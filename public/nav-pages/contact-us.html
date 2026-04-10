@@ -1,0 +1,2417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Contact Us</title>
+    <meta name="description" content="Contact us now!">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/LOGO.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/LOGO.png">
+    <link rel="shortcut icon" href="../assets/LOGO.png">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../browser-fixes.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        .contact-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: var(--spacing-md);
+            color: var(--text-dark);
+        }
+
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .contact-form {
+            background: rgba(15, 15, 15, 0.8);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+                0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .contact-form h3 {
+            font-size: 1.75rem;
+            margin-bottom: var(--spacing-md);
+            color: white;
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .field-wrapper {
+            position: relative;
+        }
+
+        .field-icon {
+            position: absolute;
+            left: 1.1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+            width: 18px;
+            height: 18px;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .field-wrapper:focus-within .field-icon {
+            opacity: 1;
+            color: var(--primary-color);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        /* Tint uploaded department icon images to match the primary cyan colour.
+           The filter approximates var(--primary-color) = #00d4ff. */
+        .dept-icon-img {
+            filter: brightness(0) saturate(100%) invert(72%) sepia(87%) saturate(400%) hue-rotate(155deg) brightness(102%) contrast(101%);
+        }
+
+        /* ── Nested department submenu ─────────────────────────────────── */
+        /* Parent department list item */
+        #deptMenu .dept-menu-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            justify-content: space-between;
+            cursor: pointer;
+            padding: 0.75rem 1rem;
+            transition: background 0.15s;
+        }
+
+        #deptMenu .dept-menu-item:hover {
+            background: rgba(0, 212, 255, 0.08);
+        }
+
+        #deptMenu .dept-menu-item.submenu-open {
+            background: rgba(0, 212, 255, 0.12);
+        }
+
+        #deptMenu .dept-menu-item .dept-item-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        #deptMenu .dept-menu-item .submenu-arrow {
+            flex-shrink: 0;
+            opacity: 0.5;
+            font-size: 0.7rem;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        #deptMenu .dept-menu-item.submenu-open .submenu-arrow {
+            opacity: 1;
+            transform: rotate(90deg);
+        }
+
+        /* Nested submenu panel */
+        #deptMenu .dept-submenu {
+            display: none;
+            background: rgba(0, 0, 0, 0.25);
+            border-top: 1px solid rgba(0, 212, 255, 0.15);
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        #deptMenu .dept-menu-item.submenu-open+.dept-submenu {
+            display: block;
+        }
+
+        #deptMenu .dept-submenu li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.6rem 1rem 0.6rem 2.5rem;
+            cursor: pointer;
+            font-size: 0.88rem;
+            color: var(--text-secondary, #aaa);
+            transition: background 0.15s, color 0.15s;
+        }
+
+        #deptMenu .dept-submenu li:hover {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary-color, #00d4ff);
+        }
+
+        #deptMenu .dept-submenu li .sub-dot {
+            display: none;
+        }
+
+        /* When there's only one sub-option (the dept itself), hide the arrow */
+        #deptMenu .dept-menu-item.no-sub .submenu-arrow {
+            display: none;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.6rem;
+            color: var(--primary-color);
+            font-weight: var(--font-weight-medium);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .field-wrapper input,
+        .field-wrapper textarea,
+        .custom-dropdown .dropdown-toggle {
+            width: 100%;
+            padding: 0.85rem 1.25rem 0.85rem 3.2rem;
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+            color: white;
+            font-size: 1rem;
+            font-family: var(--font-primary);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Textarea icon alignment fix */
+        .field-wrapper textarea+.field-icon {
+            top: 1.25rem;
+            transform: none;
+        }
+
+        .field-wrapper:focus-within textarea+.field-icon {
+            transform: scale(1.1);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .field-wrapper input:focus,
+        .field-wrapper textarea:focus,
+        .custom-dropdown.open .dropdown-toggle {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.07);
+            border-color: rgba(0, 212, 255, 0.5);
+            box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.1);
+        }
+
+        /* Custom Dropdown Styling */
+        .custom-dropdown {
+            position: relative;
+            width: 100%;
+            margin-bottom: 0.75rem;
+        }
+
+        .custom-dropdown .dropdown-toggle {
+            /* Inherits shared styles from .field-wrapper input/dropdown-toggle */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .custom-dropdown .dropdown-toggle:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .custom-dropdown .chev {
+            transition: transform 0.3s ease;
+            color: var(--primary-color);
+        }
+
+        .custom-dropdown.open .chev {
+            transform: rotate(180deg);
+        }
+
+        .custom-dropdown .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            width: 100%;
+            min-width: 100%;
+            max-width: none;
+            margin: 0;
+            box-sizing: border-box;
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 0.5rem;
+            list-style: none;
+            z-index: 100;
+            opacity: 0;
+            transform: translateY(-10px);
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .custom-dropdown.open .dropdown-menu {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .custom-dropdown .dropdown-menu li {
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+        }
+
+        .custom-dropdown .dropdown-menu li:hover {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary-color);
+            padding-left: 1.25rem;
+        }
+
+        .custom-dropdown .dropdown-menu li.selected {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        /* Fix for Get In Touch dropdown padding since icon is inline */
+        #contactDeptToggle {
+            padding-left: 1.25rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            margin-top: 1.5rem;
+            background: var(--primary-gradient);
+            color: white;
+            padding: 1.1rem 2rem;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 1.1rem;
+            font-weight: var(--font-weight-bold);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.35);
+            filter: brightness(1.1);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .contact-info {
+            background: rgba(15, 15, 15, 0.8);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+                0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .contact-info h3 {
+            font-size: 1.75rem;
+            margin-bottom: var(--spacing-md);
+            color: white;
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .office-locations {
+            margin-top: var(--spacing-xl);
+            padding: var(--spacing-xl) 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .office-locations h3 {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: var(--spacing-xl);
+            background: linear-gradient(135deg, #ffffff 0%, #a0a0a0 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: var(--font-weight-bold);
+            letter-spacing: -0.02em;
+        }
+
+
+        .offices-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.6fr;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: stretch;
+        }
+
+        .office-info-card {
+            background: rgba(10, 20, 30, 0.4);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-lg);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5),
+                inset 0 1px 1px rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+
+
+        .office-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .office-brand-logo {
+            height: 40px;
+            width: auto;
+        }
+
+        .office-brand h4 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            font-weight: var(--font-weight-bold);
+            letter-spacing: -0.01em;
+        }
+
+        .office-details-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            padding-top: 3rem;
+        }
+
+        .detail-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .detail-icon {
+            width: 44px;
+            height: 44px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .detail-text h5 {
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .detail-text p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .get-directions-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            background: var(--primary-gradient);
+            color: white;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: var(--font-weight-bold);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 212, 255, 0.2);
+            margin-top: auto;
+        }
+
+        .get-directions-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 212, 255, 0.3);
+            filter: brightness(1.1);
+        }
+
+        .get-directions-btn svg {
+            transition: transform 0.3s ease;
+        }
+
+        .get-directions-btn:hover svg {
+            transform: translateX(4px);
+        }
+
+        .office-map-container {
+            position: relative;
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-height: 500px;
+        }
+
+        .office-map-container::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius-xl);
+        }
+
+        .map-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .map-halo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .department-tabs {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
+            flex-wrap: wrap;
+        }
+
+        .dept-tab-btn {
+            padding: 0.7rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: var(--font-weight-medium);
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .dept-tab-btn:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .dept-tab-btn.active {
+            background: var(--primary-gradient);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
+        }
+
+        .department-content {
+            display: none;
+            animation: slideIn var(--transition-fast);
+        }
+
+        .department-content.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dept-details {
+            background: rgba(255, 255, 255, 0.03);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-sm);
+            margin-bottom: var(--spacing-md);
+            border: 1px solid rgba(85, 198, 247, 0.2);
+        }
+
+        .dept-details h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            font-size: 1.15rem;
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .dept-details>p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: flex-start;
+            margin-top: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-fast);
+        }
+
+        .contact-method:hover {
+            background: rgba(0, 212, 255, 0.08);
+            transform: translateX(4px);
+        }
+
+        .method-icon {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: var(--spacing-sm);
+            color: var(--primary-color);
+            flex-shrink: 0;
+        }
+
+        .method-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .method-sub-item a svg {
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+            margin-right: 0.4rem;
+        }
+
+        .dept-details h4 svg,
+        .business-hours-box h4 svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            vertical-align: middle;
+            margin-right: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .method-content {
+            flex: 1;
+        }
+
+        .method-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            font-weight: var(--font-weight-medium);
+        }
+
+        .method-value {
+            color: var(--text-dark);
+            font-weight: var(--font-weight-medium);
+            font-size: 0.95rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: flex-start;
+        }
+
+        .method-value a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .method-value a svg {
+            width: 16px;
+            height: 16px;
+            margin-right: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .method-value a:hover {
+            color: var(--secondary-color);
+        }
+
+        .contact-method-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .contact-method-group h5 {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--primary-color);
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .contact-method-group h5 svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .method-sub-item {
+            padding-left: 2rem;
+            margin-bottom: 0.6rem;
+            font-size: 0.95rem;
+        }
+
+        .method-sub-item a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+        }
+
+        .method-sub-item a:hover {
+            color: var(--secondary-color);
+        }
+
+        .business-hours-box {
+            margin-top: var(--spacing-lg);
+            padding: var(--spacing-md);
+            background: rgba(41, 175, 212, 0.08);
+            border: 1px solid rgba(85, 198, 247, 0.2);
+            border-radius: var(--radius-sm);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .business-hours-box h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            font-weight: var(--font-weight-semibold);
+            font-size: 1.1rem;
+        }
+
+        .business-hours-box p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+
+        @media (min-width: 768px) and (max-width: 1024px) {
+
+            /* --- 2-column layout: narrower form on the left --- */
+            .contact-content {
+                grid-template-columns: 45% 1fr;
+                gap: var(--spacing-md);
+            }
+
+            /* Compact form to fit the narrower column */
+            .contact-form {
+                padding: 1.25rem;
+                height: max-content;
+            }
+
+            .contact-form h3 {
+                font-size: 1.35rem;
+                margin-bottom: 0.9rem;
+            }
+
+            .form-group {
+                margin-bottom: 0.65rem;
+            }
+
+            .form-group label {
+                font-size: 0.78rem;
+                margin-bottom: 0.4rem;
+            }
+
+            .field-wrapper input,
+            .field-wrapper textarea,
+            .custom-dropdown .dropdown-toggle {
+                padding: 0.65rem 1rem 0.65rem 2.8rem;
+                font-size: 0.88rem;
+            }
+
+            .field-icon {
+                width: 15px;
+                height: 15px;
+                left: 0.9rem;
+            }
+
+            .submit-btn {
+                padding: 0.85rem 1.5rem;
+                font-size: 0.95rem;
+                margin-top: 1rem;
+            }
+
+            /* Info panel stays comfortably sized */
+            .contact-info {
+                padding: 1.25rem;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+
+            .contact-info h3 {
+                font-size: 1.35rem;
+                margin-bottom: 0.5rem;
+            }
+
+            /* Squeeze contact methods to reduce overall height */
+            .contact-method {
+                margin-top: 0.2rem;
+                margin-bottom: 0.2rem;
+                padding: 0.2rem;
+            }
+
+            .contact-method-group {
+                margin-bottom: 0.2rem;
+            }
+
+            .contact-method-group h5 {
+                margin-top: 0.2rem;
+                margin-bottom: 0.2rem;
+            }
+
+            .method-sub-item {
+                margin-bottom: 0.2rem;
+            }
+
+            .business-hours-box {
+                margin-top: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .business-hours-box h4 {
+                margin-bottom: 0.2rem;
+            }
+
+            .business-hours-box p {
+                margin-bottom: 0.2rem;
+            }
+
+            /* --- Shared hero / tabs adjustments --- */
+            .contact-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .department-tabs {
+                flex-direction: column;
+            }
+
+            .dept-tab-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            /* --- Office section keeps single column on tablet --- */
+            .offices-grid {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-lg);
+            }
+
+            .office-info-card {
+                padding: var(--spacing-md);
+                gap: 1.5rem;
+            }
+
+            .office-brand h4 {
+                font-size: 1.4rem;
+            }
+
+            .office-brand-logo {
+                height: 32px;
+            }
+
+            .office-map-container {
+                height: 350px;
+                min-height: 350px;
+            }
+
+            .office-details-list {
+                padding-top: 1.5rem;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .contact-container {
+                padding: 0.5rem 1.5rem;
+                /* Increased side padding to narrow container */
+                width: 100%;
+            }
+
+            .contact-hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .contact-hero p {
+                font-size: 0.9rem;
+            }
+
+            .contact-form,
+            .contact-info {
+                padding: 1.25rem;
+                /* Reduced inner padding */
+                margin-bottom: 2rem;
+            }
+
+            .contact-form h3,
+            .contact-info h3 {
+                font-size: 1.5rem;
+                /* Smaller headers */
+                margin-bottom: 1.25rem;
+            }
+
+            .field-wrapper input,
+            .field-wrapper textarea,
+            .custom-dropdown .dropdown-toggle {
+                padding: 0.7rem 1rem 0.7rem 2.8rem;
+                /* Compact inputs */
+                font-size: 0.9rem;
+                /* Smaller input font */
+            }
+
+            .custom-dropdown .dropdown-toggle {
+                font-size: 1rem !important;
+            }
+
+            .field-icon {
+                width: 16px;
+                height: 16px;
+                left: 1rem;
+            }
+
+            .form-group {
+                margin-bottom: 0.75rem;
+            }
+
+            .form-group label {
+                font-size: 0.8rem;
+                margin-bottom: 0.4rem;
+            }
+
+            .dept-details {
+                padding: 0.75rem;
+            }
+
+            .office-locations {
+                padding: 1.5rem 1rem;
+                margin-top: 1.5rem;
+            }
+
+            .office-locations h3 {
+                font-size: 1.8rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .footer-bottom {
+                margin-top: 2rem !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .contact-container {
+                padding: 1rem 1.25rem;
+                /* Balanced side padding for small screens */
+            }
+
+            .contact-content {
+                gap: 1.25rem;
+            }
+
+            .contact-hero h1 {
+                font-size: 1.6rem;
+            }
+
+            .contact-form,
+            .contact-info {
+                padding: 1rem;
+                /* Tighter inner padding */
+            }
+
+            .form-group {
+                margin-bottom: 0.75rem;
+            }
+
+            .offices-grid {
+                gap: 1.25rem;
+            }
+
+            .office-locations h3 {
+                font-size: 1.5rem;
+            }
+
+            .office-brand {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .office-brand h4 {
+                font-size: 1.2rem;
+            }
+
+            .submit-btn {
+                padding: 0.9rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .footer-bottom {
+                margin-top: 2rem !important;
+            }
+
+            /* Mobile (320px, 375px, 425px) – stack layout to single column */
+        }
+
+        @media (max-width: 425px) {
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .offices-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <img src="../assets/NAV-LOGO.png" alt="eScience Corporation - Architects of Innovation" class="nav-logo-img">
+            </a>
+
+            <div class="nav-links">
+                <a href="../index.html#solutions">Solutions</a>
+                <a href="../index.html#why-us">Why Us</a>
+                <a href="careers.html">Careers</a>
+
+                <!-- Dropdown: "More" -->
+                <div class="dropdown">
+                    <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="more-menu"
+                        id="moreToggle" type="button">
+                        More
+                        <svg class="chev" width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"
+                            focusable="false">
+                            <path fill="currentColor" d="M7 10l5 5 5-5z" />
+                        </svg>
+                    </button>
+
+                    <ul class="dropdown-menu" id="more-menu" role="menu" aria-labelledby="moreToggle">
+                        <li role="none"><a role="menuitem" tabindex="-1" href="company.html">Company</a></li>
+                        <li role="none"><a role="menuitem" tabindex="-1" href="solutions.html">Products</a></li>
+                        <li role="none"><a role="menuitem" tabindex="-1" href="blog.html">Blog</a></li>
+                        <li role="none"><a role="menuitem" tabindex="-1" href="contact-us.html">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-cta">
+                    <a href="../index.html#contact">Book a Demo</a>
+                </div>
+            </div>
+
+            <div class="nav-mobile-toggle" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-image-section">
+        <div class="container hero-inner">
+            <h1 class="hero-headline">
+                <span class="hero-headline-left">CONTACT</span>
+                <span class="hero-headline-right">US</span>
+            </h1>
+            <p class="hero-subtitle-extended">Get in touch with our team of innovation architects</p>
+            <div class="company-scroll-indicator">
+                <svg width="28" height="40" viewBox="0 0 28 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="1" y="1" width="26" height="38" rx="13" stroke="white" stroke-width="2" />
+                    <circle cx="14" cy="12" r="3" fill="white">
+                        <animate attributeName="cy" values="12;20;12" dur="1.5s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite" />
+                    </circle>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <div class="contact-container">
+
+        <div class="contact-content">
+            <div class="contact-form fade-in-left">
+                <h3>Send us a Message</h3>
+                <form>
+                    <div class="form-group">
+                        <label for="department">Department</label>
+                        <div class="custom-dropdown field-wrapper" id="department-custom">
+                            <button type="button" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false"
+                                id="deptToggle">
+                                <span>Select Department</span>
+                                <svg class="chev" width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"
+                                    focusable="false">
+                                    <path fill="currentColor" d="M7 10l5 5 5-5z" />
+                                </svg>
+                            </button>
+                            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                            </svg>
+                            <ul class="dropdown-menu" id="deptMenu">
+                                <!-- Flat fallbacks shown before API data loads -->
+                                <li class="dept-menu-item no-sub" data-dept-id="sales"
+                                    data-email="sales@electronicscience.net">
+                                    <div class="dept-item-left">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" style="color:var(--primary-color);flex-shrink:0">
+                                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                                        </svg>
+                                        <span>Sales - New Business Inquiries</span>
+                                    </div>
+                                    <span class="submenu-arrow">&#9657;</span>
+                                </li>
+                                <li class="dept-menu-item no-sub" data-dept-id="support"
+                                    data-email="support@electronicscience.net">
+                                    <div class="dept-item-left">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" style="color:var(--primary-color);flex-shrink:0">
+                                            <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+                                            <path
+                                                d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z">
+                                            </path>
+                                        </svg>
+                                        <span>Customer Support - Technical Assistance</span>
+                                    </div>
+                                    <span class="submenu-arrow">&#9657;</span>
+                                </li>
+                                <li class="dept-menu-item no-sub" data-dept-id="hr"
+                                    data-email="hrd@electronicscience.net">
+                                    <div class="dept-item-left">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" style="color:var(--primary-color);flex-shrink:0">
+                                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="9" cy="7" r="4"></circle>
+                                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                        </svg>
+                                        <span>HR - Careers &amp; Employment</span>
+                                    </div>
+                                    <span class="submenu-arrow">&#9657;</span>
+                                </li>
+                            </ul>
+                            <input type="hidden" name="department" id="department" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <div class="field-wrapper">
+                            <input type="text" id="name" name="name" placeholder="Your full name" required>
+                            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <div class="field-wrapper">
+                            <input type="email" id="email" name="email" placeholder="your.email@company.com" required>
+                            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                </path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company">Company</label>
+                        <div class="field-wrapper">
+                            <input type="text" id="company" name="company" placeholder="Your company name">
+                            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 21h18"></path>
+                                <path d="M9 8h10"></path>
+                                <path d="M9 12h10"></path>
+                                <path d="M9 16h10"></path>
+                                <path d="M4 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <div class="field-wrapper">
+                            <input type="tel" id="phone" name="phone" placeholder="+63 XXX XXX XXXX">
+                            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <div class="field-wrapper">
+                            <textarea id="message" name="message" rows="5"
+                                placeholder="Tell us about your project or inquiry..." required></textarea>
+                            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+
+            <div class="contact-info fade-in-right">
+                <h3>Get in Touch</h3>
+
+                <div class="form-group">
+                    <label for="contact-department">Department</label>
+                    <div class="custom-dropdown" id="contact-department-custom">
+                        <button type="button" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false"
+                            id="contactDeptToggle">
+                            <span>Sales & Marketing</span>
+                            <svg class="chev" width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"
+                                focusable="false">
+                                <path fill="currentColor" d="M7 10l5 5 5-5z" />
+                            </svg>
+                        </button>
+                        <ul class="dropdown-menu" id="contactDeptMenu">
+                            <li data-value="sales">Sales & Marketing</li>
+                            <li data-value="support">Customer Support</li>
+                            <li data-value="hr">Human Resources</li>
+                        </ul>
+                        <input type="hidden" id="contact-department" value="sales">
+                    </div>
+                </div>
+
+                <!-- Sales & Marketing Department -->
+                <div class="department-content" id="sales-content">
+                    <div class="dept-details">
+                        <h4>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                            </svg>
+                            Sales and Marketing Department
+                        </h4>
+                        <p>For new business inquiries, product demonstrations, and partnership opportunities</p>
+
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path
+                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                    </path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                            </div>
+                            <div class="method-content">
+                                <div class="method-label">Sales Inquiries</div>
+                                <div class="method-value"><a
+                                        href="mailto:sales@electronicscience.net">sales@electronicscience.net</a></div>
+                            </div>
+                        </div>
+
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path
+                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                    </path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                            </div>
+                            <div class="method-content">
+                                <div class="method-label">Marketing</div>
+                                <div class="method-value"><a
+                                        href="mailto:marketing@electronicscience.net">marketing@electronicscience.net</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path
+                                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <div class="method-content">
+                                <div class="method-label">Phone</div>
+                                <div class="method-value"><a href="tel:02-8850-1324">02-8850-1324</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer Support Department -->
+                <div class="department-content" id="support-content">
+                    <div class="dept-details">
+                        <h4>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+                                <path
+                                    d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z">
+                                </path>
+                            </svg>
+                            Customer Support
+                        </h4>
+                        <p>Technical assistance, product support, and issue resolution available 24/7</p>
+
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                                    <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                                </svg>
+                            </div>
+                            <div class="method-content">
+                                <div class="method-label">GLOBE Mobile</div>
+                                <div class="method-value">
+                                    <a href="tel:+639778364867">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path
+                                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                            </path>
+                                        </svg>
+                                        (+63) 977 8364 867
+                                    </a>
+                                    <a href="tel:+639178842975">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path
+                                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                            </path>
+                                        </svg>
+                                        (+63) 917 8842 975
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                                    <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                                </svg>
+                            </div>
+                            <div class="method-content">
+                                <div class="method-label">SMART Mobile</div>
+                                <div class="method-value">
+                                    <a href="tel:+639088107057">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path
+                                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                            </path>
+                                        </svg>
+                                        (+63) 908 8107 057
+                                    </a>
+                                    <a href="tel:+639988495159">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path
+                                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                            </path>
+                                        </svg>
+                                        (+63) 998 8495 159
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                                </svg>
+                            </div>
+                            <div class="method-content">
+                                <div class="method-label">Facebook Support</div>
+                                <div class="method-value">
+                                    <a href="https://facebook.com/esciencesupport" target="_blank">@esciencesupport</a>
+                                    <a href="https://facebook.com/esciencecorp" target="_blank">@esciencecorp</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path
+                                        d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-10.6 8.38 8.38 0 0 1 3.9.9L21 3.5Z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <div class="method-content">
+                                <div class="method-label">IMS Support</div>
+                                <div class="method-value">
+                                    <a href="tel:+639176369606">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path
+                                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                            </path>
+                                        </svg>
+                                        (+63) 917 636 9606
+                                    </a>
+                                    <a href="tel:+639989701129">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path
+                                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                            </path>
+                                        </svg>
+                                        (+63) 998 970 1129
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HR Department -->
+                <div class="department-content" id="hr-content">
+                    <div class="dept-details">
+                        <h4>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                            Human Resources
+                        </h4>
+                        <p>Career opportunities, employment inquiries, and talent development programs</p>
+
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path
+                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                    </path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                            </div>
+                            <div class="method-content">
+                                <div class="method-label">HR Inquiries</div>
+                                <div class="method-value"><a
+                                        href="mailto:hrd@electronicscience.net">hrd@electronicscience.net</a></div>
+                            </div>
+                        </div>
+
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path
+                                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <div class="method-content">
+                                <div class="method-label">Phone</div>
+                                <div class="method-value"><a href="tel:02-8850-1324">02-8850-1324</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="business-hours-box">
+                    <h4>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        Business Hours
+                    </h4>
+                    <p><strong>Monday - Friday:</strong> 9:00 AM - 6:00 PM</p>
+                    <p><strong>Saturday & Sunday:</strong> Closed</p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Philippine Standard Time (PST)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="office-locations fade-up">
+            <h3>Visit Our Office</h3>
+            <div class="offices-grid">
+                <div class="office-info-card fade-in-left">
+
+                    <div class="office-details-list">
+                        <div class="detail-item">
+                            <div class="detail-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                            </div>
+                            <div class="detail-text">
+                                <h5>Address</h5>
+                                <p> 8th Floor Paz Madrigal Plaza Bldg. <br>Industry cor Finance St.,
+                                    Madrigal Business Park, Alabang, Muntinlupa City,<br>Metro Manila, Philippines 1780
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="detail-item">
+                            <div class="detail-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path
+                                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <div class="detail-text">
+                                <h5>Direct Line</h5>
+                                <p>02-8850-1324</p>
+                            </div>
+                        </div>
+
+                        <div class="detail-item">
+                            <div class="detail-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path
+                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                    </path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                            </div>
+                            <div class="detail-text">
+                                <h5>Email</h5>
+                                <p>hrd@electronicscience.net</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="https://maps.app.goo.gl/rqA9TxUn2fs2hxp5A" target="_blank" class="get-directions-btn">
+                        Get Directions
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="office-map-container fade-in-right">
+                    <div class="map-halo"></div>
+                    <iframe class="map-iframe"
+                        src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7728.024269841577!2d121.025681!3d14.426464!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397d1cceb7551f9%3A0xb981b1e8fe18619f!2sE-Science%20Corporation!5e0!3m2!1sen!2sph!4v1768973067996!5m2!1sen!2sph"
+                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img src="../assets/NAV-LOGO.png" alt="eScience Logo" class="footer-logo">
+                    <p id="footer-tagline">Architects of Innovation since 2000</p>
+                </div>
+
+                <div class="footer-col footer-contact">
+                    <h4>Contact</h4>
+                    <a href="mailto:sales@electronicscience.net" id="footer-email">sales@electronicscience.net</a>
+                    <a href="tel:02-8850-1324" id="footer-phone">02-8850-1324</a>
+                </div>
+
+                <div class="footer-col footer-legal">
+                    <h4>Legal</h4>
+                    <a href="terms.html">Terms and Conditions</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="npc-seal.html" id="footer-npc-link">NPC Seal</a>
+                </div>
+
+                <div class="footer-col footer-connect">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-icon-link" aria-label="Facebook" id="footer-fb-link">
+                            <svg class="social-icon" viewBox="0 0 24 24">
+                                <path
+                                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-icon-link" aria-label="LinkedIn" id="footer-li-link">
+                            <svg class="social-icon" viewBox="0 0 24 24">
+                                <path
+                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 eScience Corporation. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <button id="backToTop" class="back-to-top" aria-label="Back to Top">↑</button>
+
+    <script src="../scripts/main-script.js"></script>
+        <script src="../scripts/page-transition.js"></script>
+    <script src="../scripts/nav-dropdown.js"></script>
+    <script src="../scripts/mobile-nav.js"></script>
+
+    <!-- Dynamic Contact Content -->
+    <script>
+        (async function loadContactContent() {
+            try {
+                const res = await fetch('/api/content');
+                const data = await res.json();
+                const contactData = data.contactPage || {};
+
+                // Update departments
+                if (contactData.departments) {
+                    const visibleDepartments = contactData.departments.filter(dept => !dept.isHidden);
+                    
+                    if (visibleDepartments.length === 0) {
+                        const contactDeptGroup = document.querySelector('#contact-department-custom')?.closest('.form-group');
+                        if (contactDeptGroup) contactDeptGroup.style.display = 'none';
+
+                        const deptContents = document.querySelectorAll('.department-content');
+                        deptContents.forEach(el => el.style.display = 'none');
+
+                        const deptGroup = document.querySelector('#department-custom')?.closest('.form-group');
+                        if (deptGroup) deptGroup.style.display = 'none';
+                    } else {
+                        updateDepartmentDropdowns(visibleDepartments);
+                        updateDepartmentContent(visibleDepartments);
+                        
+                        // Ensure dropdowns are visible if previously hidden
+                        const contactDeptGroup = document.querySelector('#contact-department-custom')?.closest('.form-group');
+                        if (contactDeptGroup) contactDeptGroup.style.display = 'block';
+                        
+                        const deptGroup = document.querySelector('#department-custom')?.closest('.form-group');
+                        if (deptGroup) deptGroup.style.display = 'block';
+                    }
+                }
+
+                // Update business hours
+                if (contactData.businessHours) {
+                    updateBusinessHours(contactData.businessHours);
+                }
+
+                // Update office location
+                if (contactData.officeLocation) {
+                    updateOfficeLocation(contactData.officeLocation);
+                }
+            } catch (err) {
+                console.error('Error loading contact content:', err);
+            }
+        })();
+
+        // Store dept email map for form submission
+        window.deptEmailMap = {
+            sales: 'sales@electronicscience.net',
+            support: 'support@electronicscience.net',
+            hr: 'hrd@electronicscience.net'
+        };
+
+        function updateDepartmentDropdowns(departments) {
+            // Build email map from API data — prefer explicit formEmail, then first contact email
+            departments.forEach(dept => {
+                if (dept.formEmail) {
+                    window.deptEmailMap[dept.id] = dept.formEmail;
+                } else {
+                    const emailContact = (dept.contacts || []).find(c => c.type === 'email');
+                    if (emailContact) {
+                        const email = Array.isArray(emailContact.values)
+                            ? emailContact.values[0]
+                            : emailContact.value;
+                        if (email) window.deptEmailMap[dept.id] = email;
+                    }
+                }
+            });
+
+            // Default hardcoded icons based on ID (fallback) with TEAL color
+            const iconStyle = 'width: 20px; height: 20px; object-fit: contain; color: var(--primary-color); flex-shrink: 0;';
+            // Generic department icon used as fallback for unknown IDs
+            const genericSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="${iconStyle}"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>`;
+            const svgs = {
+                sales: genericSvg,
+                support: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="${iconStyle}"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>`,
+                hr: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="${iconStyle}"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`
+            };
+
+            const getIcon = (dept) => {
+                if (dept.icon) {
+                    // Use class so CSS filter tints it to primary cyan
+                    return `<img src="/${dept.icon}" alt="" class="dept-icon-img" style="${iconStyle}">`;
+                }
+                // Fall back to known SVG or the generic department SVG
+                return svgs[dept.id] || genericSvg;
+            };
+
+            // ── Rebuild #deptMenu with nested sub-items ──────────────────
+            const formDropdown = document.getElementById('deptMenu');
+            if (formDropdown) {
+                formDropdown.innerHTML = '';
+
+                departments.forEach(dept => {
+                    const label = dept.dropdownLabel || dept.name;
+                    const deptEmail = window.deptEmailMap[dept.id] || '';
+
+                    // Collect email-type contacts for sub-menu
+                    const emailContacts = (dept.contacts || []).filter(c => c.type === 'email');
+
+                    // Build sub-items:
+                    // If there is a specific formEmail OR only one email contact, we can still
+                    // show subItems for all email contacts. If none, just the dept itself.
+                    let subItems = [];
+                    emailContacts.forEach(c => {
+                        const vals = Array.isArray(c.values) ? c.values : (c.value ? [c.value] : []);
+                        vals.forEach(v => {
+                            subItems.push({ label: c.label || v, email: v });
+                        });
+                    });
+                    // If formEmail is set and not already in the list, add it as "General"
+                    if (dept.formEmail && !subItems.some(s => s.email === dept.formEmail)) {
+                        subItems.unshift({ label: 'General', email: dept.formEmail });
+                    }
+
+                    const hasSubItems = subItems.length > 1;
+
+                    // --- Parent row ---
+                    const parentLi = document.createElement('li');
+                    parentLi.className = 'dept-menu-item' + (hasSubItems ? '' : ' no-sub');
+                    parentLi.dataset.deptId = dept.id;
+                    parentLi.dataset.email = deptEmail;
+                    parentLi.innerHTML = `
+                        <div class="dept-item-left">
+                            ${getIcon(dept)}
+                            <span>${label}</span>
+                        </div>
+                        <span class="submenu-arrow">&#9657;</span>
+                    `;
+
+                    // --- Sub-menu ---
+                    const subUl = document.createElement('ul');
+                    subUl.className = 'dept-submenu';
+
+                    if (hasSubItems) {
+                        subItems.forEach(sub => {
+                            const subLi = document.createElement('li');
+                            subLi.dataset.deptId = dept.id;
+                            subLi.dataset.email = sub.email;
+                            subLi.innerHTML = `<span class="sub-dot"></span><span>${sub.label}</span>`;
+                            subLi.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                selectFormDepartment(dept, sub.label, sub.email);
+                            });
+                            subUl.appendChild(subLi);
+                        });
+
+                        // Toggle submenu open/close on parent click
+                        parentLi.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const isOpen = parentLi.classList.toggle('submenu-open');
+                            // Close sibling submenus
+                            formDropdown.querySelectorAll('.dept-menu-item.submenu-open').forEach(el => {
+                                if (el !== parentLi) el.classList.remove('submenu-open');
+                            });
+                        });
+                    } else {
+                        // No sub-items — clicking the parent selects the dept directly
+                        parentLi.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            selectFormDepartment(dept, label, deptEmail);
+                        });
+                    }
+
+                    formDropdown.appendChild(parentLi);
+                    formDropdown.appendChild(subUl);
+                });
+            }
+
+            // Helper to Create List Items (Icon + Text wrapper)
+            const createListItem = (dept, label) => {
+                // We use flex gap for spacing
+                return `<li data-value="${dept.id}" style="display: flex; align-items: center; gap: 12px;">
+                            ${getIcon(dept)}
+                            <span>${label}</span>
+                        </li>`;
+            };
+
+            // Helper to update toggle button content
+            const updateToggleContent = (dropdownId, dept) => {
+                const dropdown = document.getElementById(dropdownId)?.closest('.custom-dropdown');
+                if (!dropdown) return;
+
+                const toggleBtn = dropdown.querySelector('.dropdown-toggle');
+                const chev = dropdown.querySelector('.chev'); // Preserve existing chevron
+
+                // Create wrapper for content
+                const contentWrapper = document.createElement('div');
+                contentWrapper.style.cssText = 'display: flex; align-items: center; gap: 12px;';
+                contentWrapper.innerHTML = `${getIcon(dept)}<span>${dropdownId === 'deptMenu' ? (dept.dropdownLabel || dept.name) : dept.name}</span>`;
+
+                toggleBtn.innerHTML = '';
+                toggleBtn.appendChild(contentWrapper);
+                if (chev) toggleBtn.appendChild(chev);
+
+                // Adjust padding for Get in Touch toggle specifically
+                if (dropdownId === 'contactDeptMenu') { // Using menu ID to identify the specific dropdown logic context
+                    toggleBtn.style.paddingLeft = '1.25rem';
+                }
+            };
+
+            // Update contact info dropdown ("Get in Touch")
+            const contactDropdown = document.getElementById('contactDeptMenu');
+            if (contactDropdown && departments.length > 0) {
+                contactDropdown.innerHTML = departments.map(dept =>
+                    createListItem(dept, dept.name)
+                ).join('');
+
+                // Initialize the Get In Touch button with the first department (default)
+                updateToggleContent('contactDeptMenu', departments[0]);
+            }
+
+            // Re-initialize click handlers for Get in Touch dropdown only
+            // (#deptMenu nested items already have their own listeners from above)
+            document.querySelectorAll('#contactDeptMenu li').forEach(item => {
+                item.addEventListener('click', function () {
+                    const dropdown = this.closest('.custom-dropdown');
+                    const toggleBtn = dropdown.querySelector('.dropdown-toggle');
+
+                    const chev = dropdown.querySelector('.chev');
+                    const hidden = dropdown.querySelector('input[type="hidden"]');
+
+                    // Create wrapper for selected content to keep them together on the left
+                    const selectedContentWrapper = document.createElement('div');
+                    selectedContentWrapper.style.cssText = 'display: flex; align-items: center; gap: 12px;';
+                    selectedContentWrapper.innerHTML = this.innerHTML; // Copies Icon + Span(Text)
+
+                    toggleBtn.innerHTML = '';
+                    toggleBtn.appendChild(selectedContentWrapper);
+
+                    if (chev) toggleBtn.appendChild(chev);
+
+                    if (hidden) hidden.value = this.dataset.value;
+
+                    dropdown.classList.remove('open');
+                    dropdown.querySelector('.dropdown-menu').setAttribute('hidden', '');
+                    dropdown.querySelector('.dropdown-toggle').setAttribute('aria-expanded', 'false');
+
+                    // Trigger department content switch if applicable
+                    if (dropdown.id === 'contact-department-custom') {
+                        showDepartment(this.dataset.value);
+                    }
+                });
+            });
+        }
+
+        // Helper: update the Send us a Message toggle button to show selected dept + sub-label
+        function selectFormDepartment(dept, subLabel, email) {
+            const dropdown = document.getElementById('department-custom');
+            if (!dropdown) return;
+
+            const toggleBtn = dropdown.querySelector('.dropdown-toggle');
+            const chev = dropdown.querySelector('.chev');
+            const hiddenInput = document.getElementById('department');
+            const staticIcon = dropdown.querySelector('.field-icon');
+
+            // The icon to show in the button
+            const iconStyle = 'width: 20px; height: 20px; object-fit: contain; color: var(--primary-color); flex-shrink: 0;';
+            const iconHtml = dept.icon
+                ? `<img src="/${dept.icon}" alt="" class="dept-icon-img" style="${iconStyle}">`
+                : '';
+
+            const wrapper = document.createElement('div');
+            wrapper.style.cssText = 'display: flex; align-items: center; gap: 12px;';
+            wrapper.innerHTML = `${iconHtml}<span>${dept.dropdownLabel || dept.name}${subLabel && subLabel !== (dept.dropdownLabel || dept.name) ? ' – ' + subLabel : ''}</span>`;
+
+            toggleBtn.innerHTML = '';
+            toggleBtn.appendChild(wrapper);
+            if (chev) toggleBtn.appendChild(chev);
+
+            // Store dept ID and target email: "deptId::email"
+            if (hiddenInput) hiddenInput.value = `${dept.id}::${email}`;
+
+            // Hide the static field icon
+            if (staticIcon) {
+                staticIcon.style.display = 'none';
+                toggleBtn.style.paddingLeft = '1.25rem';
+            }
+
+            // Close dropdown
+            dropdown.classList.remove('open');
+            const deptMenu = document.getElementById('deptMenu');
+            if (deptMenu) deptMenu.setAttribute('hidden', '');
+            toggleBtn.setAttribute('aria-expanded', 'false');
+        }
+
+        function updateDepartmentContent(departments) {
+            const container = document.querySelector('.contact-info');
+            if (!container) return;
+
+            // Find existing department contents
+            const existingContent = container.querySelectorAll('.department-content');
+            existingContent.forEach(el => el.remove());
+
+            // Add department content for each department
+            const insertTarget = container.querySelector('.business-hours-box');
+
+            departments.forEach((dept, index) => {
+                const deptDiv = document.createElement('div');
+                deptDiv.className = 'department-content' + (index === 0 ? ' active' : '');
+                deptDiv.id = dept.id + '-content';
+
+                let contactsHtml = '';
+                (dept.contacts || []).forEach(contact => {
+                    const icon = getContactIcon(contact.type);
+
+                    if (Array.isArray(contact.values)) {
+                        // Multiple values
+                        let valuesHtml = '';
+                        contact.values.forEach((val, idx) => {
+                            const link = contact.links && contact.links[idx] ? contact.links[idx] : null;
+                            if (contact.type === 'email') {
+                                valuesHtml += `<a href="mailto:${val}">${val}</a>`;
+                            } else if (contact.type === 'phone') {
+                                const cleanPhone = val.replace(/[^0-9+]/g, '');
+                                valuesHtml += `<a href="tel:${cleanPhone}">${icon}${val}</a>`;
+                            } else if (contact.type === 'social' && link) {
+                                valuesHtml += `<a href="${link}" target="_blank">${val}</a>`;
+                            } else {
+                                valuesHtml += `<span>${val}</span>`;
+                            }
+                        });
+
+                        contactsHtml += `
+                            <div class="contact-method">
+                                <div class="method-icon">${icon}</div>
+                                <div class="method-content">
+                                    <div class="method-label">${contact.label}</div>
+                                    <div class="method-value">${valuesHtml}</div>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        // Single value
+                        let valueHtml = '';
+                        if (contact.type === 'email') {
+                            valueHtml = `<a href="mailto:${contact.value}">${contact.value}</a>`;
+                        } else if (contact.type === 'phone') {
+                            const cleanPhone = contact.value.replace(/[^0-9+]/g, '');
+                            valueHtml = `<a href="tel:${cleanPhone}">${contact.value}</a>`;
+                        } else {
+                            valueHtml = contact.value;
+                        }
+
+                        contactsHtml += `
+                            <div class="contact-method">
+                                <div class="method-icon">${icon}</div>
+                                <div class="method-content">
+                                    <div class="method-label">${contact.label}</div>
+                                    <div class="method-value">${valueHtml}</div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+                // Use the uploaded icon if present (tinted via CSS filter), else fall back to SVG
+                const titleIcon = dept.icon
+                    ? `<img src="/${dept.icon}" alt="" class="dept-icon-img" style="width:24px;height:24px;object-fit:contain;vertical-align:middle;margin-right:8px;">`
+                    : getDeptIcon(dept.id);
+
+                deptDiv.innerHTML = `
+                    <div class="dept-details">
+                        <h4>${titleIcon}${dept.name}</h4>
+                        <p>${dept.description || ''}</p>
+                        ${contactsHtml}
+                    </div>
+                `;
+
+                if (insertTarget) {
+                    insertTarget.parentNode.insertBefore(deptDiv, insertTarget);
+                } else {
+                    container.appendChild(deptDiv);
+                }
+            });
+
+            // Update the toggle to show first department
+            const toggle = document.getElementById('contactDeptToggle');
+            if (toggle && departments.length > 0) {
+                toggle.querySelector('span').textContent = departments[0].name;
+                document.getElementById('contact-department').value = departments[0].id;
+            }
+        }
+
+        function getContactIcon(type) {
+            if (type === 'email') {
+                return `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>`;
+            } else if (type === 'phone') {
+                return `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>`;
+            } else if (type === 'social') {
+                return `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>`;
+            }
+            return '';
+        }
+
+        function getDeptIcon(deptId) {
+            // Generic department/building icon used as fallback for new unknown IDs
+            const genericIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>`;
+            const icons = {
+                sales: genericIcon,
+                support: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>`,
+                hr: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`
+            };
+            return icons[deptId] || genericIcon;
+        }
+
+        function updateBusinessHours(hours) {
+            const hoursBox = document.querySelector('.business-hours-box');
+            if (!hoursBox) return;
+
+            const weekdayP = hoursBox.querySelectorAll('p')[0];
+            const weekendP = hoursBox.querySelectorAll('p')[1];
+            const timezoneP = hoursBox.querySelectorAll('p')[2];
+
+            if (weekdayP && hours.weekdays) {
+                weekdayP.innerHTML = `<strong>Monday - Friday:</strong> ${hours.weekdays}`;
+            }
+            if (weekendP && hours.weekends) {
+                weekendP.innerHTML = `<strong>Saturday & Sunday:</strong> ${hours.weekends}`;
+            }
+            if (timezoneP && hours.timezone) {
+                timezoneP.textContent = hours.timezone;
+            }
+        }
+
+        function updateOfficeLocation(office) {
+            // Update address
+            const addressEl = document.querySelector('.office-details-list .detail-item:first-child .detail-text p');
+            if (addressEl && office.address) {
+                addressEl.innerHTML = office.address.replace(/\n/g, '<br>');
+            }
+
+            // Update direct line
+            const phoneEl = document.querySelector('.office-details-list .detail-item:nth-child(2) .detail-text p');
+            if (phoneEl && office.directLine) {
+                phoneEl.textContent = office.directLine;
+            }
+
+            // Update email
+            const emailEl = document.querySelector('.office-details-list .detail-item:nth-child(3) .detail-text p');
+            if (emailEl && office.email) {
+                emailEl.textContent = office.email;
+            }
+
+            // Update Get Directions link
+            const directionsBtn = document.querySelector('.get-directions-btn');
+            if (directionsBtn && office.googleMapsLink) {
+                directionsBtn.href = office.googleMapsLink;
+            }
+
+            // Update map embed
+            const mapIframe = document.querySelector('.map-iframe');
+            if (mapIframe && office.googleMapsEmbed) {
+                mapIframe.src = office.googleMapsEmbed;
+            }
+        }
+
+        // Make showDepartment globally accessible
+        window.showDepartment = function (deptId) {
+            document.querySelectorAll('.department-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            const targetContent = document.getElementById(deptId + '-content');
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+        };
+    </script>
+
+    <!-- Send us a Message: mailto handler + static fallback item wiring -->
+    <script>
+        // Wire click handlers for the static hardcoded fallback dept-menu-items
+        // (shown before the API loads). Once API loads, #deptMenu is rebuilt in JS
+        // with its own listeners, so these only fire for the unloaded state.
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('#deptMenu .dept-menu-item.no-sub').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const deptId = item.dataset.deptId;
+                    const email = item.dataset.email;
+                    const labelEl = item.querySelector('span:not(.submenu-arrow)');
+                    const label = labelEl ? labelEl.textContent : deptId;
+                    const fakeDept = { id: deptId, name: label, dropdownLabel: label, icon: null };
+                    selectFormDepartment(fakeDept, label, email);
+                });
+            });
+        });
+
+        document.querySelector('.contact-form form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const rawDeptValue = document.getElementById('department').value;
+            const name = document.getElementById('name').value.trim();
+            const senderEmail = document.getElementById('email').value.trim();
+            const company = document.getElementById('company').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            // Parse "deptId::email" (set by selectFormDepartment) or plain "deptId" (old fallback)
+            let toEmail, deptId;
+            if (rawDeptValue.includes('::')) {
+                const parts = rawDeptValue.split('::');
+                deptId = parts[0];
+                toEmail = parts[1];
+            } else {
+                deptId = rawDeptValue;
+                toEmail = (window.deptEmailMap && window.deptEmailMap[deptId])
+                    ? window.deptEmailMap[deptId]
+                    : 'sales@electronicscience.net';
+            }
+
+            if (!rawDeptValue) {
+                alert('Please select a department before sending.');
+                return;
+            }
+
+            // Build subject from the toggle button display text
+            const deptLabel = document.getElementById('deptToggle')
+                ?.querySelector('span')?.textContent || deptId || 'General';
+            const subject = encodeURIComponent(`Contact Form: ${deptLabel} Inquiry from ${name}`);
+
+            // Build body
+            const bodyLines = [
+                `Name: ${name}`,
+                `Email: ${senderEmail}`,
+                company ? `Company: ${company}` : '',
+                phone ? `Phone: ${phone}` : '',
+                '',
+                'Message:',
+                message
+            ].filter(l => l !== null);
+            const body = encodeURIComponent(bodyLines.join('\n'));
+
+            // Open the user's mail client
+            window.location.href = `mailto:${toEmail}?subject=${subject}&body=${body}`;
+        });
+    </script>
+
+    <script>
+        // Scroll Animations with Intersection Observer
+        const revealObserverOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                } else {
+                    entry.target.classList.remove('visible');
+                }
+            });
+        }, revealObserverOptions);
+
+        document.querySelectorAll('.fade-up, .fade-in-left, .fade-in-right, .fade-in-scale').forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        // Hero scroll parallax and fade animation
+        const heroSection = document.querySelector('.hero-image-section');
+        const heroInner = document.querySelector('.hero-inner');
+
+        // Initialize hero-inner state for entrance animation
+        if (heroInner) {
+            heroInner.style.opacity = '0';
+            heroInner.style.transform = 'translateY(30px)';
+            heroInner.style.transition = 'opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)';
+
+            // Trigger entrance animation after a short delay
+            setTimeout(() => {
+                heroInner.style.opacity = '1';
+                heroInner.style.transform = 'translateY(0)';
+
+                // Remove transition after entrance to allow smooth JS-driven scroll animation
+                setTimeout(() => {
+                    if (heroInner) heroInner.style.transition = 'none';
+                }, 1200);
+            }, 100);
+        }
+
+        let scrollTicking = false;
+        window.addEventListener('scroll', () => {
+            if (!scrollTicking) {
+                window.requestAnimationFrame(() => {
+                    const scrolled = window.scrollY;
+                    const heroHeight = heroSection ? heroSection.offsetHeight : 500;
+
+                    if (scrolled <= heroHeight && heroInner) {
+                        const opacity = Math.max(0, 1 - (scrolled / (heroHeight * 0.7)));
+                        const yPos = scrolled * 0.45;
+
+                        heroInner.style.opacity = opacity;
+                        heroInner.style.transform = `translateY(${yPos}px)`;
+                    } else if (heroInner && scrolled > heroHeight && heroInner.style.opacity !== '0') {
+                        heroInner.style.opacity = '0';
+                    }
+                    scrollTicking = false;
+                });
+                scrollTicking = true;
+            }
+        });
+
+        // Custom Dropdown Handling
+        document.querySelectorAll('.custom-dropdown').forEach(dropdown => {
+            const toggle = dropdown.querySelector('.dropdown-toggle');
+            const menu = dropdown.querySelector('.dropdown-menu');
+            const hiddenInput = dropdown.querySelector('input[type="hidden"]');
+            const label = toggle.querySelector('span');
+
+            toggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const isOpen = dropdown.classList.toggle('open');
+                toggle.setAttribute('aria-expanded', isOpen);
+                if (isOpen) {
+                    menu.removeAttribute('hidden');
+                } else {
+                    menu.setAttribute('hidden', '');
+                }
+
+                // Close other dropdowns
+                document.querySelectorAll('.custom-dropdown').forEach(other => {
+                    if (other !== dropdown) {
+                        other.classList.remove('open');
+                        other.querySelector('.dropdown-toggle').setAttribute('aria-expanded', 'false');
+                        other.querySelector('.dropdown-menu').setAttribute('hidden', '');
+                    }
+                });
+            });
+
+            menu.querySelectorAll('li').forEach(item => {
+                item.addEventListener('click', () => {
+                    const value = item.getAttribute('data-value');
+                    const text = item.textContent;
+
+                    label.textContent = text;
+                    if (hiddenInput) {
+                        hiddenInput.value = value;
+                        // Trigger change event for form validation/listeners
+                        hiddenInput.dispatchEvent(new Event('change'));
+                    }
+
+                    dropdown.classList.remove('open');
+                    toggle.setAttribute('aria-expanded', 'false');
+                    menu.setAttribute('hidden', '');
+
+                    // Special case for department switching in info section
+                    if (dropdown.id === 'contact-department-custom') {
+                        showDepartment(value);
+                    }
+                });
+            });
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.custom-dropdown')) {
+                document.querySelectorAll('.custom-dropdown').forEach(dropdown => {
+                    dropdown.classList.remove('open');
+                    dropdown.querySelector('.dropdown-toggle').setAttribute('aria-expanded', 'false');
+                    dropdown.querySelector('.dropdown-menu').setAttribute('hidden', '');
+                });
+            }
+        });
+
+        // Function to display department content
+        function showDepartment(dept) {
+            if (!dept) {
+                // Hide all if no selection
+                document.querySelectorAll('.department-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                return;
+            }
+
+            // Hide all department contents
+            document.querySelectorAll('.department-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Show selected department content
+            const targetContent = document.getElementById(dept + '-content');
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+        }
+
+        // Initial setup for default selection
+        const initialDept = document.getElementById('contact-department').value;
+        if (initialDept) {
+            showDepartment(initialDept);
+        }
+
+        // Back to Top functionality
+        const backToTopBtn = document.getElementById('backToTop');
+        if (backToTopBtn) {
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTopBtn.classList.add('visible');
+                } else {
+                    backToTopBtn.classList.remove('visible');
+                }
+            });
+
+            backToTopBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+    </script>
+
+    <!-- Customer Support Chat Widget -->
+    <div class="chat-widget" id="chatWidget">
+        <div class="chat-toggle" id="chatToggle">
+            <svg class="chat-icon" viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor"
+                    d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" />
+            </svg>
+            <svg class="close-icon" viewBox="0 0 24 24" width="24" height="24" style="display: none;">
+                <path fill="currentColor"
+                    d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+            </svg>
+        </div>
+        <div class="chat-panel" id="chatPanel">
+            <div class="chat-header">
+                <h4>Customer Support</h4>
+                <p>Ask me anything!</p>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-message bot-message">
+                    <div class="message-content">Hi! I'm here to help. How can I assist you today?</div>
+                </div>
+            </div>
+            <div class="chat-input-container">
+                <input type="text" id="chatInput" class="chat-input" placeholder="Type your message..." />
+                <button id="chatSend" class="chat-send-btn">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path fill="currentColor" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Chat AI Script -->
+    <script src="../js/utils.js"></script>
+    <script src="../scripts/chat-ai.js"></script>
+    <!-- Analytics -->
+    <script src="../scripts/analytics.js"></script>
+</body>
+
+</html>

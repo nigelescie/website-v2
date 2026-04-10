@@ -1,0 +1,10 @@
+# Server
+PORT=3000
+
+# JWT Secret - generate with: node -e "require('crypto').randomBytes(64).toString('hex')"
+JWT_SECRET=a9df23360db6f2cbf640cb66cbff6af87f450c5182f5f7f923e0d3ca5702c226
+
+# Email (see ENV_SETUP.md for Gmail App Password instructions)
+EMAIL_SERVICE=gmail
+EMAIL_USER=jeriel.d@electronicscience.net
+EMAIL_PASSWORD=emxx qcgf lvsg pqai

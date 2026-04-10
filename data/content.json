@@ -1,0 +1,2142 @@
+{
+  "hero": {
+    "buttonText": "Explore Solutions",
+    "slides": [
+      {
+        "image": "assets/hero-1.png",
+        "label": "Field team using mobile tools"
+      },
+      {
+        "image": "assets/hero-2.png",
+        "label": "Cloud dashboard analytics"
+      }
+    ],
+    "hidden": false
+  },
+  "stats": [
+    {
+      "number": 24,
+      "label": "Years of Innovation Since 2000",
+      "icon": "assets/icons/check.svg",
+      "type": "svg"
+    },
+    {
+      "number": 100,
+      "label": "Clients Worldwide",
+      "icon": "assets/icons/globe.svg",
+      "type": "svg"
+    },
+    {
+      "number": 100,
+      "label": "Uptime Since 2000",
+      "icon": "assets/icons/trending-up.svg",
+      "type": "svg"
+    },
+    {
+      "number": 2018,
+      "label": "AWS Partner of the Year Nominee",
+      "icon": "assets/aws-logo.png",
+      "type": "image"
+    }
+  ],
+  "solutions": [
+    {
+      "title": "CRM Tools for Salesforce",
+      "description": "PocketWiSE SFE, PM App, and SOLE - Paperless customer engagements and transactions for large sales forces",
+      "image": "uploads/image-1771838420084-484850246.png",
+      "hidden": false
+    },
+    {
+      "title": "Inventory Management",
+      "description": "SwiftPoint, IMS, PATS, BayaniBox - Real-time inventory monitoring and workforce trade activity tracking",
+      "image": "uploads/image-1771839955625-850481022.png"
+    },
+    {
+      "title": "Paperless Operations",
+      "description": "Swift-Forms - Eliminate waiting time and promote fast contactless transactions",
+      "image": "uploads/image-1771839969230-167772002.png"
+    },
+    {
+      "title": "Mobile POS Solutions",
+      "description": "PocketWiSE Retail & Pocket Venta - Monitor sales and transactions across all store locations",
+      "image": "uploads/image-1771840517102-45095178.png"
+    },
+    {
+      "title": "Brand Loyalty Systems",
+      "description": "Swift Rewards & Swift Care - Automated coupon generation and discount approval",
+      "image": "uploads/image-1771839994767-990190071.png"
+    },
+    {
+      "title": "Custom Solutions",
+      "description": "Tailored mobile solutions designed specifically for your industry and requirements",
+      "image": "uploads/image-1771840539395-248924020.png"
+    }
+  ],
+  "whyUs": [
+    {
+      "title": "Proven Track Record",
+      "description": "Established in 2000, eScience has extensive experience in developing mobile solutions for enterprises and businesses. We are a proud employee-owned company with almost a hundred employees consisting of Tech industry experts and specialists.",
+      "image": "assets/proven.jpeg"
+    },
+    {
+      "title": "Award-Winning Solutions",
+      "description": "Our mobile solutions are widely recognized in the country and overseas. The company was also nominated as the Amazon Web Services (AWS) Partner of the Year in 2018. ",
+      "image": "assets/award.jpeg"
+    },
+    {
+      "title": "Mobile Technology Pioneers",
+      "description": "We have been providing mobile solutions to big enterprises since the year 2000 through wireless technology. And our reliable and secure mobile solutions have never experienced any downtime or interruptions over those years. ",
+      "image": "assets/mobiletech.jpeg"
+    },
+    {
+      "title": "Trusted Worldwide",
+      "description": "eScience is the preferred mobile solutions provider by enterprises and businesses with almost a hundred clients from different industries.",
+      "image": "assets/preferred.jpeg"
+    }
+  ],
+  "testimonials": [
+    {
+      "name": "Andy Gapuz",
+      "title": "Senior Operations Manager",
+      "company": "Testing Lang CO.",
+      "quote": "EDTR has helped us grow our business. It helped us address operational gaps as fast as possible and avoid sales loss through real-time visibility of field data and goods.",
+      "logo": "uploads/image-1767832325147-423811609.png"
+    },
+    {
+      "name": "Neville F. Sisgado",
+      "title": "District Sales Manager",
+      "company": "company name",
+      "quote": "The feedback from our field operations is fast and immediate. Their technical support team is always available, and the SFE app is iOS-ready. PocketWiSE SFE's flexibility made us choose it.",
+      "logo": "assets/client-logo-2.png"
+    },
+    {
+      "name": "Caroline Junsay",
+      "title": "SFE Manager",
+      "company": "company name",
+      "quote": "Thank you eScience for supporting our field force during lockdowns. You introduced new features in a dynamic and flexible app. We appreciate the innovations being introduced.",
+      "logo": "assets/client-logo-3.png"
+    },
+    {
+      "name": "Julie Anne Catalan-Kempis",
+      "title": "Commercial Excellence Manager",
+      "company": "company name",
+      "quote": "We're grateful to eScience for helping our organization transform how we cover and reach customers. We can capture all data and engagements with accuracy and productivity.",
+      "logo": "assets/client-logo-4.png"
+    },
+    {
+      "name": "Client Name",
+      "title": "Position",
+      "company": "Company",
+      "quote": "Testimonial...",
+      "logo": ""
+    }
+  ],
+  "productsPage": {
+    "sections": [
+      {
+        "id": "crm-tools-for-salesforce",
+        "title": "CRM Tools for Salesforce",
+        "subtitle": "PocketWiSE SFE, PM App, and SOLE - Paperless customer engagements and transactions for large sales forces",
+        "products": [
+          {
+            "id": "sfe",
+            "title": "PocketWiSE SFE",
+            "image": "assets/product-logos/sfe.png",
+            "description": "An integrated mobile solution that provides real-time capturing and sending of customer coverage and engagements from the field directly to the head office. Now comes with new remote features!",
+            "link": "../products/sfe.html",
+            "longDescription": "Looking to take your sales productivity to the next level? Look no further than SFE. This comprehensive Mobile CRM automates customer coverage, planning, presentations, and even transactions. Plus, with new health-protocol compliant features like contactless call confirmation and MD rating, SFE is perfect for businesses in the new normal. Give your sales force the tools they need to succeed with SFE. ",
+            "features": [
+              {
+                "title": "KPIs and Dashboard",
+                "icon": "assets/icons/layout.svg",
+                "description": "asdafasfadasd",
+                "type": "svg"
+              },
+              {
+                "title": "Call Report Module",
+                "icon": "assets/icons/phone.svg",
+                "type": "svg"
+              },
+              {
+                "title": "Master Coverage Plan",
+                "icon": "assets/icons/calendar.svg",
+                "type": "svg"
+              },
+              {
+                "title": "Actual Coverage Monitoring",
+                "icon": "assets/icons/check-circle.svg",
+                "type": "svg"
+              },
+              {
+                "title": "Product Detailing Aid",
+                "icon": "assets/icons/monitor.svg",
+                "type": "svg"
+              },
+              {
+                "title": "Webtool Activity Report",
+                "icon": "assets/icons/tool.svg",
+                "type": "svg"
+              },
+              {
+                "title": "Customer Transaction",
+                "icon": "assets/icons/users.svg",
+                "type": "svg"
+              }
+            ],
+            "benefits": [
+              {
+                "title": "Real-time Access to Field Data",
+                "description": "SFE allows field sales reps to send data instantly, which can be immediately turned over for management. This increases the process of turning key information like customer transactions and visits in a timely manner, so this crucial info is always at your fingertips! "
+              },
+              {
+                "title": "Accurate and Verifiable Reports",
+                "description": "For businesses who are looking to maximize their productivity, SFE is an app that automatically captures data of sales. This means no more errors and delays with field reports as they can be instantly generated using this program! The best thing about it? It comes complete call confirmation where you record the signature from your customer for assurance on coverage or visit done by rep during work hours. "
+              },
+              {
+                "title": "Sales Productivity and Efficiency",
+                "description": "With the SFE, reps can focus on what they do best and leave all of this paperwork to us. We take care not only for their efficiency but also its profitability by including product presentations in our application so that no detail goes overlooked when it comes down making sure customers are happy!\n                                    "
+              },
+              {
+                "title": "Proactive Decision-Making",
+                "description": "With the new system, managers can now receive field data immediately from their reps. They won't have to wait a day before releasing guidelines and decisions that could affect operations in-field since they are able to make these critical split moments of decision making on urgent matters themselves with ease thanks for this quick access! "
+              },
+              {
+                "title": "Save on Cost and Time, and Increase in Revenue",
+                "description": "SFE has helped companies of all sizes streamline their operations by eliminating the tedious paperwork that comes with it. From mailing and paper costs, users can save up to a week or even one month's worth which leads them more time for engaging customers ultimately boosting sales and increasing revenue as well! "
+              },
+              {
+                "title": "Efficient Progress Management",
+                "description": "Customizable workflows for processes like sales order approvals and invoice collections ensure streamlined operations and effective management of exceptions. "
+              },
+              {
+                "title": "Accelerated Business Processes",
+                "description": "The platform accelerates the Order-to-Cash cycle by streamlining sales, order management, invoicing, and payment processes, leading to improved cash flow and operational efficiency. "
+              }
+            ],
+            "heroSubtitle": "The game-changer application in the Pharma industry",
+            "introImage": "uploads/image-1767601401043-413019151.jpg",
+            "video": "uploads/image-1767670866063-652194772.mp4",
+            "useCase": "SFE is the flagship mobile solution of eScience which is used by 70+ pharmaceutical companies in the Philippines accounting to almost 20% of the pharma market share in the country.\n\nSFE, as an integrated productivity tool, helped these pharma companies monitor all field activities in real-time. Medical or sales rep in the field can easily send their computed KPIs, monthly coverage plan (MCP), call or coverage reports, and inventory of their samples to their district managers. With the automated process, reports which used to take weeks or month to accomplished can be done and sent instantly. The management can now also proactively decide on strategies on how to increase product sales and marketing activities. "
+          },
+          {
+            "id": "pm-app",
+            "title": "PocketWiSE for Managers (PM App)",
+            "image": "assets/product-logos/pmapp.png",
+            "description": "Designed for district managers leading their sales force, PM app is the partner application of SFE to oversee the customer coverage and KPI's of every field personnel.",
+            "link": "../products/pm-app.html",
+            "longDescription": "PocketWiSE for Managers, known as PM app, is the perfect tool for district managers who want to coach their reps more effectively. This app allows you to join calls or coverage with your reps, and gives you access to their current KPIs and sales performance. With this information at your fingertips, you can coach your reps based on their individual needs. ",
+            "heroSubtitle": "The mobile solution for district managers",
+            "features": [
+              {
+                "title": "Manager's Dashboard",
+                "icon": "assets/icons/trending-up.svg",
+                "type": "svg"
+              },
+              {
+                "title": "Actual Call and Itinerary",
+                "icon": "assets/icons/calendar.svg",
+                "type": "svg"
+              },
+              {
+                "title": "Development Plan",
+                "icon": "assets/icon-placeholder.svg",
+                "type": "svg"
+              },
+              {
+                "title": "PMR (Reps)",
+                "icon": "assets/icons/users.svg",
+                "type": "svg"
+              },
+              {
+                "title": "Online Approval and Status Summary",
+                "icon": "assets/icons/list.svg",
+                "type": "svg"
+              },
+              {
+                "title": "Sales and Online Reports",
+                "icon": "assets/icon-placeholder.svg",
+                "type": "svg"
+              }
+            ],
+            "introImage": "uploads/image-1767682354966-189263909.jpg",
+            "benefits": [
+              {
+                "title": "Fast and Easy Monitoring for Sales Rep's Performance",
+                "description": "PM App paired with SFE, Managers can now review and approve coverage plans for their sales reps in real time, without waiting on paperwork. This means that they will never miss an important update about what is happening with a particular rep's performance ever again! "
+              },
+              {
+                "title": "Real-time Coaching",
+                "description": "District managers can easily check their targets and goals for the month, so they know how to effectively supervise sales representatives in order ensure that every territory or customer gets covered. "
+              },
+              {
+                "title": "Better Collaboration and Coordination between Sales of Every Territory",
+                "description": "The PM App has a feature that allows managers to join calls or visits with their sales reps in order check how they are performing. This will allow them to assess every rep's effectiveness, as well help if any customer issues arise while on-site A great way for company owners/managers alike! "
+              },
+              {
+                "title": "Proactive Decision-Making",
+                "description": "With PM App, the DMs are always prepared for any situation that may arise. They can proactively anticipate and solve incidents before they ever happen with ease thanks to real-time data captured by this app! "
+              }
+            ]
+          },
+          {
+            "id": "sole",
+            "title": "Sales, Opportunities, Leads, and Engagements (SOLE)",
+            "image": "assets/product-logos/solelogo.png",
+            "description": "Manage your sales pipeline and customer relationships using SOLE. Be on top of every opportunity with the CRM on your mobile phone!",
+            "link": "../products/sole.html",
+            "features": [
+              {
+                "title": "Sales KPIs and Dashboard",
+                "icon": "assets/icons/trending-up.svg",
+                "type": "svg"
+              },
+              {
+                "title": "Customer and Master Timeline",
+                "icon": "assets/icons/users.svg",
+                "type": "svg"
+              },
+              {
+                "title": "Calendar and Itinerary",
+                "icon": "assets/icons/calendar.svg",
+                "type": "svg"
+              },
+              {
+                "title": "Deals, Opportunity, Accounts Monitoring",
+                "icon": "assets/icons/check.svg",
+                "type": "svg"
+              },
+              {
+                "title": "Digital Marketing Materials",
+                "icon": "assets/icons/layout.svg",
+                "type": "svg"
+              },
+              {
+                "title": "Web-based Activity Report",
+                "icon": "assets/icons/globe.svg",
+                "type": "svg"
+              }
+            ],
+            "introImage": "uploads/image-1767682360272-44743731.jpg",
+            "heroSubtitle": "Be on top of every opportunity with a handheld CRM",
+            "longDescription": "Sales, Opportunities, Leads, and Engagements or SOLE is the perfect handheld CRM to manage your customers and sales pipeline while on the go. With complete features that include contact management, lead capture and tracking, and sales analysis tools, SOLE ensures you're always in control of your business dealings. SOLE makes it easy to stay organized and focused on your goals, so you can close more deals quickly and easily.",
+            "useCase": "SOLE is a complete customer relationship lifecycle management solution that automates your company’s sales engagement process. It is a sales productivity platform that gives your field force personnel access to the information they need to be effective in their work. It allows them to easily & quickly manage leads, contract, deals, opportunities and interactions using their mobile device. SOLE also works offline and synchronizes data with a cloud-based server. \n\n SOLE includes a wide range of graphical reports and analytical tools to give valuable insights on the opportunities, leads, deal progression, profitability and much more. ",
+            "video": "uploads/image-1767682910342-611844975.mp4",
+            "benefits": [
+              {
+                "title": "Efficient Customer-Relationship Management",
+                "description": "SOLE is a revolutionary CRM system that provides sales reps with an all-inclusive tool to help them manage their customers and even prospects more efficiently. This sleek, user-friendly platform organizes leads for easy navigation through different stages of deals from managing existing clients right down the line - cutting down on time wasted sorting data into excel sheets! "
+              },
+              {
+                "title": "Oversee Leads and Sales Pipeline by Sales Rep",
+                "description": "With the help of our interactive webtool, you can easily keep an eye on your sales reps and their activities. You'll know who they're working with at all times so there will never be any disputes about which customer or company belongs to them! "
+              },
+              {
+                "title": "Focus on Sales Productivity",
+                "description": "Sales reps can now focus less on finishing their reports and more time finding new customers. SOLE also comes with an activity report for each sales representative which is automatically generated, sent to management - keeping them up-to date about what's happening. "
+              },
+              {
+                "title": "Real-time Tracking of Opportunities and Leads to Boost Sales",
+                "description": "SOLE's technology is designed to help your sales team close more deals and convert every prospect. With SOLE, you can easily monitor the progress of each opportunity so that all resources are focused on how best to keep this customer engaged for them to eventually become loyal customers! "
+              }
+            ]
+          },
+          {
+            "id": "new-product-8636",
+            "title": "New Product",
+            "description": "",
+            "image": "",
+            "link": "product-detail.html?id=new-product-8636"
+          }
+        ],
+        "hidden": false
+      },
+      {
+        "id": "inventory-management",
+        "title": "Inventory Management",
+        "subtitle": "SwiftPoint, IMS, PATS, BayaniBox - Real-time inventory monitoring and workforce trade activity tracking",
+        "style": "background: #0a0a0a;",
+        "products": [
+          {
+            "id": "swiftpoint",
+            "title": "SwiftPoint",
+            "image": "assets/product-logos/swiftpoint.png",
+            "description": "Attendance, trade activities, and complete inventory monitoring application that allows you to capture field data from your workforce across all stores and branches.",
+            "link": "../products/swiftpoint.html",
+            "introImage": "uploads/image-1767683371058-107626384.jpg",
+            "heroSubtitle": "testing",
+            "longDescription": "the quick brown fox jumps over the lazy dog.the quick brown fox jumps over the lazy dog.the quick brown fox jumps over the lazy dog.the quick brown fox jumps over the lazy dog.the quick brown fox jumps over the lazy dog.the quick brown fox jumps over the lazy dog.the quick brown fox jumps over the lazy dog.the quick brown fox jumps over the lazy dog.the quick brown fox jumps over the lazy dog.",
+            "useCase": "the quick brown fox jumps over the lazy dog.the quick brown fox jumps over the lazy dog.the quick brown fox jumps over the lazy dog.the quick brown fox jumps over the lazy dog.the quick brown fox jumps over the lazy dog.the quick brown fox jumps over the lazy dog.the quick brown fox jumps over the lazy dog.the quick brown fox jumps over the lazy dog.the quick brown fox jumps over the lazy dog.",
+            "video": "uploads/image-1767683402482-929261138.mp4",
+            "features": [
+              {
+                "title": "New Feature",
+                "icon": "assets/icons/check.svg",
+                "type": "svg"
+              },
+              {
+                "title": "New Feature",
+                "icon": "assets/icons/check.svg",
+                "type": "svg"
+              }
+            ],
+            "benefits": [
+              {
+                "title": "New Benefit",
+                "description": ""
+              },
+              {
+                "title": "New Benefit",
+                "description": ""
+              }
+            ]
+          },
+          {
+            "id": "ims",
+            "title": "Inventory Management System (IMS)",
+            "image": "assets/product-logos/ims.png",
+            "description": "Built for Bureau of Customs, custom facilities and warehouses, IMS is designed to automate all cargo operations from stripping, billing, customer service up to releasing of cargo.",
+            "link": "../products/ims.html"
+          },
+          {
+            "id": "pats",
+            "title": "Promo Activity Tracking System (PATS)",
+            "image": "assets/product-logos/pats.png",
+            "description": "Built for the FMCG industry, PATS centralizes all inventory and stock movement data of the promo materials from FMCG management’s agreement with suppliers up to the warehouses and the stores into just one system.",
+            "link": "../products/pats.html"
+          },
+          {
+            "id": "bayanibox",
+            "title": "BayaniBox",
+            "image": "assets/product-logos/bayanibox.png",
+            "description": "Built to streamline the processing of balikbayan boxes, providing a seamless experience and convenient way of sending and tracking shipments.",
+            "link": "../products/bayanibox.html",
+            "introImage": "uploads/image-1767684008794-975871451.jpg"
+          }
+        ]
+      },
+      {
+        "id": "paperless-operations",
+        "title": "Paperless Operations",
+        "subtitle": "Swift-Forms - Eliminate waiting time and promote fast contactless transactions",
+        "products": [
+          {
+            "id": "swift-forms",
+            "title": "Swift-Forms",
+            "image": "assets/product-logos/swiftforms.png",
+            "description": "Digital forms platform with offline support and real-time sync.",
+            "features": [
+              "Custom form builder",
+              "Offline data capture",
+              "Digital signatures",
+              "Photo attachments",
+              "Real-time sync",
+              {
+                "title": "New Feature",
+                "icon": "assets/icons/check.svg",
+                "type": "svg"
+              }
+            ],
+            "link": "../products/swift-forms.html"
+          }
+        ]
+      },
+      {
+        "id": "mobile-pos-solutions",
+        "title": "Mobile POS Solutions",
+        "subtitle": "PocketWiSE Retail & Pocket Venta - Monitor sales and transactions across all store locations",
+        "style": "background: #0a0a0a;",
+        "products": [
+          {
+            "id": "retail",
+            "title": "PocketWiSE Retail",
+            "image": "assets/product-logos/retail.png",
+            "description": "Complete retail POS with inventory and payment integration.",
+            "features": [
+              "Payment processing",
+              "Inventory sync",
+              "Receipt printing",
+              "Sales reporting"
+            ],
+            "link": "../products/retail.html"
+          },
+          {
+            "id": "pocketventa",
+            "title": "Pocket Venta",
+            "image": "assets/product-logos/pocketventa.png",
+            "description": "Mobile sales solution for field representatives.",
+            "features": [
+              "Mobile ordering",
+              "Customer management",
+              "Route optimization",
+              "Offline mode"
+            ],
+            "link": "../products/pocket-venta.html"
+          }
+        ]
+      },
+      {
+        "id": "brand-loyalty-systems",
+        "title": "Brand Loyalty Systems",
+        "subtitle": "Swift Rewards & Swift Care - Automated coupon generation and discount approval",
+        "products": [
+          {
+            "id": "swift-rewards",
+            "title": "Swift Rewards",
+            "image": "assets/product-logos/swiftrewards.png",
+            "description": "Comprehensive loyalty program with automated rewards.",
+            "features": [
+              "Points management",
+              "Automated rewards",
+              "Tiered programs",
+              "Customer analytics"
+            ],
+            "link": "../products/swift-rewards.html"
+          },
+          {
+            "id": "swift-care",
+            "title": "Swift Care",
+            "image": "assets/product-logos/swiftcare.png",
+            "description": "Customer care and discount management system.",
+            "features": [
+              "Coupon generation",
+              "Discount approval",
+              "Customer support",
+              "Campaign management"
+            ],
+            "link": "../products/swift-care.html"
+          }
+        ]
+      },
+      {
+        "id": "custom",
+        "title": "Custom Solutions",
+        "subtitle": "Tailored applications for your unique business needs",
+        "style": "background: #0a0a0a;",
+        "products": [
+          {
+            "id": "custom-development",
+            "title": "Custom Development",
+            "image": "assets/product-logos/custom.png",
+            "description": "Tailored mobile and web applications for your specific business requirements.",
+            "features": [
+              "Custom development",
+              "API integrations",
+              "Cloud deployment",
+              "Ongoing support"
+            ],
+            "link": "../products/custom-development.html"
+          }
+        ]
+      }
+    ]
+  },
+  "timeline": [
+    {
+      "id": 1,
+      "title": "Pioneering Mobile Technology",
+      "year": "1999",
+      "description": "10 years before online stores and e-commerce sites gained popularity in the Philippines, there was already E-Store Exchange, the first ever electronic store in the country that allowed users to sell, buy and pay for products online through their phone.",
+      "position": "left"
+    },
+    {
+      "id": 2,
+      "title": "Official Establishment of eScience",
+      "year": "Year 0 - 2000",
+      "description": "After pioneer E-Store Exchange in the country, Mr. Dagelet together with his wife co-founded eScience, an IT company that develops high-impact mobile applications and IT solutions that help companies automate their operations.",
+      "position": "right"
+    },
+    {
+      "id": 3,
+      "title": "Awarded by the Australian Government",
+      "year": "Year 4 - 2004",
+      "description": "eScience won the \"Secrets of Australian IT Innovation\" in 2004 for developing the first ever mobile karaoke application.",
+      "position": "left"
+    },
+    {
+      "id": 1768351984054,
+      "title": "Vendor of the Year Awardee",
+      "year": "Year 7 - 2007",
+      "description": "eScience received Nokia's Best Partner: Vendor of the Year Award in 2007 for providing innovative services in the IT industry.",
+      "position": "right"
+    },
+    {
+      "id": 1768351985365,
+      "title": "From Consulting and System Integration to SAAS",
+      "year": "Year 10 - 2010",
+      "description": "eScience shifted to a Software As A Service (SAAS) business model, developing mobile solutions that are in subscription basis accessible across different industries and countries.",
+      "position": "left"
+    },
+    {
+      "id": 1771484523693,
+      "title": "Launch of PocketWiSE Sales Force Effectiveness (SFE)",
+      "year": "Year 11 - 2011",
+      "description": "PocketWise SFE, a mobile CRM and productivity tool is the flagship product of eScience automating the sales force process and business operations of companies in the pharmaceutical and healthcare industry. SFE helps boost sales productivity and efficiency.",
+      "position": "right"
+    },
+    {
+      "id": 1771484751577,
+      "title": "Samsung's Best ISV Partner Awardee",
+      "year": "Year 15 - 2015",
+      "description": "eScience was awarded by Samsung as the Best ISV Partner for providing excellent mobile solutions.",
+      "position": "left"
+    },
+    {
+      "id": 1771485054008,
+      "title": "eScience in Indonesia",
+      "year": "Year 16 - 2016",
+      "description": "The need for automation of enterprises and business paved the way for eScience to expand its business overseas. eScience reached the shores of Indonesia in 2016 catering one of the largest retail and distribution companies in the country.",
+      "position": "right"
+    },
+    {
+      "id": 1771485656932,
+      "title": "eScience in Myanmar",
+      "year": "Year 18 - 2018",
+      "description": "eScience has reached another overseas milestone. The innovative mobile solution, PocketWiSE SFE, was implemented by two of the largest pharmaceutical groups in Myanmar.",
+      "position": "left"
+    },
+    {
+      "id": 1771485882642,
+      "title": "Introduction of New Cutting Edge Remote Features",
+      "year": "Year 20 - 2020",
+      "description": "New apps were launched to help business owners, establishments and customers to adjust to the new normal through automation. New features for existing apps were also introduced to cater remote set-ups and adhere to the safety protocols against COVID-19. ",
+      "position": "right"
+    },
+    {
+      "id": 1771485961781,
+      "title": "Inventory automation with Bureau of Customs (BOC)",
+      "year": "Year 21 - 2021",
+      "description": "In a partnership-project with BOC, eScience developed the automated Inventory Management System to help BOC and all warehouses to get real-time access to data from every warehouse across the country to promote transparencey and boost efficiency. ",
+      "position": "left"
+    }
+  ],
+  "leaders": {
+    "title": "Our Leaders",
+    "description": "eScience is home to technology experts, unmatched industry knowledge, and timely response. We have the most talented, passionate, and committed IT experts, business development and customer specialists who share the essential core values that define our organization: Integrity, God-centeredness, Excellence, Innovation, Teamwork, and Customer focus. ",
+    "list": [
+      {
+        "name": "Ricky Dagelet",
+        "role": "Chief Executive Officer",
+        "image": "uploads/image-1768274882435-728734955.png"
+      },
+      {
+        "name": "Alvin Fabella",
+        "role": "Chief Operating Officer",
+        "image": "uploads/image-1768274924730-763786431.png"
+      },
+      {
+        "name": "Brenda Dagelet",
+        "role": "Vice President",
+        "image": "uploads/image-1768794391666-669850808.png"
+      }
+    ]
+  },
+  "perks": {
+    "title": "Employee Perks & Benefits",
+    "description": "eScience being home to technology experts and practitioners provide a healthy working enviroment and family culture along with great perks and benefits. ",
+    "list": [
+      {
+        "title": "Stock Option Plan",
+        "description": "We are proud to say that eScience is an employee-owned company with over 45 shareholders up to date. We provide a stock option plan for all our employees after reaching 3 years of tenure. ",
+        "icon": "bi-heart-pulse",
+        "image": "uploads/image-1768294863604-306959968.png"
+      },
+      {
+        "title": "Competitive Salary Package",
+        "description": "We provide compensation that is well deserved by all our employees. Every year, we appraise our employees and give them up to 20% salary increase based on their annual performance. ",
+        "icon": "bi-graph-up-arrow",
+        "image": "uploads/image-1768294900947-621215547.jpg"
+      },
+      {
+        "title": "Grandiose Company Outings",
+        "description": "As part of the annual company outing, eScience has already gone to different parts of the Philippines and even overseas bringing all our employees, for an all expense paid trip! Hong Kong, Taiwan, Palawan, Boracay, and Cagayan De Oro are just some of our destinations to name a few. ",
+        "icon": "bi-people",
+        "image": "uploads/image-1768294952235-926490931.jpg"
+      },
+      {
+        "title": "Bonuses, Allowances, and Medical Coverage",
+        "description": "Regular eScience employees receive additional bonuses that could go as much as 2 additional month of salary. Aside from these, the company provides allowances for clothing, meal, and mobile. We also provide comprehensive medical coverage for the employee, their immediate family members and dependents (parents for single individuals). ",
+        "image": "uploads/image-1768295529760-826483683.jpg"
+      },
+      {
+        "title": "Trainings for Professional Development",
+        "description": "eScience provides employees all the trainings and seminars they need that will help them develop their careers in their respective fields. We also send our employees to local and overseas conferences to meet other experts in the field and learn the best practices and latest technologies. ",
+        "image": "uploads/image-1768350648156-287528379.jpg"
+      },
+      {
+        "title": "Seminars and Activities for our Employees' Well-Being",
+        "description": "The Human Resources (HR) department of eScience regularly invites medical health professionals to conduct seminars on mental health, COVID-19, ergonomics and many more topics that can be beneficial for the well-being of our employees. ",
+        "image": "uploads/image-1768350709872-693929281.jpg"
+      }
+    ]
+  },
+  "blogPage": {
+    "heroTitle": "Our Blog",
+    "heroDescription": "Insights and updates from the eScience team",
+    "posts": [
+      {
+        "id": 1771491014813,
+        "title": "Only Filipino tech company invited for Amazon Web Services (AWS) Summit 2018 in Singapore ",
+        "excerpt": "Enter a short summary of the article here...",
+        "blocks": [
+          {
+            "type": "header",
+            "content": "<p><strong>eScience in AWS Summit held in Singapore&nbsp;</strong></p>",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "text",
+            "content": "<p>eScience was the only Filipino IT company invited to join the Amazon Web Services (AWS) Partner Summit to be one of the tech exhibitors. AWS Partner Summit was held in Singapore on April 5, 2018.&nbsp;</p><p>eScience Corporation was proud to showcase its Filipino-made CRM application, SOLE. Sales Opportunities Leads, and Engagement (SOLE) is a CRM application that can be used on mobile phones and even offline which transmits field sales data from the user to the management in real-time.&nbsp;</p>"
+          },
+          {
+            "type": "image",
+            "content": "",
+            "url": "",
+            "caption": "",
+            "images": [
+              {
+                "url": "uploads/image-1771491160226-26291748.jpg",
+                "caption": ""
+              }
+            ]
+          },
+          {
+            "type": "divider",
+            "content": "",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "text",
+            "content": "<p>PocketWiSE series are mobile apps that helps FMCG, retail and distribution, warehouse management, and pharmaceutical companies to automatically send real-time field data to the management portal or headquarters using a low-end mobile phone and 3G/4G/Wi-fi network. This solution helped 80+ companies in the Philippines make proactive decisions for their field stores and operations.&nbsp;</p>",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "content": "",
+            "url": "",
+            "caption": "",
+            "images": [
+              {
+                "url": "uploads/image-1771491196685-909056019.jpg",
+                "caption": ""
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "content": "<p>eScience CEO Ricky Dagelet, together with Project Manager Khaye Becina and Innovations Team Head Joseph Maiquez, represented eScience in the AWS Partner Summit. Becina served as the technical product head who developed SOLE.&nbsp;</p>",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "divider",
+            "content": "",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "content": "",
+            "url": "",
+            "caption": "",
+            "images": [
+              {
+                "url": "uploads/image-1771491264707-295690733.jpg",
+                "caption": ""
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "content": "<p>Before SOLE’s official launch in May, the Singaporean attendees already had a glimpse of what SOLE can do to boost sales productivity and to manage the sales pipeline efficiently.&nbsp;</p><p>Amazon Web Services, (AWS) a worldwide cloud computing service provider, has been eScience’s partner for almost a decade now.&nbsp;</p>",
+            "url": "",
+            "caption": ""
+          }
+        ],
+        "category": "events",
+        "date": "April 7, 2018",
+        "image": "uploads/image-1771491099419-475909354.jpg"
+      },
+      {
+        "id": 1771487468425,
+        "title": "eScience family travels to Taiwan for a 3-day company outing",
+        "excerpt": "Enter a short summary of the article here...",
+        "blocks": [
+          {
+            "type": "header",
+            "content": "<p><strong>#eScienceOneInTaiwan</strong></p>",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "text",
+            "content": "<p>We are serious and dedicated in developing mobile solutions but who says we don't know how to have fun? Every year, the whole eScience family goes out of town as part of our annual company outing. This year we went out of the country! eScience explored the home of Jerry Yan (Dào Míng Sì) and Barbie Shu (Shan Cai) this 2018.&nbsp;</p>"
+          },
+          {
+            "type": "image",
+            "content": "",
+            "url": "",
+            "caption": "",
+            "images": [
+              {
+                "url": "uploads/image-1771487654406-712503994.jpg",
+                "caption": ""
+              }
+            ]
+          },
+          {
+            "type": "divider",
+            "content": "",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "text",
+            "content": "<p>We value our hardwork and perseverance as much as we value fun and motivation. eScience makes sure that every year all of us would go places and enjoy sceneries we have never seen before. We value eScience's greatest assets—our people so we make sure that every year we have something to look forward to. And this sets us apart among any others.</p><p>As we stayed in our hotel, we held a program and general assembly to recognize our hardworking employees for 5 to 10 years. We also watched presentations from the locals in Taiwan.&nbsp;&nbsp;</p><p>As we roam around the City, we found good food, good people, and good sceneries. We enjoyed the rich Taiwanese culture which is evident in their infrastructures, buildings, artworks, and people as well.&nbsp;</p>",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "content": "",
+            "url": "",
+            "caption": "",
+            "images": [
+              {
+                "url": "uploads/image-1771487727896-221906783.jpg",
+                "caption": ""
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "content": "<p>This annual company outing is not just an “outing” but an amazing new experience for each and every one of us at eScience. Imagine a company who wanders abroad every year!&nbsp;</p>",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "divider",
+            "content": "",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "content": "",
+            "url": "",
+            "caption": "",
+            "images": [
+              {
+                "url": "uploads/image-1771488023443-181527809.jpg",
+                "caption": ""
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "content": "<p>Before SOLE’s official launch in May, the Singaporean attendees already had a glimpse of what SOLE can do to boost sales productivity and to manage the sales pipeline efficiently.&nbsp;</p><p>Amazon Web Services, (AWS) a worldwide cloud computing service provider, has been eScience’s partner for almost a decade now.&nbsp;</p>",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "content": "",
+            "url": "",
+            "caption": "",
+            "images": [
+              {
+                "url": "uploads/image-1771488075199-333207997.jpg",
+                "caption": ""
+              }
+            ]
+          }
+        ],
+        "category": "team",
+        "date": "April 7, 2018",
+        "image": "uploads/image-1771487563517-540790314.jpg"
+      },
+      {
+        "id": 1771486981814,
+        "title": "Sales Force Automation for Van Sales and PocketWiSE for Sales and Merchandisers joins Samsung Business Technology Summit ",
+        "excerpt": "Enter a short summary of the article here...",
+        "blocks": [
+          {
+            "type": "header",
+            "content": "<p><strong>SFA Van Sales at Samsung Business Technology Summit&nbsp;</strong></p>",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "text",
+            "content": "<p>Samsung Business announced its initial plans to deliver enterprise mobility solutions for a number of industries last July 21-22 in Marriott Hotel Cebu. Once implemented, the plans are expected to help create an enterprise mobility ecosystem based on Samsung mobile devices. The new ecosystem will be designed to build on the popularity and reach of Samsung's mobile innovations.&nbsp;</p>"
+          },
+          {
+            "type": "image",
+            "content": "",
+            "url": "",
+            "caption": "",
+            "images": [
+              {
+                "url": "uploads/image-1771487230834-561595495.jpg",
+                "caption": ""
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "content": "<p>The new plans are to add to Samsung's broad portfolio of devices, wearables and enterprise mobility solutions so users can benefit from SAP Mobile Platform and have more secure and simple integration with SAP's ecosystem. It is intends to combine and allow the extension of enterprise applications in a secure intuitive manner to the extended workforce and help provide businesses with shorter time to market, quicker access to revenue streams and improved real-time decision support to executives and the workforce.&nbsp;</p><p>As a market leader in market devices and solutions, Samsung knows how to bridge consumer expectations for what a premium mobile experience should feel like with a readiness for the enterprise environment. E-Science is proud to be one of Samsung Business Philippines' technology partner. PocketWiSE SFE for Van Sales and PocketWiSE for Merchandisers PSM were featured in the two-day summit where Samsung's industry partner vendors are gathered.</p><p>The collaboration between Samsung Business Philippines and E-Science is expected to create new opportunities for developers to build solutions that can leverage the integrated offering from Samsung and E-Science on mobile devices. The parties plan for mobile applications and user experiences to be engineered to help take advantage of Samsung device capabilities, thus aimed at giving a competitive advantage to workforces that use Samsung mobile devices. This approach is expected to help facilitate web and mobile developers to innovate with Samsung, and the large System Integrators ecosystems of both companies may be enabled to more quickly create vertical solutions that can address the needs of the market and the game-changing opportunities in the mobile solutions arena.&nbsp;</p><p>&nbsp;</p>",
+            "url": "",
+            "caption": ""
+          }
+        ],
+        "category": "company",
+        "date": "July 22, 2016",
+        "image": "uploads/image-1771487113867-962646811.jpg"
+      },
+      {
+        "id": 1770689169244,
+        "title": "New Blog Article",
+        "excerpt": "Enter a short summary of the article here...",
+        "blocks": [
+          {
+            "type": "text",
+            "content": "<p>Welcome to your new article! Start by editing this block or adding more sections below.</p>"
+          }
+        ],
+        "category": "testing2",
+        "date": "February 10, 2026",
+        "image": ""
+      },
+      {
+        "id": 1770687989878,
+        "title": "TESTING",
+        "excerpt": "Enter a short summary of the article here...",
+        "blocks": [
+          {
+            "type": "text",
+            "content": "<p>Welcome to your new article! Start by editing this block or adding more sections below.</p>"
+          }
+        ],
+        "category": "testing",
+        "date": "February 10, 2026",
+        "image": ""
+      },
+      {
+        "id": 1769743841462,
+        "title": "A New Identity for a Dynamic Future: eScience Unveils SwiftPoint!",
+        "excerpt": "Enter a short summary of the article here...",
+        "blocks": [
+          {
+            "type": "header",
+            "content": "<p><strong>eScience Unveils SwiftPoint</strong></p>",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "text",
+            "content": "<p>The highly anticipated event of eScience took a momentous launch last July 12, 2023 at Ascott Hotel Makati. Marking a significant milestone in the company's journey, this transformational event drew representatives from different industries, all eager to witness what’s new with eScience.&nbsp;</p>"
+          },
+          {
+            "type": "image",
+            "content": "",
+            "url": "",
+            "caption": "",
+            "images": [
+              {
+                "url": "uploads/image-1769753632322-568052467.jpeg",
+                "caption": ""
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "content": "<p>SwiftPoint, a cutting-edge application that empowers your field-deployed employees to effortlessly submit attendance, track activities, monitor inventories and handle work-related tasks directly from their smartphones. eScience showcased its new visual identity and tagline signaling a powerful shift in its focus and vision. The new logo, symbolizing modernity and progress, and its new tagline, “Swift Reports, On Point” indeed embodied SwiftPoint’s commitment to pushing boundaries and driving innovation in the technology space. Truly, you would say goodbye to tedious paperwork and hello to convenience, efficiency, and real-time updates with SwiftPoint!&nbsp;</p>",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "content": "",
+            "url": "",
+            "caption": "",
+            "images": [
+              {
+                "url": "uploads/image-1769753665700-406799520.JPG",
+                "caption": ""
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "content": "<p>Ms. Riva de Castro, Former Sales Operation Associate Director of a distinguished company in the Philippines and a respectable figure in the world of data analytics with over 20 years of experience in the area of Sales, Trade Marketing &amp; Business Data Analysis, marked the event as the keynote speaker for the afternoon. With a wealth of knowledge and experience, she captivated the audience with her insights, guiding them through the transformative power of data and its untapped potential.&nbsp;</p>",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "content": "",
+            "url": "",
+            "caption": "",
+            "images": [
+              {
+                "url": "uploads/image-1769753698653-453767246.JPG",
+                "caption": ""
+              }
+            ]
+          },
+          {
+            "type": "divider",
+            "content": "",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "header",
+            "content": "<p><strong>The Launch of AI-Powered IMAGE2TEXT: Unleashing Creative Potential at eScience</strong></p>",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "text",
+            "content": "<p>The recent rebranding marked a significant moment for SwiftPoint, setting the stage for an exhilarating future. However, the highlight of the unforgettable evening was undoubtedly the introduction of SwiftPoint's newest technology - the AI-powered IMAGE2TEXT. This leading-edge innovation represents a giant leap forward in the realms of artificial intelligence and image recognition.&nbsp;</p><p>Attendees were given the chance to experience firsthand the capabilities of the Image2Text. In real-time, Image2Text demonstrated its ability to accurately recognize and extract meaningful inventory information from the images, converting them into textual data with an average accuracy of 95% - 98%.</p><p>SwiftPoint's AI-generated IMAGE2TEXT carries the potential to transform industries and streamline workflows. From expediting data entry processes to unlocking valuable insights hidden within images, the feature is boundless. The technology's versatility and precision promise to open new doors for businesses seeking a competitive edge.&nbsp;&nbsp;</p>",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "video",
+            "content": "",
+            "url": "uploads/image-1769753774454-667640890.mp4",
+            "caption": ""
+          }
+        ],
+        "category": "company",
+        "date": "July 12, 2023",
+        "image": "uploads/image-1769753477202-297241466.JPG"
+      },
+      {
+        "id": 1769743529388,
+        "title": "eScience awards two employees who celebrated their 2-decade and 1-decade work anniversaries",
+        "excerpt": "Enter a short summary of the article here...",
+        "blocks": [
+          {
+            "type": "text",
+            "content": "<p>Welcome to your new article! Start by editing this block or adding more sections below.</p>"
+          }
+        ],
+        "category": "team",
+        "date": "August 11, 2021",
+        "image": "uploads/image-1769743818344-999422442.jpg"
+      },
+      {
+        "id": 1769740722603,
+        "title": "eScience joins AWS Solutions Day 2021: Filipino solutions for Filipino businesses",
+        "excerpt": "Enter a short summary of the article here...",
+        "blocks": [
+          {
+            "type": "header",
+            "content": "<p><strong>AWS Solutions Day 2021&nbsp;</strong></p>",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "text",
+            "content": "<p>Every year, eScience is invited by Amazon Web Services (AWS) to present and pitch our mobile solutions and technology updates to customers in various industries. This customers are looking for ways and the best practices to improve and manage their operations.</p><p>This year's AWS Solutions Day has shifted to a virtual platform since face-to-face events are still currently limited due to the pandemic. Nonetheless, the virtual event was successful with around 45-60 companies actively listened to technology pitches.&nbsp;</p>"
+          },
+          {
+            "type": "image",
+            "content": "",
+            "url": "",
+            "caption": "",
+            "images": [
+              {
+                "url": "uploads/image-1769740914824-116214150.png",
+                "caption": ""
+              }
+            ]
+          },
+          {
+            "type": "divider",
+            "content": "",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "header",
+            "content": "<p><strong>ISV Partners</strong><span class=\"ql-cursor\">﻿</span></p>",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "text",
+            "content": "<p>eScience presented along with other ISV partners of AWS including Azeus, Paynamics, and Salarium. Each partner has their own gimmicks on how to continuously engage their audience until the end of every presentation since audience virtual engagement is quite challenging.&nbsp;</p>",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "content": "",
+            "url": "",
+            "caption": "",
+            "images": [
+              {
+                "url": "uploads/image-1769740966086-971138299.png",
+                "caption": ""
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "content": "<p>Mon Biticon, eScience Training Head and Project Manager, pitched our company background and product suite while Cathy Jimenez, eScience Sales Manager focused on the solution for pharma and healthcare, widely known as PocketWiSE SFE.&nbsp;</p>",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "content": "",
+            "url": "",
+            "caption": "",
+            "images": [
+              {
+                "url": "uploads/image-1769740998847-930227047.jpg",
+                "caption": ""
+              },
+              {
+                "url": "uploads/image-1769740998883-37992492.jpg",
+                "caption": ""
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "content": "<p>eScience presentation wrapped up with a question and answer portion where a number of companies raised their questions on specific features and the cost of deploying our mobile solutions.</p>",
+            "url": "",
+            "caption": ""
+          }
+        ],
+        "category": "events",
+        "date": "September 17, 2021",
+        "image": "uploads/image-1769740843427-390786627.png"
+      },
+      {
+        "id": 1769740052715,
+        "title": "eScience Mid-year Planning 2022",
+        "excerpt": "Enter a short summary of the article here...",
+        "blocks": [
+          {
+            "type": "text",
+            "content": "<p><strong class=\"ql-size-large\">eScience Mid-year Planning and MANCOM Team Building</strong>&nbsp;</p><p>Last July 14-15, 2022 eScience MANCOM gathered together at Zen Garden Hotel for a special meeting.&nbsp;</p><p>The first half of 2022 was a great success! The goal of the meeting was to plan &amp; ensure that eScience continues with the successful run for the rest of the year.&nbsp;</p><p>The first day started off with a sumptuous breakfast at Breakfast at Antonio’s. The rest of the day was filled with presentations from Sales, Product Managers, HRD, Finance, NEST &amp; other key units. Everyone shared their inputs on how to better support the plans presented. We spent the whole day meeting about what could be better for the coming days ahead of us, not just for the company but also for our clients. It is our commitment to provide innovation to our customers.&nbsp;</p><p>On our second day, we had our first ever Hybrid General Assembly (GA) with the MANCOM gathered in Zen Garden Hotel Silang Tagaytay while the rest were at home or in the office. The GA was conducted via Zoom.</p><p>Next, we jumped into our Team Building activity facilitated by Paulo de Alba. We spent time getting to know each another better through our personal sharings. We also participated in exercises that required us to build strategies and improve our teamwork. Overall, the team building activity was a good learning experience for all of us. We capped the 2nd day with a closing message from our CEO Ricky Dagelet.&nbsp;</p><p>Truly, the two-day event was a great success!&nbsp;&nbsp;</p><p>We are all excited for what the rest of 2022 will bring to us.&nbsp;</p><p>May offer back to God all the glory &amp; honor!&nbsp;</p>"
+          },
+          {
+            "type": "image",
+            "content": "",
+            "url": "",
+            "caption": "",
+            "images": [
+              {
+                "url": "uploads/image-1769745270027-801458506.jpeg",
+                "caption": ""
+              }
+            ]
+          }
+        ],
+        "category": "team",
+        "date": "July 14, 2022",
+        "image": "uploads/image-1769740173092-546266400.jpeg"
+      },
+      {
+        "id": 1769579055981,
+        "title": "eScience goes to Boracay for annual company outing",
+        "excerpt": "Enter a short summary of the article here...",
+        "blocks": [
+          {
+            "type": "header",
+            "content": "<p>Boracay Outing 2015</p>",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "text",
+            "content": "<p>Work, we believe, needs to be fun, educational and something that makes you so excited that you jump out of bed each morning. Over the last 15 years E-Science has won awards and accolades for creating innovative mobile solutions to business problems, so to celebrate its enduring legacy, we decided to fly the entire team on a retreat to one of the most beautiful beaches in Asia -Boracay.</p><p>It was December 2014 when E-Science announced our Boracay outing last March 12-15, 2015. Sixty people confirmed, we had a year to plan but had a limited budget. Did we panic? No! This activity was a product of fervent prayers and a lot of hard work. This event was one year in the making and had a lot of go and no-go challenges but we kept on going until we could find the right timing and support to make it possible. So here's a rundown of our itinerary in our 3-day Boracay outing on a peak season.</p><p>We left the office at 4pm on March 12, 2015, Thursday to go to Batangas Port. Everyone had fun playing message relay about common adages in travelling and barely felt the 3-hour ride to the port. We boarded a ship and before we knew it, we were at the Caticlan Jetty port at 6:00 in the morning the following day.&nbsp;</p><p>From Caticlan, we boarded the boat in one batch and arrived at Boracay for a van transfer to our hotel at Boracay Uptown. We arrived at the hotel at round 9 in the morning.&nbsp;&nbsp;</p>"
+          },
+          {
+            "type": "image",
+            "content": "",
+            "url": "",
+            "caption": "",
+            "images": [
+              {
+                "url": "uploads/image-1769579271580-605701154.jpg",
+                "caption": ""
+              }
+            ]
+          },
+          {
+            "type": "divider",
+            "content": "",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "text",
+            "content": "<p>Waterskiing, Banana Boat, Helmet Diving, Kite Flying, Kite Surfing, Snorkeling, Island hopping and Parasailing are all activities anyone can enjoy on the beach. Some groups decided to go parasailing to see the glorious panoramic view of Boracay?s vast shoreline. Other groups decided to go jet skiing. While others tried the paraw, a small outrigger sailboats for 2 to 6 people.&nbsp;</p>",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "content": "",
+            "url": "",
+            "caption": "",
+            "images": [
+              {
+                "url": "uploads/image-1769579303433-974114109.jpg",
+                "caption": ""
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "content": "<p>Our hotel was situated in Station 2, fronting the beach. The hotel was quite new. It had two swimming pools, and one was an infinity pool situated at the roof deck of the hotel fronting the beach. The rooms were spacious and clean, complete with all the things we needed to relax. The hotel staff were very accommodating. At around 3 in the afternoon we all had our official water activities ?the banana boat ride and helmet diving. We all enjoyed the water activities that day including those who fell off the banana boat. Helmet diving was memorable as a number of us experienced it for the first time.&nbsp;</p><p>Everyone was hungry at the end of the day. We headed back to the hotel for dinner at Aqua fire. There were fire dancers with spectacular dance moves. The day ended early so some of us decided to go pub crawl, where we met amazing people from around the world, played get-to- know-you games, drank welcome shooters with our free shooter glass, got discounts on drinks, got free entrance in bars, and wore a yellow iconic pub crawl shirt. This was definitely one of the most awesome memories our group experienced in the island's famous nightlife.&nbsp;</p><p>We had buffet breakfast on the fifth floor of the hotel the following day. Every kind of tasty food you can imagine for breakfast was served at the buffet table. After breakfast, we took a boat trip around the island for sightseeing and snorkeling. But the area where we snorkel and took quick dips was infested with jellyfish. We hurriedly boarded the boat after noticing how itchy the water felt on our skin.&nbsp;</p>",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "image",
+            "content": "",
+            "url": "",
+            "caption": "",
+            "images": [
+              {
+                "url": "uploads/image-1769579372046-530660259.jpg",
+                "caption": ""
+              }
+            ]
+          },
+          {
+            "type": "divider",
+            "content": "",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "text",
+            "content": "<p>We finally headed to Puka Beach to have a picnic by the beach for lunch. This was where we had fun playing beach volleyball, swimming, and shopping for souvenirs.&nbsp;</p><p>We headed back to the hotel to quickly recharge and shower to prepare for the night's main event. The White Summer Dinner Party, where everyone wore all white to celebrate the night with a sumptuous dinner. During the dinner program, our CEO, Ricky Dagelet shared E-Science?s history and its accomplishments for the past 15 years. He thanked everyone and shared his vision for E-Science. He also shared exciting projects that E-Science has lined up and encouraged everyone to participate in making remarkable and innovative products. There was a short presentation from ESC Heads, the company's unofficial band. They played songs and everyone sang along. The hosts, Herbie Bagsik and Rose Ann Tan, facilitated a quick trivia game about E-Science. Although the weather was not good that night, we still pushed through with our sky lantern lighting competition. Lighting the lantern was our symbol of hope for a prosperous future of E-Science. Lester Ruiz and Juvy Palaca won the competition.&nbsp;</p><p>The next day, we left the hotel at round 7AM and rode a bus to Kalibo Airport. We arrived in Manila happy, hopeful, and grateful.</p>",
+            "url": "",
+            "caption": ""
+          }
+        ],
+        "category": "team",
+        "date": "March 12, 2015",
+        "image": "uploads/image-1769579147389-40699257.jpg"
+      },
+      {
+        "id": 7,
+        "title": "Wonders of Vietnam: Da Nang Getaway 2025",
+        "excerpt": "Xin chào, eScience! Our team recently embarked on an unforgettable journey to Central Vietnam, exploring the vibrant landscapes of Da Nang and the timeless charm of Hoi An.",
+        "date": "February 27, 2025",
+        "category": "team",
+        "image": "uploads/image-1769417705582-697846053.jpg",
+        "blocks": [
+          {
+            "type": "text",
+            "content": "<p><strong class=\"ql-size-large\">Xin chào, eScience!</strong></p><p>Last February, 2025, we set off for an unforgettable escape to the heart of Central Vietnam—exploring the vibrant city of Da Nang and the enchanting lantern-lit streets of Hoi An. From majestic mountains to ancient towns, every moment was packed with awe, laughter, and memories we’ll cherish forever.&nbsp;</p>"
+          },
+          {
+            "type": "header",
+            "content": "<p><strong>Day 1: Arrival in Da Nang – Touchdown and Take It Slow</strong></p>"
+          },
+          {
+            "type": "text",
+            "content": "<p>Our journey began with excitement as we landed in the coastal city of Da Nang. Greeted by sunny skies and warm breezes, we checked into our accommodations and took the rest of the day to settle in, relax, and sample local Vietnamese cuisine. Some wandered along the beachfront, while others explored the lively city streets or just unwound at the hotel.&nbsp;</p>"
+          },
+          {
+            "type": "image",
+            "url": "https://www.electronicscience.com/blog/blog1/img/vietnam1.jpg",
+            "caption": "Touching the clouds: The eScience team at the iconic Golden Bridge in Ba Na Hills.",
+            "images": [
+              {
+                "url": "uploads/image-1769417854962-878372697.jpg",
+                "caption": ""
+              },
+              {
+                "url": "uploads/image-1769417854998-540280204.JPG",
+                "caption": ""
+              }
+            ]
+          },
+          {
+            "type": "divider"
+          },
+          {
+            "type": "header",
+            "content": "<p><strong>Day 2: Sun World Ba Na Hills – Where Dreams Meet the Clouds</strong></p>"
+          },
+          {
+            "type": "text",
+            "content": "<p>&nbsp;An early start led us up to the mountaintop marvel that is Sun World Ba Na Hills—an experience nothing short of magical.&nbsp;</p>"
+          },
+          {
+            "type": "image",
+            "content": "",
+            "url": "",
+            "caption": "",
+            "images": [
+              {
+                "url": "uploads/image-1769417959819-237120668.jpg",
+                "caption": ""
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "content": "<p>We ascended via one of the world’s longest cable car rides, where the views were nothing but spectacular. First stop, The Golden Bridge, held gracefully by two giant stone hands—an architectural icon that took our breath away.&nbsp;</p>",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "header",
+            "content": "<p><strong>Day 3: Hoi An – A Step Back in Time</strong></p>"
+          },
+          {
+            "type": "text",
+            "content": "<p>Our final day was dedicated to the UNESCO-listed Hoi An Ancient Town. We started with a thrilling (and dizzying!) Basket Boat Ride at Cam Thanh Coconut Village, where the team tested their balance and cheered on the local boat performers. Later, we strolled through Hoi An’s lantern-lit streets, admired the Japanese Covered Bridge, and explored the local markets for unique souvenirs.</p>"
+          },
+          {
+            "type": "image",
+            "url": "https://www.electronicscience.com/blog/blog1/img/vietnam8.JPG",
+            "caption": "A splash of fun: Navigating the coconut groves of Cam Thanh in traditional basket boats.",
+            "images": [
+              {
+                "url": "https://www.electronicscience.com/blog/blog1/img/vietnam8.JPG",
+                "caption": ""
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "content": "<h3><span class=\"ql-size-large\">A Journey to Remember</span></h3><p>As we returned home, we brought back more than just photos and souvenirs; we brought back closer bonds and a renewed energy to innovate. Vietnam was truly a wonder, and we can't wait for the next eScience adventure!</p>"
+          },
+          {
+            "type": "divider",
+            "content": "",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "quote",
+            "content": "<p>this is a test</p>",
+            "url": "",
+            "caption": ""
+          },
+          {
+            "type": "video",
+            "content": "",
+            "url": "uploads/image-1769560850124-138826798.mp4",
+            "caption": "This is a test"
+          }
+        ],
+        "content": "<p class=\"lead\">Xin chào, eScience! Our team recently embarked on an unforgettable journey to Central Vietnam, exploring the vibrant landscapes of Da Nang and the timeless charm of Hoi An. From mountain peaks to ancient streets, here's a look back at our February 2025 getaway.</p><br><img src=\"https://www.electronicscience.com/blog/blog1/img/vietnam1.jpg\" alt=\"Touching the clouds: The eScience team at the iconic Golden Bridge in Ba Na Hills.\"><br><h3>Day 1: Arrival in Da Nang – Touchdown and Take It Slow</h3><br><p>Touchdown in Central Vietnam! Our team arrived in breezy Da Nang, ready for a well-deserved break from the typical work week. We checked into our cozy accommodations and immediately dove into the first order of business: authentic Vietnamese cuisine. From savoring freshly chilled welcome drinks to enjoying a beachside dinner under the stars, the first day was all about relaxation and soaking in the coastal vibes.</p><br><hr><br><h3>Day 2: Sun World Ba Na Hills – Where Dreams Meet the Clouds</h3><br><p>Day two took us high into the Truong Son Mountains to the enchanting Sun World Ba Na Hills. We walked along the world-famous Golden Bridge, held by two giant stone hands that seem to emerge from the mountainside. After exploring the Le Jardin d’Amour flower gardens and the whimsical French Village, the team headed to Fantasy Park for some high-energy fun. We wrapped up the day with a visit to the pastel-pink Da Nang Cathedral, a charming colonial landmark in the heart of the city.</p><br><blockquote>Events like these remind us that our greatest strength isn't just the technology we build, but the incredible people we build it with.</blockquote><br><h3>Day 3: Hoi An – A Step Back in Time</h3><br><p>Our final day was dedicated to the UNESCO-listed Hoi An Ancient Town. We started with a thrilling (and dizzying!) Basket Boat Ride at Cam Thanh Coconut Village, where the team tested their balance and cheered on the local boat performers. Later, we strolled through Hoi An’s lantern-lit streets, admired the Japanese Covered Bridge, and explored the local markets for unique souvenirs.</p><br><img src=\"https://www.electronicscience.com/blog/blog1/img/vietnam8.JPG\" alt=\"A splash of fun: Navigating the coconut groves of Cam Thanh in traditional basket boats.\"><br><h3>A Journey to Remember</h3><p>As we returned home, we brought back more than just photos and souvenirs; we brought back closer bonds and a renewed energy to innovate. Vietnam was truly a wonder, and we can't wait for the next eScience adventure!</p>"
+      },
+      {
+        "id": 5,
+        "title": "eScience and Bureau of Customs (BOC) launch BayaniBox",
+        "excerpt": "Example summary for this article",
+        "date": "July 21, 2023",
+        "category": "company",
+        "image": "uploads/image-1769503419966-143586270.jpeg",
+        "blocks": [
+          {
+            "type": "text",
+            "content": "<p><strong class=\"ql-size-large\">What is BayaniBox all about?&nbsp;</strong></p><p>If you've ever sent a balikbayan box from abroad to the Philippines, you might be familiar with the challenges that can arise during the customs clearance process. With the BayaniBox initiative, BOC and E-Science Corporation have joined forces to streamline and enhance the processing of balikbayan boxes, providing overseas Filipinos and their families a seamless and stress-free experience.&nbsp;</p><p>The recent launch of BayaniBox, alongside several other automation projects, marks a momentous occasion in the Bureau of Customs' (BOC) journey towards embracing digital transformation. With a strong commitment to leveraging technology, the BOC is making significant strides in optimizing customs processes and revolutionizing the experience for overseas Filipinos. By introducing these innovations, the Bureau is not only easing the burden for Filipinos abroad but also bolstering the efficiency and reliability of international shipping. The launch event, held on July 21 at Sofitel Manila, signifies a brighter and more technologically advanced future for customs operations in the Philippines.&nbsp;</p>"
+          },
+          {
+            "type": "image",
+            "content": "",
+            "url": "",
+            "caption": "",
+            "images": [
+              {
+                "url": "uploads/image-1769503572562-99817770.jpeg",
+                "caption": "This is a placeholder caption for this image"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "content": "<p><strong class=\"ql-size-large\">Goals and Objectives of BayaniBox&nbsp;</strong></p><p>BayaniBox is set to commence its operations in the fourth quarter of 2023, starting with a gradual rollout to reach all countries from which balikbayan boxes are sent. This exciting venture promises to enhance the balikbayan box shipping experience, strengthening the bond between overseas Filipinos and their loved ones back home.&nbsp;</p><p>The launch of BayaniBox signifies a significant step forward for the Bureau of Customs and E-Science Corporation in their commitment to leveraging technology for the benefit of the nation. By embracing digital transformation and optimizing customs processes, they are making it easier for Filipinos abroad to stay connected with their families and heritage.&nbsp;</p><p>With BayaniBox paving the way, a brighter future awaits for overseas Filipinos and the entire nation through technology-driven progress.&nbsp;</p>",
+            "url": "",
+            "caption": ""
+          }
+        ],
+        "content": "<p>We are proud to introduce our new <strong>Modular Block Editor</strong>. This system allows for highly customisable layouts using Text, Image, Header, and Quote components.</p><br><blockquote>Simplicity is the ultimate sophistication.</blockquote>"
+      }
+    ],
+    "settings": {
+      "showSearch": true,
+      "showCategories": true,
+      "showNewsletter": true,
+      "welcomeMessage": "Thank you for subscribing!",
+      "emailSubject": "Welcome to eScience Insights! 🚀",
+      "emailTitle": "Stay updated with the latest news in eScience!",
+      "emailQuote": "Innovation distinguishes between a leader and a follower.",
+      "emailClosing": "Stay tuned for our next update!",
+      "postsPerPage": 9
+    },
+    "categories": [
+      {
+        "id": "company",
+        "label": "Company News"
+      },
+      {
+        "id": "events",
+        "label": "Events"
+      },
+      {
+        "id": "team",
+        "label": "Team & Culture"
+      },
+      {
+        "id": "testing",
+        "label": "Testing"
+      }
+    ]
+  },
+  "careersPage": {
+    "customSections": [],
+    "hideJobStreet": false,
+    "hero": {
+      "title": "JOIN OUR TEAM",
+      "subtitle": "Unlock your potential with exciting careers at eScience",
+      "backgroundImage": "assets/careers-hero.jpg"
+    },
+    "intro": {
+      "title": "Be Part of Our Growing Family",
+      "description": "At eScience, we're not just building software— we're shaping the future of mobile enterprise solutions. Join a team of passionate innovators, problem-solvers, and technology enthusiasts who have been transforming businesses since 2000. Here, your ideas matter, your growth is our priority, and your impact is limitless.",
+      "slides": [
+        {
+          "image": "uploads/image-1768294952235-926490931.jpg"
+        },
+        {
+          "image": "uploads/image-1769486524118-281120817.jpg"
+        },
+        {
+          "image": "uploads/image-1771846087217-89267847.JPG"
+        }
+      ]
+    },
+    "whyJoin": {
+      "title": "Why Join eScience?",
+      "subtitle": "THIS IS A TEST SUBTITLE",
+      "cards": [
+        {
+          "icon": "🚀",
+          "image": "uploads/image-1769496557728-670580628.png",
+          "title": "Innovation",
+          "description": "Work on cutting-edge technologies and shape the future of mobile enterprise solutions",
+          "gradient": "linear-gradient(135deg, #00d4ff 0%, #0099ff 100%)",
+          "galleryImages": [
+            "uploads/image-1769496557728-670580628.png",
+            "uploads/image-1765872330452-670956322.jpg",
+            "uploads/image-1765868069718-166301826.jpg",
+            "uploads/image-1769578221094-114335423.png"
+          ],
+          "hidden": false
+        },
+        {
+          "icon": "🌱",
+          "image": "uploads/image-1769496571358-822551280.png",
+          "title": "Growth",
+          "description": "Continuous learning opportunities, training programs, and career advancement paths",
+          "gradient": "linear-gradient(135deg, #46C1A4 0%, #2F9D78 100%)",
+          "galleryImages": [
+            "uploads/image-1769496571358-822551280.png",
+            "uploads/image-1769740998847-930227047.jpg",
+            "uploads/image-1769740998883-37992492.jpg",
+            "uploads/image-1769745270027-801458506.jpeg"
+          ],
+          "hidden": false
+        },
+        {
+          "icon": "👥",
+          "image": "uploads/image-1769496579143-101385281.png",
+          "title": "Community",
+          "description": "Join a family-oriented culture where collaboration and mutual respect are paramount",
+          "gradient": "linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)",
+          "galleryImages": [
+            "uploads/image-1769496579143-101385281.png",
+            "uploads/image-1769579271580-605701154.jpg",
+            "uploads/image-1769579303433-974114109.jpg",
+            "uploads/image-1769579372046-530660259.jpg",
+            "uploads/image-1769579147389-40699257.jpg"
+          ],
+          "hidden": false
+        }
+      ]
+    },
+    "teamCulture": {
+      "title": "Meet Our Team",
+      "description": "Discover the culture that drives innovation and growth at eScience.",
+      "videoUrl": "uploads/image-1767683402482-929261138.mp4"
+    },
+    "officeCulture": {
+      "title": "Office Culture & Events",
+      "subtitle": "Celebrate milestones and create memories together",
+      "cards": [
+        {
+          "icon": "🎉",
+          "image": "uploads/image-1771844162547-705320895.JPG",
+          "title": "Team Events",
+          "description": "Regular team building activities, company outings, and celebration events",
+          "gradient": "linear-gradient(135deg, #FF6B6B 0%, #FF8E72 100%)",
+          "galleryImages": [
+            "uploads/image-1769740173092-546266400.jpeg",
+            "uploads/image-1771844479353-524575121.JPG",
+            "uploads/image-1771844486310-952120990.JPG",
+            "uploads/image-1771844605331-906803827.jpg",
+            "uploads/image-1771844617180-144910392.jpg",
+            "uploads/image-1773737145441-924372374.mp4"
+          ]
+        },
+        {
+          "icon": "💼",
+          "image": "uploads/image-1771845740056-221191500.jpg",
+          "title": "Workspace",
+          "description": "Modern office facilities with collaborative spaces and comfortable work environment",
+          "gradient": "linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%)",
+          "galleryImages": [
+            "uploads/image-1771845768464-597653230.jpg",
+            "uploads/image-1771845780172-728459966.jpg",
+            "uploads/image-1771845794552-321065717.jpg",
+            "uploads/image-1771845813920-744392197.jpg"
+          ]
+        },
+        {
+          "icon": "🏆",
+          "image": "uploads/image-1769750915090-667371438.jpg",
+          "title": "Recognition",
+          "description": "Celebrate achievements and recognize outstanding contributions from team members",
+          "gradient": "linear-gradient(135deg, #F7DC6F 0%, #F8C471 100%)",
+          "galleryImages": [
+            "uploads/image-1769750915090-667371438.jpg",
+            "uploads/image-1769579271580-605701154.jpg"
+          ]
+        }
+      ]
+    },
+    "opportunities": {
+      "jobs": [
+        {
+          "title": "Software Engineer",
+          "description": "Architect and build high-impact mobile and web applications using modern stacks. Drive innovation from concept to deployment.",
+          "image": "uploads/image-1769578221094-114335423.png"
+        },
+        {
+          "title": "QA Engineer",
+          "description": "Ensure excellence through rigorous manual and automated testing. Be the gatekeeper of quality for our enterprise solutions.",
+          "image": "uploads/image-1771857727421-956606312.jpg"
+        },
+        {
+          "title": "Customer Support",
+          "description": "Empower our clients with expert technical guidance. Bridge the gap between technology and user success.",
+          "image": "uploads/image-1771858269751-307316860.png"
+        },
+        {
+          "title": "System Admin",
+          "description": "Maintain and optimize the infrastructure that powers businesses. Manage cloud systems and ensure maximum uptime.",
+          "image": "uploads/image-1771858280513-280820726.png"
+        }
+      ],
+      "internships": [
+        {
+          "title": "Cyber Security",
+          "description": "THIS IS A PLACEHOLDER",
+          "image": "uploads/image-1771858674023-344608702.jpg"
+        },
+        {
+          "title": "Accounting",
+          "description": "THIS IS A PLACEHOLDER",
+          "image": "uploads/image-1771858681941-649746743.png"
+        },
+        {
+          "title": "Marketing",
+          "description": "THIS IS A PLACEHOLDER",
+          "image": "uploads/image-1771858830162-209746568.png"
+        },
+        {
+          "title": "Human Resources",
+          "description": "THIS IS A PLACEHOLDER",
+          "image": "uploads/image-1771858840922-352850587.png"
+        }
+      ]
+    },
+    "apply": {
+      "title": "Let's Shape the Future Together!",
+      "description": "Connect with us for employment and internship opportunities",
+      "email": "hrd@electronicscience.net",
+      "phone": "02-8850-1324",
+      "buttonText": "Send Application"
+    },
+    "sectionOrder": [
+      "careers-hero",
+      "why-join",
+      "our-culture",
+      "perks",
+      "team-culture",
+      "opportunities",
+      "careers-apply"
+    ]
+  },
+  "contactPage": {
+    "departments": [
+      {
+        "id": "sales",
+        "name": "Sales & Marketing",
+        "dropdownLabel": "Sales - New Business Inquiries",
+        "description": "For new business inquiries, product demonstrations, and partnership opportunities",
+        "contacts": [
+          {
+            "type": "email",
+            "label": "Sales Inquiries",
+            "value": "sales@electronicscience.net"
+          },
+          {
+            "type": "email",
+            "label": "Marketing",
+            "value": "marketing@electronicscience.net"
+          },
+          {
+            "type": "phone",
+            "label": "Phone",
+            "value": "02-8850-1324"
+          }
+        ],
+        "hidden": false
+      },
+      {
+        "id": "support",
+        "name": "Customer Support",
+        "dropdownLabel": "Customer Support - Technical Assistance",
+        "description": "Technical assistance, product support, and issue resolution available 24/7",
+        "contacts": [
+          {
+            "type": "phone",
+            "label": "GLOBE Mobile",
+            "values": [
+              "(+63) 977 8364 867",
+              "(+63) 917 8842 975"
+            ]
+          },
+          {
+            "type": "phone",
+            "label": "SMART Mobile",
+            "values": [
+              "(+63) 908 8107 057",
+              "(+63) 998 8495 159"
+            ]
+          },
+          {
+            "type": "social",
+            "label": "Facebook Support",
+            "values": [
+              "@esciencesupport",
+              "@esciencecorp"
+            ],
+            "links": [
+              "https://facebook.com/esciencesupport",
+              "https://facebook.com/esciencecorp"
+            ]
+          },
+          {
+            "type": "phone",
+            "label": "IMS Support",
+            "values": [
+              "(+63) 917 636 9606",
+              "(+63) 998 970 1129"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "hr",
+        "name": "Human Resources",
+        "dropdownLabel": "HR - Careers & Employment",
+        "description": "Career opportunities, employment inquiries, and talent development programs",
+        "contacts": [
+          {
+            "type": "email",
+            "label": "HR Inquiries",
+            "value": "hrd@electronicscience.net"
+          },
+          {
+            "type": "phone",
+            "label": "Phone",
+            "value": "02-8850-1324"
+          }
+        ]
+      },
+      {
+        "id": "test-department",
+        "name": "Test Department",
+        "dropdownLabel": "Test Department",
+        "description": "This is a test Department",
+        "formEmail": "",
+        "contacts": [
+          {
+            "type": "email",
+            "label": "New Contact",
+            "value": "123456@gmail.com"
+          }
+        ],
+        "icon": "assets/icons/clock.svg",
+        "isHidden": true
+      }
+    ],
+    "businessHours": {
+      "weekdays": "9:00 AM - 6:00 PM",
+      "weekends": "Closed",
+      "timezone": "Philippine Standard Time (PST)"
+    },
+    "officeLocation": {
+      "address": "8th Floor Paz Madrigal Plaza Bldg. Industry cor Finance St., Madrigal Business Park, Alabang, Muntinlupa City, Metro Manila, Philippines 1780",
+      "directLine": "02-8850-1324",
+      "email": "hrd@electronicscience.net",
+      "googleMapsLink": "https://maps.app.goo.gl/rqA9TxUn2fs2hxp5A",
+      "googleMapsEmbed": "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7728.024269841577!2d121.025681!3d14.426464!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397d1cceb7551f9%3A0xb981b1e8fe18619f!2sE-Science%20Corporation!5e0!3m2!1sen!2sph!4v1768973067996!5m2!1sen!2sph"
+    }
+  },
+  "footer": {
+    "brand": {
+      "logoUrl": "assets/NAV-LOGO.png",
+      "tagline": "Architects of Innovation since 2000"
+    },
+    "contact": {
+      "email": "sales@electronicscience.net",
+      "phone": "02-8850-1324"
+    },
+    "legal": {
+      "termsAndConditions": {
+        "title": "Terms and Conditions",
+        "content": "",
+        "sections": [
+          {
+            "heading": "",
+            "paragraphs": [
+              "By visiting this website, these terms will automatically apply to you. You should, therefore,\n                        ensure that you read them carefully before using the Service."
+            ]
+          },
+          {
+            "heading": "Intellectual Property",
+            "paragraphs": [
+              "You are not allowed to copy, or modify the Service, any part of the Service, or any E-Science\n                        trademarks in any way. You are not allowed to attempt to extract the source code of the Service\n                        Components, and you also should not attempt to translate the Service into other languages, or\n                        make derivative versions. The Service itself, and all the trademarks, database rights and other\n                        intellectual property rights related to it, belong to E-Science."
+            ]
+          },
+          {
+            "heading": "Changes",
+            "paragraphs": [
+              "E-Science Corporation is committed to ensuring that the Service is as useful and as efficient as\n                        possible. For these reasons, we reserve the right to make changes to the Service or to charge\n                        for it, at any time and for any reason.",
+              "The system requirements for the platforms that the Service is made available in (and for any\n                        additional systems we decide to extend the availability of the Service to), may change, and you\n                        will need to download the updates if you want to keep using the Service. E-Science Corporation\n                        does not promise that it will always update the Service so that it is relevant to you and/or\n                        works with the OS or browser version that you have installed on your device. However, it is\n                        assumed that all users will accept updates to the Service when available."
+            ]
+          },
+          {
+            "heading": "Security",
+            "paragraphs": [
+              "E-Science Corporation Processes personal data that you have provided to us, in order to provide\n                        our service. It is your responsibility to keep your devices and access to the mobile secure. We\n                        therefore recommend that you do not remove software restrictions and limitations imposed by the\n                        official operating system of your device."
+            ]
+          },
+          {
+            "heading": "Mobile Device Resources",
+            "paragraphs": [
+              "You should be aware that there are certain things that E-Science Corporation will not take\n                        responsibility for. Certain functions of the Service will require an active internet connection.\n                        The connection can be Wi-Fi, or provided by your mobile network provider, but E-Science\n                        Corporation will not take responsibility for the Service not working at full functionality if\n                        you do not have access to an internet connection, nor if you do not have any of data allowance\n                        left.",
+              "Along the same lines, E-Science Corporation cannot always take responsibility for the way you use\n                        the Service i.e. You need to ensure that your device stays charged – if it runs out of battery\n                        and you cannot turn it on to avail of the Service, E-Science Corporation cannot accept\n                        responsibility for such situations.",
+              "The Service may be subject to limitations, delays, and other problems inherent in the use of the\n                        internet and electronic communications including the device used by you or the third party\n                        device provider being faulty, not connected, out of range, switched off or not functioning. We\n                        cannot be responsible for any delays, delivery failures, damages or losses resulting from such\n                        problems."
+            ]
+          },
+          {
+            "heading": "Data Charges",
+            "paragraphs": [
+              "If you are using the Service outside of an area with Wi-Fi, you should remember that your terms\n                        of agreement with your mobile network provider will still apply. As a result, you may be charged\n                        by your mobile provider for the cost of data for the duration of the connection while accessing\n                        the Service, or other third party charges. In using the Service, you are accepting\n                        responsibility for any such charges, including roaming data charges if you use the Service\n                        outside of your home territory (i.e. region or country) without turning off data roaming. If you\n                        are not the bill payer for the device on which you are using the Service, please be aware that\n                        we assume that you have received permission from the bill payer for using the Service."
+            ]
+          },
+          {
+            "heading": "Accounts",
+            "paragraphs": [
+              "You may be required to create an account with email or phone number or username to use certain\n                        features on the Service. You agree to provide, maintain and update true, accurate, current and\n                        complete information about yourself as prompted by the registration process. You may not\n                        impersonate any person or entity or misrepresent your identity or affiliation with any person or\n                        entity, including using another person’s username, password, or other account information.",
+              "We may refuse service, terminate accounts, remove or edit content, or cancel orders at our sole\n                        discretion for reasons not limited to fraud or an unauthorized or illegal activities that are\n                        suspected."
+            ]
+          },
+          {
+            "heading": "Using the Service on behalf of an Establishment/Service Provider",
+            "paragraphs": [
+              "Establishments and/or Service Providers such as hospitals, restaurants and other businesses may\n                        avail of the Service. To use the Service on behalf of an Establishment/Service Provider, an\n                        authorized representative of that Establishment/Service Provider must agree to these terms. By\n                        registering and using this Service, you will be considered as either the Service Provider or an\n                        authorized representative of the Establishment/Service Provider."
+            ]
+          },
+          {
+            "heading": "Disclaimer",
+            "paragraphs": [
+              "The Service is provided on an \"AS IS\" and \"AS AVAILABLE\" basis. The Service is provided without\n                        warranties of any kind, whether express or implied, including, but not limited to, implied\n                        warranties of merchantability, fitness for a particular purpose, non-infringement or course of\n                        performance.",
+              "E-Science Corporation and its subsidiaries, affiliates do not warrant that a) the Service will\n                        function uninterrupted, or available at any particular time or location; b) any errors or\n                        defects will be corrected; c) the Service is free of viruses or other harmful components; or d)\n                        the results of using the Service will meet your particular requirements."
+            ]
+          },
+          {
+            "heading": "Termination",
+            "paragraphs": [
+              "We may also wish to stop providing the Service, and may terminate use of it at any time without\n                        giving notice of termination to you. Unless we tell you otherwise, upon any termination, (a) the\n                        rights and licenses granted to you in these terms will end; (b) you must stop using the Service,\n                        and (if needed) delete it from your device."
+            ]
+          },
+          {
+            "heading": "Changes to this Terms and Conditions",
+            "paragraphs": [
+              "We may update our Terms and Conditions from time to time. Thus, you are advised to review this\n                        page periodically for any changes. E-Science Corporation reserves the right to change and update\n                        this terms and conditions statement without giving prior notice."
+            ]
+          },
+          {
+            "heading": "Indemnification",
+            "paragraphs": [
+              "You agree to defend, indemnify and hold harmless E-Science Corporation, its entities, employees,\n                        contractors, agents, officers and directors, from and against any and all claims, damages,\n                        obligations, losses, liabilities, costs or debt, and expenses resulting from or arising out of\n                        a) your use and access of the Service, by you or any person using your account and password; b)\n                        a breach of these Terms, or c) Content posted on the Service."
+            ]
+          },
+          {
+            "heading": "Limitation of Liabilities",
+            "paragraphs": [
+              "E-Science accepts no liability for any loss, direct or indirect, you experience as a result of\n                        relying wholly on this functionality of the Service.",
+              "In no event shall E-Science Corporation, nor its directors, employees, partners, agents,\n                        suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or\n                        punitive damages, including without limitation, loss of profits, data, use, goodwill, or other\n                        intangible losses, resulting from (i) your access to or use of or inability to access or use the\n                        Service; (ii) any conduct or content of any third party on the Service; (iii) any content\n                        obtained from the Service; and (iv) unauthorized access, use or alteration of your transmissions\n                        or content, whether based on warranty, contract, tort (including negligence) or any other legal\n                        theory, whether or not we have been informed of the possibility of such damage, and even if a\n                        remedy set forth herein is found to have failed of its essential purpose."
+            ]
+          },
+          {
+            "heading": "Governing Law",
+            "paragraphs": [
+              "These Terms shall be governed in accordance with the laws of the Philippines, without regard to\n                        its conflict of law provisions.",
+              "Our failure to enforce any right or provision of these Terms will not be considered a waiver of\n                        those rights. If any provision of these Terms is held to be invalid or unenforceable by a court,\n                        the remaining provisions of these Terms will remain in effect. These Terms constitute the entire\n                        agreement between us regarding our Service, and supersede and replace any prior agreements we\n                        might have had between us regarding the Service."
+            ]
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "title": "Privacy Policy",
+        "content": "",
+        "sections": [
+          {
+            "heading": "",
+            "paragraphs": [
+              "Personal data and privacy is important to us. E-SCIENCE is committed to maintain any confidential\n                        information and to strictly limit any disclosure in accordance with local laws. We are at the\n                        forefront of not only implementing but complying with the Data Privacy Act of the Philippines.\n                        This Privacy Policy only applies to www.electroniscience.com.",
+              "We collect personal data on the CONTACT US portion of this website."
+            ],
+            "htmlContent": "<p>Personal data and privacy is important to us. E-SCIENCE is committed to maintain any confidential information and to strictly limit any disclosure in accordance with local laws. We are at the forefront of not only implementing but complying with the Data Privacy Act of the Philippines. This Privacy Policy only applies to <a href=\"www.electroniscience.com\" target=\"_blank\">www.electroniscience.com</a>.</p><p>We collect personal data on the CONTACT US portion of this website.</p>"
+          },
+          {
+            "heading": "What personal data do we collect from you?",
+            "paragraphs": [
+              "We collect the following basic personal information from the web site visitors by voluntarily\n                        typing in their:",
+              "Full Name",
+              "Company",
+              "E-mail Address",
+              "Contact Number",
+              "Designation"
+            ],
+            "htmlContent": "<p>We collect the following basic personal information from the web site visitors by voluntarily typing in their:</p><p>Full Name</p><p>Company</p><p>E-mail Address</p><p>Contact Number</p><p>Designation</p>"
+          },
+          {
+            "heading": "What do we use your personal data for?",
+            "paragraphs": [
+              "We use your information to deliver our services. For example:",
+              "To record client contact information.",
+              "We use data for analytics and measurement to understand how our services are used.",
+              "We also use your information to send you updates, notices, announcements, and additional\n                            information related to the Services;",
+              "We may also use your information to conduct surveys and questionnaires; And if you contact\n                            E-Science Corporation personnel, we may keep a record of your request in order to help solve\n                            any issues you might be facing.",
+              "The Services may include an internal messaging system which provides you the ability to send and\n                        receive messages to and from other users, and to receive marketing messages from us. You hereby\n                        agree that we may use the internal messaging system for the purpose of informing you regarding\n                        products or services, which may interest you."
+            ]
+          },
+          {
+            "heading": "Sharing your personal data",
+            "paragraphs": [
+              "E-Science Corporation does not sell, rent or lease your personal information to third parties\n                        without consent.",
+              "E-Science Corporation will not share your personal information with others, without your\n                        permission, except for the following purposes and to the extent necessary in E-Science’s\n                        good-faith discretion:",
+              "As necessary for the facilitation and operation of the Services;",
+              "If E-Science Corporation reasonably believes that you have breached the Terms of Use or is\n                            investigating potential breach of the Terms of Use, or believes that you abused your rights\n                            to use the Services, or performed any act or omission that E-Science Corporation reasonably\n                            believes to be violating any applicable law, rules, or regulations. E-Science Corporation\n                            may share your information in these cases, with law enforcement agencies and other competent\n                            authorities and with any third party as may be required to handle any result of your\n                            wrongdoing;",
+              "If E-Science Corporation is required, or reasonably believes that it is required by law to\n                            share or disclose your information;",
+              "In any case of dispute, or legal proceeding of any kind between you and E-Science\n                            Corporation, or between you and other users with respect to, or in relation with the\n                            Services;",
+              "In any case where E-Science Corporation reasonably believes that sharing information is\n                            necessary to protect against harm to the rights, property or safety of E-Science\n                            Corporation, our users, or the public as required or permitted by law, including to prevent\n                            imminent physical damage or damage to property;",
+              "To detect, prevent, or otherwise address fraud, security, or technical issues;",
+              "If E-Science Corporation organizes the operation of the Services within a different\n                            framework, or through another legal structure or entity, or if E-Science Corporation is\n                            acquired by, or merged into or with another entity, or if E-Science Corporation enters\n                            bankruptcy, provided however, that those entities agree to be bound by the provisions of\n                            this Privacy Policy, with respective changes taken into consideration;",
+              "To collect, store, hold and manage your personal information through cloud based or hosting\n                            services or a third party or a party affiliated or connected to E-Science Corporation, as\n                            reasonable for business purposes, which may be located potentially countries outside of your\n                            jurisdiction;",
+              "We may also have selected measurement services which help us understand how our users\n                            interaction with our ads and in order to measure E-Science Corporation own marketing\n                            efforts, by using and sharing the device’s identifier.",
+              "Personal information may also be shared with E-Science Corporation trusted partners and\n                            service providers to process it for us, based on our instructions and in compliance with\n                            this policy and any other appropriate confidentiality and security measures.",
+              "Anonymized data removes the data subject’s personally identifiable information."
+            ]
+          },
+          {
+            "heading": "Data retention and deletion",
+            "paragraphs": [
+              "We keep your personal data only as long as necessary to provide you with the E-Science\n                        Corporation Service and for legitimate and essential business purposes, such as making\n                        data-driven business decisions about new features and offerings, complying with our legal\n                        obligations, and resolving disputes. We keep some of your personal data for as long as you are a\n                        user of the E-Science Corporation platform. Transactional records shall be maintained and safely\n                        stored for 365 Days from the date of transaction except where specific contract clause and/or\n                        regulations require a different retention period."
+            ]
+          },
+          {
+            "heading": "Keeping your data safe",
+            "paragraphs": [
+              "We are committed to protecting our users’ personal data. We implement appropriate technical and\n                        organizational measures to help protect the security of your personal data; however, please note\n                        that no system is ever completely secure. We have implemented various policies including\n                        anonymization, encryption, access, and retention policies to guard against unauthorized access\n                        and unnecessary retention of personal data in our systems.",
+              "Your password protects your user account, so we encourage you to use a unique and strong\n                        password, limit access to your computer and browser, and log out."
+            ]
+          },
+          {
+            "heading": "Changes to this Privacy Policy",
+            "paragraphs": [
+              "This Privacy Notice is in effect as of April 30, 2019 and will continue to remain in effect\n                        unless otherwise directed by E-Science’s Data Protection Officer.",
+              "This notice may be modified by the Acabar, and modifications to our Privacy Policy may be\n                        released via official issuances, to which you will be duly notified of by virtue of the online\n                        registration details you have provided to us.",
+              "If significant changes to this Privacy Policy will affect your personal information, we shall\n                        notify you through the email address you have provided us."
+            ]
+          },
+          {
+            "heading": "How to contact us?",
+            "paragraphs": [
+              "You have the right to ask for a copy of any personal information we hold about you, as well as to\n                        ask for it to be corrected if you think it is wrong. To do so, please contact privacy@electronicscience.com"
+            ]
+          }
+        ]
+      },
+      "npcSeal": {
+        "title": "NPC Seal",
+        "content": "",
+        "imageUrl": ""
+      }
+    },
+    "connect": {
+      "facebook": {
+        "platform": "Facebook",
+        "url": "https://www.facebook.com/esciencecorp",
+        "label": "Follow us on Facebook"
+      },
+      "linkedin": {
+        "platform": "LinkedIn",
+        "url": "https://www.linkedin.com/company/escience/?viewAsMember=true",
+        "label": "Connect with us on LinkedIn"
+      }
+    }
+  },
+  "legalPages": {
+    "terms": {
+      "hero": {
+        "titleLeft": "Terms &",
+        "titleRight": "Conditions",
+        "subtitle": "Please read these terms carefully before using our Service."
+      },
+      "sections": [
+        {
+          "title": "",
+          "content": "<p>By visiting this website, these terms will automatically apply to you. You should, therefore, ensure that you read them carefully before using the Service.</p>"
+        },
+        {
+          "title": "Intellectual Property",
+          "content": "<p>You are not allowed to copy, or modify the Service, any part of the Service, or any E-Science\n                        trademarks in any way. You are not allowed to attempt to extract the source code of the Service\n                        Components, and you also should not attempt to translate the Service into other languages, or\n                        make derivative versions. The Service itself, and all the trademarks, database rights and other\n                        intellectual property rights related to it, belong to E-Science.</p>"
+        },
+        {
+          "title": "Changes",
+          "content": "<p>E-Science Corporation is committed to ensuring that the Service is as useful and as efficient as\n                        possible. For these reasons, we reserve the right to make changes to the Service or to charge\n                        for it, at any time and for any reason.</p>\n                    <p>The system requirements for the platforms that the Service is made available in (and for any\n                        additional systems we decide to extend the availability of the Service to), may change, and you\n                        will need to download the updates if you want to keep using the Service. E-Science Corporation\n                        does not promise that it will always update the Service so that it is relevant to you and/or\n                        works with the OS or browser version that you have installed on your device. However, it is\n                        assumed that all users will accept updates to the Service when available.</p>"
+        },
+        {
+          "title": "Security",
+          "content": "<p>E-Science Corporation Processes personal data that you have provided to us, in order to provide\n                        our service. It is your responsibility to keep your devices and access to the mobile secure. We\n                        therefore recommend that you do not remove software restrictions and limitations imposed by the\n                        official operating system of your device.</p>"
+        },
+        {
+          "title": "Mobile Device Resources",
+          "content": "<p>You should be aware that there are certain things that E-Science Corporation will not take\n                        responsibility for. Certain functions of the Service will require an active internet connection.\n                        The connection can be Wi-Fi, or provided by your mobile network provider, but E-Science\n                        Corporation will not take responsibility for the Service not working at full functionality if\n                        you do not have access to an internet connection, nor if you do not have any of data allowance\n                        left.</p>\n                    <p>Along the same lines, E-Science Corporation cannot always take responsibility for the way you use\n                        the Service i.e. You need to ensure that your device stays charged – if it runs out of battery\n                        and you cannot turn it on to avail of the Service, E-Science Corporation cannot accept\n                        responsibility for such situations.</p>\n                    <p>The Service may be subject to limitations, delays, and other problems inherent in the use of the\n                        internet and electronic communications including the device used by you or the third party\n                        device provider being faulty, not connected, out of range, switched off or not functioning. We\n                        cannot be responsible for any delays, delivery failures, damages or losses resulting from such\n                        problems.</p>"
+        },
+        {
+          "title": "Data Charges",
+          "content": "<p>If you are using the Service outside of an area with Wi-Fi, you should remember that your terms\n                        of agreement with your mobile network provider will still apply. As a result, you may be charged\n                        by your mobile provider for the cost of data for the duration of the connection while accessing\n                        the Service, or other third party charges. In using the Service, you are accepting\n                        responsibility for any such charges, including roaming data charges if you use the Service\n                        outside of your home territory (i.e. region or country) without turning off data roaming. If you\n                        are not the bill payer for the device on which you are using the Service, please be aware that\n                        we assume that you have received permission from the bill payer for using the Service.</p>"
+        },
+        {
+          "title": "Accounts",
+          "content": "<p>You may be required to create an account with email or phone number or username to use certain\n                        features on the Service. You agree to provide, maintain and update true, accurate, current and\n                        complete information about yourself as prompted by the registration process. You may not\n                        impersonate any person or entity or misrepresent your identity or affiliation with any person or\n                        entity, including using another person’s username, password, or other account information.</p>\n                    <p>We may refuse service, terminate accounts, remove or edit content, or cancel orders at our sole\n                        discretion for reasons not limited to fraud or an unauthorized or illegal activities that are\n                        suspected.</p>"
+        },
+        {
+          "title": "Using the Service on behalf of an Establishment/Service Provider",
+          "content": "<p>Establishments and/or Service Providers such as hospitals, restaurants and other businesses may\n                        avail of the Service. To use the Service on behalf of an Establishment/Service Provider, an\n                        authorized representative of that Establishment/Service Provider must agree to these terms. By\n                        registering and using this Service, you will be considered as either the Service Provider or an\n                        authorized representative of the Establishment/Service Provider.</p>"
+        },
+        {
+          "title": "Disclaimer",
+          "content": "<p>The Service is provided on an \"AS IS\" and \"AS AVAILABLE\" basis. The Service is provided without\n                        warranties of any kind, whether express or implied, including, but not limited to, implied\n                        warranties of merchantability, fitness for a particular purpose, non-infringement or course of\n                        performance.</p>\n                    <p>E-Science Corporation and its subsidiaries, affiliates do not warrant that a) the Service will\n                        function uninterrupted, or available at any particular time or location; b) any errors or\n                        defects will be corrected; c) the Service is free of viruses or other harmful components; or d)\n                        the results of using the Service will meet your particular requirements.</p>"
+        },
+        {
+          "title": "Termination",
+          "content": "<p>We may also wish to stop providing the Service, and may terminate use of it at any time without\n                        giving notice of termination to you. Unless we tell you otherwise, upon any termination, (a) the\n                        rights and licenses granted to you in these terms will end; (b) you must stop using the Service,\n                        and (if needed) delete it from your device.</p>"
+        },
+        {
+          "title": "Changes to this Terms and Conditions",
+          "content": "<p>We may update our Terms and Conditions from time to time. Thus, you are advised to review this\n                        page periodically for any changes. E-Science Corporation reserves the right to change and update\n                        this terms and conditions statement without giving prior notice.</p>"
+        },
+        {
+          "title": "Indemnification",
+          "content": "<p>You agree to defend, indemnify and hold harmless E-Science Corporation, its entities, employees,\n                        contractors, agents, officers and directors, from and against any and all claims, damages,\n                        obligations, losses, liabilities, costs or debt, and expenses resulting from or arising out of\n                        a) your use and access of the Service, by you or any person using your account and password; b)\n                        a breach of these Terms, or c) Content posted on the Service.</p>"
+        },
+        {
+          "title": "Limitation of Liabilities",
+          "content": "<p>E-Science accepts no liability for any loss, direct or indirect, you experience as a result of\n                        relying wholly on this functionality of the Service.</p>\n                    <p>In no event shall E-Science Corporation, nor its directors, employees, partners, agents,\n                        suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or\n                        punitive damages, including without limitation, loss of profits, data, use, goodwill, or other\n                        intangible losses, resulting from (i) your access to or use of or inability to access or use the\n                        Service; (ii) any conduct or content of any third party on the Service; (iii) any content\n                        obtained from the Service; and (iv) unauthorized access, use or alteration of your transmissions\n                        or content, whether based on warranty, contract, tort (including negligence) or any other legal\n                        theory, whether or not we have been informed of the possibility of such damage, and even if a\n                        remedy set forth herein is found to have failed of its essential purpose.</p>"
+        },
+        {
+          "title": "Governing Law",
+          "content": "<p>These Terms shall be governed in accordance with the laws of the Philippines, without regard to\n                        its conflict of law provisions.</p>\n                    <p>Our failure to enforce any right or provision of these Terms will not be considered a waiver of\n                        those rights. If any provision of these Terms is held to be invalid or unenforceable by a court,\n                        the remaining provisions of these Terms will remain in effect. These Terms constitute the entire\n                        agreement between us regarding our Service, and supersede and replace any prior agreements we\n                        might have had between us regarding the Service.</p>"
+        }
+      ]
+    },
+    "privacy": {
+      "hero": {
+        "titleLeft": "Privacy",
+        "titleRight": "Policy",
+        "subtitle": "Personal data and privacy is important to us."
+      },
+      "sections": [
+        {
+          "title": "",
+          "content": "<p>Personal data and privacy is important to us. E-SCIENCE is committed to maintain any confidential\n                        information and to strictly limit any disclosure in accordance with local laws. We are at the\n                        forefront of not only implementing but complying with the Data Privacy Act of the Philippines.\n                        This Privacy Policy only applies to www.electroniscience.com.</p>"
+        },
+        {
+          "title": "Your Rights and Your Preferences",
+          "content": "<p>You may be aware that the Data Privacy Act of 2012, gives certain rights to individuals in\n                        relation to their personal data. Accordingly, we have implemented additional transparency and\n                        access controls stated in this Privacy Policy to help users take advantage of those rights. As\n                        available and except as limited under applicable law, the rights afforded to individuals are:\n                    </p>\n                    <ul style=\"list-style-type: none; padding-left: 0;\">\n                        <li style=\"position: relative; padding-left: 25px; margin-bottom: 15px;\">\n                            <span style=\"position: absolute; left: 0; color: #00d4ff; font-weight: bold;\">•</span>\n                            <strong>Right of Access :</strong> the right to be informed of and request access to the\n                            personal data we process about you;\n                        </li>\n                        <li style=\"position: relative; padding-left: 25px; margin-bottom: 15px;\">\n                            <span style=\"position: absolute; left: 0; color: #00d4ff; font-weight: bold;\">•</span>\n                            <strong>Right to Erasure :</strong> the right to request that we delete your personal data;\n                        </li>\n                        <li style=\"position: relative; padding-left: 25px; margin-bottom: 15px;\">\n                            <span style=\"position: absolute; left: 0; color: #00d4ff; font-weight: bold;\">•</span>\n                            <strong>Right to Restrict :</strong> the right to request that we temporarily or permanently\n                            stop processing all or some of your personal data;\n                        </li>\n                        <li style=\"position: relative; padding-left: 25px; margin-bottom: 15px;\">\n                            <span style=\"position: absolute; left: 0; color: #00d4ff; font-weight: bold;\">•</span>\n                            <strong>Right to Object :</strong>\n                            <ul style=\"list-style-type: none; padding-left: 0; margin-top: 10px;\">\n                                <li style=\"position: relative; padding-left: 20px; margin-bottom: 5px;\">\n                                    <span style=\"position: absolute; left: 0; color: #00d4ff;\">-</span>\n                                    the right, at any time, to object to us processing your personal data on grounds\n                                    relating to your particular situation;\n                                </li>\n                                <li style=\"position: relative; padding-left: 20px; margin-bottom: 5px;\">\n                                    <span style=\"position: absolute; left: 0; color: #00d4ff;\">-</span>\n                                    the right to object to your personal data being processed for direct marketing\n                                    purposes;\n                                </li>\n                            </ul>\n                        </li>\n                        <li style=\"position: relative; padding-left: 25px; margin-bottom: 15px;\">\n                            <span style=\"position: absolute; left: 0; color: #00d4ff; font-weight: bold;\">•</span>\n                            <strong>Right to not be subject to a decision :</strong> based solely on automated decision\n                            making, including profiling, where the decision would have a legal effect on you or produce\n                            a similarly significant effect.\n                        </li>\n                    </ul>"
+        },
+        {
+          "title": "How do we collect your personal data?",
+          "content": "<p>We collect your personal data in the following ways:</p>\n                    <p>We collect personal data on the CONTACT US portion of this website.</p>"
+        },
+        {
+          "title": "What personal data do we collect from you?",
+          "content": "<p>We collect the following basic personal information from the web site visitors by voluntarily\n                        typing in their:</p>\n                    <ul>\n                        <li>Full Name</li>\n                        <li>Company</li>\n                        <li>E-mail Address</li>\n                        <li>Contact Number</li>\n                        <li>Designation</li>\n                    </ul>"
+        },
+        {
+          "title": "What do we use your personal data for?",
+          "content": "<p>We use your information to deliver our services. For example:</p>\n                    <ul>\n                        <li>To record client contact information.</li>\n                    </ul>\n\n                    <h3>Measure performance</h3>\n                    <p>We use data for analytics and measurement to understand how our services are used.</p>\n\n                    <h3>Communicate with you</h3>\n                    <ul>\n                        <li>We also use your information to send you updates, notices, announcements, and additional\n                            information related to the Services;</li>\n                        <li>We may also use your information to conduct surveys and questionnaires; And if you contact\n                            E-Science Corporation personnel, we may keep a record of your request in order to help solve\n                            any issues you might be facing.</li>\n                    </ul>\n                    <p>The Services may include an internal messaging system which provides you the ability to send and\n                        receive messages to and from other users, and to receive marketing messages from us. You hereby\n                        agree that we may use the internal messaging system for the purpose of informing you regarding\n                        products or services, which may interest you.</p>"
+        },
+        {
+          "title": "Sharing your personal data",
+          "content": "<p>E-Science Corporation does not sell, rent or lease your personal information to third parties\n                        without consent.</p>\n                    <p>E-Science Corporation will not share your personal information with others, without your\n                        permission, except for the following purposes and to the extent necessary in E-Science’s\n                        good-faith discretion:</p>\n                    <ul>\n                        <li>As necessary for the facilitation and operation of the Services;</li>\n                        <li>If E-Science Corporation reasonably believes that you have breached the Terms of Use or is\n                            investigating potential breach of the Terms of Use, or believes that you abused your rights\n                            to use the Services, or performed any act or omission that E-Science Corporation reasonably\n                            believes to be violating any applicable law, rules, or regulations. E-Science Corporation\n                            may share your information in these cases, with law enforcement agencies and other competent\n                            authorities and with any third party as may be required to handle any result of your\n                            wrongdoing;</li>\n                        <li>If E-Science Corporation is required, or reasonably believes that it is required by law to\n                            share or disclose your information;</li>\n                        <li>In any case of dispute, or legal proceeding of any kind between you and E-Science\n                            Corporation, or between you and other users with respect to, or in relation with the\n                            Services;</li>\n                        <li>In any case where E-Science Corporation reasonably believes that sharing information is\n                            necessary to protect against harm to the rights, property or safety of E-Science\n                            Corporation, our users, or the public as required or permitted by law, including to prevent\n                            imminent physical damage or damage to property;</li>\n                        <li>To detect, prevent, or otherwise address fraud, security, or technical issues;</li>\n                        <li>If E-Science Corporation organizes the operation of the Services within a different\n                            framework, or through another legal structure or entity, or if E-Science Corporation is\n                            acquired by, or merged into or with another entity, or if E-Science Corporation enters\n                            bankruptcy, provided however, that those entities agree to be bound by the provisions of\n                            this Privacy Policy, with respective changes taken into consideration;</li>\n                        <li>To collect, store, hold and manage your personal information through cloud based or hosting\n                            services or a third party or a party affiliated or connected to E-Science Corporation, as\n                            reasonable for business purposes, which may be located potentially countries outside of your\n                            jurisdiction;</li>\n                        <li>We may also have selected measurement services which help us understand how our users\n                            interaction with our ads and in order to measure E-Science Corporation own marketing\n                            efforts, by using and sharing the device’s identifier.</li>\n                        <li>Personal information may also be shared with E-Science Corporation trusted partners and\n                            service providers to process it for us, based on our instructions and in compliance with\n                            this policy and any other appropriate confidentiality and security measures.</li>\n                        <li>Anonymized data removes the data subject’s personally identifiable information.</li>\n                    </ul>"
+        },
+        {
+          "title": "Data retention and deletion",
+          "content": "<p>We keep your personal data only as long as necessary to provide you with the E-Science\n                        Corporation Service and for legitimate and essential business purposes, such as making\n                        data-driven business decisions about new features and offerings, complying with our legal\n                        obligations, and resolving disputes. We keep some of your personal data for as long as you are a\n                        user of the E-Science Corporation platform. Transactional records shall be maintained and safely\n                        stored for 365 Days from the date of transaction except where specific contract clause and/or\n                        regulations require a different retention period.</p>"
+        },
+        {
+          "title": "Keeping your data safe",
+          "content": "<p>We are committed to protecting our users’ personal data. We implement appropriate technical and\n                        organizational measures to help protect the security of your personal data; however, please note\n                        that no system is ever completely secure. We have implemented various policies including\n                        anonymization, encryption, access, and retention policies to guard against unauthorized access\n                        and unnecessary retention of personal data in our systems.</p>\n                    <p>Your password protects your user account, so we encourage you to use a unique and strong\n                        password, limit access to your computer and browser, and log out.</p>"
+        },
+        {
+          "title": "Changes to this Privacy Policy",
+          "content": "<p>This Privacy Notice is in effect as of April 30, 2019 and will continue to remain in effect\n                        unless otherwise directed by E-Science’s Data Protection Officer.</p>\n                    <p>This notice may be modified by the Acabar, and modifications to our Privacy Policy may be\n                        released via official issuances, to which you will be duly notified of by virtue of the online\n                        registration details you have provided to us.</p>\n                    <p>If significant changes to this Privacy Policy will affect your personal information, we shall\n                        notify you through the email address you have provided us.</p>"
+        },
+        {
+          "title": "How to contact us?",
+          "content": "<p>You have the right to ask for a copy of any personal information we hold about you, as well as to ask for it to be corrected if you think it is wrong. To do so, please contact <a href=\"mailto:privacy@electronicscience.com\" target=\"_blank\" style=\"color: rgb(0, 212, 255);\">privacy@electronicscience.com</a></p>"
+        }
+      ]
+    }
+  },
+  "homePage": {
+    "customSections": [],
+    "sectionOrder": [
+      "hero",
+      "stats",
+      "our-clients",
+      "homepage-problem-section",
+      "solutions",
+      "why-us",
+      "testimonials",
+      "contact"
+    ]
+  },
+  "companyPage": {
+    "customSections": [],
+    "sectionOrder": [
+      "company-hero",
+      "timeline",
+      "about-escience",
+      "family-culture",
+      "mission",
+      "vision",
+      "leaders",
+      "company-careers-intro",
+      "company-cta"
+    ]
+  },
+  "chatbot": {
+    "customFaqs": [
+      {
+        "label": "Testing",
+        "answer": "THis is a test only."
+      },
+      {
+        "label": "Pricing",
+        "answer": "100 php"
+      }
+    ]
+  },
+  "problem": {
+    "title": "Stop Making Reactive Decisions",
+    "titleColor": "#ffffff",
+    "text": "Delayed reports taking days or weeks? Missing opportunities due to lack of field data access? It's time to shift from reactive to proactive.",
+    "textColor": "#e0e0e0"
+  },
+  "whoWeAre": {
+    "title": "Who We Are",
+    "content": "eScience grew out of a passion for innovation and mobile technology. We are a team of software engineers, designers, and business development specialists with more than 2 decades of experience in building mobile applications. We are pioneers in providing high-impact products and services that capitalize on emerging mobile technologies such as Mobile Tablets (Android and iOS), 5G, and location based services.",
+    "imageUrl": "uploads/image-1768266871317-299201462.jpg"
+  },
+  "familyCulture": {
+    "title": "Family Culture",
+    "content": "eScience's greatest strength and unique advantage, setting us apart from any other companies, is our exceptional people and family-oriented culture. We consider our people as part of a big family and our company’s main asset. They are the heart of eScience’s success through the years, and behind the innovative solutions, extraordinary customer service, and technical support that we deliver.\n                                \n                                \n                                \n                                \n                                ",
+    "imageUrl": "uploads/image-1768285303753-952994054.jpg"
+  },
+  "vision": {
+    "title": "Vision",
+    "content": "eScience envisions to be the most admired IT Company in the wireless and secure e-transactions business, pioneering high-impact products that serve the global market. ",
+    "imageUrl": "uploads/image-1768284805609-150994943.jpg"
+  },
+  "mission": {
+    "title": "Mission",
+    "content": "We are called to excel and harness our God-given talents as Solutions Provider in order to serve humanity and make a difference in our community. We are: Architects of Innovation, Motivated to Make a Difference, Building State of the Art Solutions, Maintaining World-Class Standards, Making Excellence A Way of Life, A Team of Brilliant Minds. ",
+    "imageUrl": "uploads/image-1768267349002-829681080.JPG"
+  },
+  "sectionVisibility": {
+    "statsHidden": false,
+    "ourClientsHidden": false,
+    "testimonialsHidden": false,
+    "careersPage.whyJoinHidden": false,
+    "contactDepartmentsHidden": false
+  },
+  "ourClients": [
+    {
+      "name": "Facebook",
+      "logo": "uploads/image-1774323996693-41390725.png",
+      "hidden": false
+    },
+    {
+      "name": "Paypal",
+      "logo": "uploads/image-1774324022310-207617665.png",
+      "hidden": false
+    },
+    {
+      "name": "Amazon",
+      "logo": "uploads/image-1774328145109-355032253.png",
+      "hidden": false
+    },
+    {
+      "name": "Client Name",
+      "logo": "uploads/image-1774496870891-770621374.png",
+      "hidden": false
+    },
+    {
+      "name": "Client Name",
+      "logo": "uploads/image-1774496877181-92165995.png",
+      "hidden": false
+    },
+    {
+      "name": "Client Name",
+      "logo": "uploads/image-1774496881928-289818120.png",
+      "hidden": false
+    },
+    {
+      "name": "Client Name",
+      "logo": "uploads/image-1774496887762-314365632.png",
+      "hidden": false
+    }
+  ]
+}

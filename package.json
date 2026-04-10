@@ -1,0 +1,35 @@
+{
+  "name": "escience",
+  "version": "1.0.0",
+  "description": "**Apple-Style Black Background Design with Real Content**",
+  "main": "script.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rdagelet/escience.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rdagelet/escience/issues"
+  },
+  "homepage": "https://github.com/rdagelet/escience#readme",
+  "overrides": {
+    "path-to-regexp": "^8.4.2"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.0.2",
+    "node-cron": "^4.2.1",
+    "nodemailer": "^7.0.13"
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "totalVisitors": 20,
+  "pageViews": {
+    "/": 73,
+    "/nav-pages/company.html": 94,
+    "/nav-pages/product-detail.html": 17,
+    "/nav-pages/solutions.html": 23,
+    "/index.html": 128,
+    "/nav-pages/contact-us.html": 30,
+    "/nav-pages/blog.html": 19,
+    "/nav-pages/careers.html": 50,
+    "/nav-pages/npc-seal.html": 1,
+    "/nav-pages/blog-post.html": 15
+  },
+  "dailyStats": {
+    "2026-03-10": {
+      "visitors": 2,
+      "pageViews": 27,
+      "uniqueHashes": [
+        "232d89452dea098c77cd84a9911963da",
+        "0ae6631c01572f45b0286695edf375a3"
+      ]
+    },
+    "2026-03-11": {
+      "visitors": 1,
+      "pageViews": 13,
+      "uniqueHashes": [
+        "c7f4f6b8ffd2d7d19c42a4e5b823a68e"
+      ]
+    },
+    "2026-03-16": {
+      "visitors": 3,
+      "pageViews": 42,
+      "uniqueHashes": [
+        "72be67b2c9cfa6dbb62dbfef80706e1a",
+        "9a24dbc0fede6e88d5d6fa630b36bc0e",
+        "37954e59ead9de115124165b3562dbd1"
+      ]
+    },
+    "2026-03-17": {
+      "visitors": 2,
+      "pageViews": 22,
+      "uniqueHashes": [
+        "140a6666f868cce5c368dd9382b0320c",
+        "65c71accf8c8581303ca3a2f3af39e64"
+      ]
+    },
+    "2026-03-19": {
+      "visitors": 2,
+      "pageViews": 64,
+      "uniqueHashes": [
+        "e0215f97864f736c8e7ba963c04830d9",
+        "7b9d1c2c266672fdc5d58fdd55e9c4b7"
+      ]
+    },
+    "2026-03-23": {
+      "visitors": 2,
+      "pageViews": 57,
+      "uniqueHashes": [
+        "31258ab368445c8d37f21e5a29a3a661",
+        "affe6ea2b0648133fb4f2c2754545d22"
+      ]
+    },
+    "2026-03-24": {
+      "visitors": 1,
+      "pageViews": 49,
+      "uniqueHashes": [
+        "4d8d602e6895a2347429588183fdd4a2"
+      ]
+    },
+    "2026-03-26": {
+      "visitors": 3,
+      "pageViews": 121,
+      "uniqueHashes": [
+        "e12071b7e8bd95964e2f194d4890408f",
+        "fe0bbe51940680a74e9377e7da85dcfa",
+        "f580d18dba7ec4fc2bb24324b23ec569"
+      ]
+    },
+    "2026-03-27": {
+      "visitors": 3,
+      "pageViews": 53,
+      "uniqueHashes": [
+        "ebaa9aa4232348407cd5192268e2e77c",
+        "7c1c2b3de0fd69c9ebad4c6f34ec6b78",
+        "a851f53428f02eec79e7e49e542cf0a6"
+      ]
+    },
+    "2026-04-08": {
+      "visitors": 1,
+      "pageViews": 2,
+      "uniqueHashes": [
+        "c0200fccb70257131986da71a9ae5707"
+      ]
+    }
+  },
+  "deviceStats": {
+    "mobile": 5,
+    "desktop": 15
+  },
+  "trafficSources": {
+    "direct": 20,
+    "search": 0,
+    "social": 0,
+    "referral": 0
+  }
+}

@@ -1,0 +1,764 @@
+/* ===== BROWSER-SPECIFIC FIXES FOR CROSS-BROWSER CONSISTENCY ===== */
+/* This file ensures Safari's appearance is maintained across Chrome, Edge, and Firefox */
+
+/* ===== CHROME, EDGE, AND CHROMIUM-BASED BROWSERS ===== */
+/* Target Chrome and Edge specifically */
+@supports (-webkit-appearance: none) and (not (-moz-appearance: none)) {
+
+    /* Fix dropdown menu glassmorphism for Chrome/Edge */
+    .dropdown-menu {
+        background: rgba(20, 20, 20, 0.85) !important;
+        -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
+        backdrop-filter: blur(40px) saturate(180%) !important;
+        border: none !important;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    .dropdown.open .dropdown-menu {
+        -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
+        backdrop-filter: blur(40px) saturate(180%) !important;
+    }
+
+    /* Fix navigation bar glassmorphism */
+    .nav {
+        background: rgba(0, 0, 0, 0.6) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        backdrop-filter: blur(20px) !important;
+    }
+
+    /* Remove unwanted border/underline from dropdown toggle */
+    .dropdown-toggle,
+    .dropdown-toggle:focus,
+    .dropdown-toggle:active,
+    .dropdown.open .dropdown-toggle {
+        outline: none !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+
+    /* Ensure smooth rendering of gradients */
+    .nav-cta {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ===== SITE-WIDE COMPACTNESS FIXES FOR CHROME ===== */
+    /* Make entire website compact to match Safari's rendering */
+
+    /* Global text compactness */
+    body {
+        line-height: 1.6 !important;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        line-height: 1.3 !important;
+        margin-bottom: 0.75rem !important;
+    }
+
+    p {
+        line-height: 1.6 !important;
+        margin-bottom: 1rem !important;
+    }
+
+    /* Solution cards compactness */
+    .solution-card h3 {
+        line-height: 1.3 !important;
+        margin-bottom: 0.75rem !important;
+    }
+
+    .solution-card p {
+        line-height: 1.6 !important;
+    }
+
+    .solution-content {
+        padding: 2rem !important;
+    }
+
+    /* Hero section compactness */
+    .hero-headline {
+        line-height: 1.2 !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .hero-subtitle-extended {
+        line-height: 1.5 !important;
+        margin-bottom: 1.5rem !important;
+    }
+
+    /* Stats section compactness */
+    .stat-card {
+        padding: 1.5rem !important;
+    }
+
+    .stat-number {
+        line-height: 1.2 !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .stat-label {
+        line-height: 1.4 !important;
+    }
+
+    /* Testimonials compactness */
+    .testimonial-content p {
+        line-height: 1.6 !important;
+    }
+
+    .testimonial-author {
+        margin-top: 1rem !important;
+    }
+
+    /* CTA section compactness */
+    .cta-content h2 {
+        line-height: 1.3 !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .cta-content p {
+        line-height: 1.6 !important;
+        margin-bottom: 1.5rem !important;
+    }
+
+    /* Form compactness */
+    .form-group {
+        margin-bottom: 1rem !important;
+    }
+
+    .contact-form label {
+        margin-bottom: 0.5rem !important;
+    }
+
+    /* Section spacing compactness */
+    section:not(.hero-image-section) {
+        padding-top: 4rem !important;
+        padding-bottom: 4rem !important;
+    }
+
+
+    /* Override: keep scroll-indicator → stats gap tight on desktop/laptop/tablet */
+    @media (min-width: 768px) {
+        .stats-section {
+            padding-top: 0 !important;
+        }
+
+        .hero-image-section {
+            padding-bottom: 1.5rem !important;
+        }
+    }
+
+    /* Foldable — narrow unfolded (480-599px): prevent 4rem forced section padding */
+    @media (min-width: 480px) and (max-width: 599px) {
+        section {
+            padding-top: 2.5rem !important;
+            padding-bottom: 2.5rem !important;
+        }
+
+        .hero-image-section {
+            padding-top: 5rem !important;
+            padding-bottom: 2rem !important;
+        }
+
+        .stats-section {
+            padding-top: 0 !important;
+        }
+    }
+
+    /* Foldable — unfolded portrait main (600-839px) */
+    @media (min-width: 600px) and (max-width: 839px) {
+        section {
+            padding-top: 3rem !important;
+            padding-bottom: 3rem !important;
+        }
+
+        .hero-image-section {
+            padding-top: 5rem !important;
+            padding-bottom: 2.5rem !important;
+        }
+
+        .stats-section {
+            padding-top: 0 !important;
+            padding-bottom: 2.5rem !important;
+        }
+    }
+
+    /* Foldable — expanded / large tablet (840-991px) */
+    @media (min-width: 840px) and (max-width: 991px) {
+        section {
+            padding-top: 3.5rem !important;
+            padding-bottom: 3.5rem !important;
+        }
+
+        .hero-image-section {
+            padding-top: 5.5rem !important;
+            padding-bottom: 3rem !important;
+        }
+
+        .stats-section {
+            padding-top: 0 !important;
+            padding-bottom: 3rem !important;
+        }
+    }
+
+    .container {
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+    }
+
+    /* Problem section compactness */
+    .section-text {
+        line-height: 1.6 !important;
+        margin-bottom: 1.5rem !important;
+    }
+
+    .highlight-box {
+        padding: 1.5rem !important;
+    }
+
+    /* Footer compactness */
+    .footer {
+        padding: 3rem 0 2rem !important;
+    }
+
+    .footer-col h4 {
+        margin-bottom: 0.75rem !important;
+    }
+
+    .footer-col a {
+        line-height: 1.8 !important;
+    }
+
+    /* Careers page - Perks & Benefits section compactness */
+    .perk-card {
+        padding: 0 !important;
+    }
+
+    .perk-content {
+        padding: 1.5rem !important;
+    }
+
+    .perk-card h3 {
+        line-height: 1.3 !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .perk-card p {
+        line-height: 1.6 !important;
+        margin-bottom: 0 !important;
+    }
+
+    .perks-grid {
+        gap: 2rem !important;
+    }
+
+    .perk-banner {
+        height: 140px !important;
+    }
+}
+
+/* ===== CHROME ZOOM FIX: match Safari's visual density =====
+   The .is-chrome class is added by scripts/page-transition.js via UA detection.
+   Targeting `body` (not `html`) means position:fixed overlays (mobile nav, modals)
+   escape the zoom context and correctly fill the full viewport. */
+html.is-chrome body {
+    zoom: 0.85;
+}
+
+/* Counteract body zoom on the fixed mobile/tablet nav overlay and splash screen so it
+   fills 100% of the viewport. The inverse of 0.85 is ~1.176. */
+@media (max-width: 991px) {
+
+    html.is-chrome .nav-links,
+    html.is-chrome .splash-screen {
+        zoom: calc(1 / 0.85);
+        /* ≈ 1.176 — restores overlay to full viewport */
+    }
+}
+
+/* Counteract body zoom on the desktop/laptop nav bar and splash screen so it
+   spans the full viewport width, matching Safari. */
+@media (min-width: 992px) {
+
+    html.is-chrome .nav,
+    html.is-chrome .splash-screen {
+        zoom: calc(1 / 0.85);
+        /* ≈ 1.176 — restores to full viewport width */
+    }
+}
+
+/* Counteract body zoom on the admin panel's fixed full-screen containers
+   so they fill 100% of the viewport (login screen & dashboard wrapper). */
+html.is-chrome .login-container,
+html.is-chrome .dashboard-container {
+    zoom: calc(1 / 0.85);
+    /* ≈ 1.176 — restores fixed admin containers to full viewport */
+}
+
+/* Fix admin logo rendering in Chrome's nested zoom context.
+   On mobile, #admin-logo uses position:absolute + transform:translateX(-50%)
+   which misbehaves when nested zoom contexts stack (body: 0.85 × container: 1/0.85).
+   We switch to flexbox centering via the header instead. */
+html.is-chrome .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+html.is-chrome #admin-logo {
+    position: static !important;
+    transform: none !important;
+    left: auto !important;
+    margin: 0 !important;
+}
+
+
+/* Blog hero: restore top spacing in Chrome so the OUR BLOG title has the
+   same breathing room above it as in Safari. The nav is zoom-counteracted
+   to full size while the body is at 0.85, so the hero needs extra padding-top. */
+html.is-chrome .blog-hero {
+    padding-top: 160px !important;
+}
+
+
+/* ===== EDGE-SPECIFIC ZOOM FIX: match Safari's visual density =====
+   Modern Edge is Chromium-based (UA contains "Edg/") but is excluded from
+   is-chrome. We apply the same zoom pattern here. */
+html.is-edge body {
+    zoom: 0.85;
+}
+
+/* Counteract body zoom on the fixed mobile/tablet nav overlay */
+@media (max-width: 991px) {
+
+    html.is-edge .nav-links,
+    html.is-edge .splash-screen {
+        zoom: calc(1 / 0.85);
+    }
+}
+
+/* Counteract body zoom on the desktop nav bar */
+@media (min-width: 992px) {
+
+    html.is-edge .nav,
+    html.is-edge .splash-screen {
+        zoom: calc(1 / 0.85);
+    }
+}
+
+/* Counteract body zoom on admin fixed containers */
+html.is-edge .login-container,
+html.is-edge .dashboard-container {
+    zoom: calc(1 / 0.85);
+}
+
+/* Fix admin logo centering in Edge's nested zoom context */
+html.is-edge .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+html.is-edge #admin-logo {
+    position: static !important;
+    transform: none !important;
+    left: auto !important;
+    margin: 0 !important;
+}
+
+/* Blog hero: restore top spacing so the hero title clears the nav */
+html.is-edge .blog-hero {
+    padding-top: 160px !important;
+}
+
+
+/* ===== FIREFOX ZOOM FIX: match Safari's visual density =====
+   Firefox 126+ supports the zoom CSS property. We apply the same
+   zoom: 0.85 pattern as Chrome so all three browsers match Safari. */
+html.is-firefox body {
+    zoom: 0.85;
+}
+
+/* Counteract body zoom on the fixed mobile/tablet nav overlay */
+@media (max-width: 991px) {
+
+    html.is-firefox .nav-links,
+    html.is-firefox .splash-screen {
+        zoom: calc(1 / 0.85);
+    }
+}
+
+/* Counteract body zoom on the desktop nav bar */
+@media (min-width: 992px) {
+
+    html.is-firefox .nav,
+    html.is-firefox .splash-screen {
+        zoom: calc(1 / 0.85);
+    }
+}
+
+/* Counteract body zoom on admin fixed containers */
+html.is-firefox .login-container,
+html.is-firefox .dashboard-container {
+    zoom: calc(1 / 0.85);
+}
+
+/* Fix admin logo centering in Firefox's nested zoom context */
+html.is-firefox .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+html.is-firefox #admin-logo {
+    position: static !important;
+    transform: none !important;
+    left: auto !important;
+    margin: 0 !important;
+}
+
+/* Blog hero: restore top spacing so the hero title clears the nav */
+html.is-firefox .blog-hero {
+    padding-top: 160px !important;
+}
+
+
+/* ===== FIREFOX-SPECIFIC FIXES ===== */
+@-moz-document url-prefix() {
+
+    /* Firefox doesn't support backdrop-filter well, so we enhance the background */
+    .dropdown-menu {
+        background: rgba(15, 15, 15, 0.95) !important;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6),
+            0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+    }
+
+    .nav {
+        background: rgba(0, 0, 0, 0.85) !important;
+        box-shadow: 0 4px 16px rgba(0, 212, 255, 0.1);
+    }
+
+    /* Enhance text rendering */
+    body {
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* ===== FIREFOX MODERN SUPPORT ===== */
+@supports (-moz-appearance: none) {
+
+    /* Modern Firefox with better backdrop support */
+    .dropdown-menu {
+        background: rgba(20, 20, 20, 0.85) !important;
+        backdrop-filter: blur(40px) saturate(180%) !important;
+    }
+
+    .dropdown.open .dropdown-menu {
+        backdrop-filter: blur(40px) saturate(180%) !important;
+    }
+
+    .nav {
+        background: rgba(0, 0, 0, 0.6) !important;
+        backdrop-filter: blur(20px) !important;
+    }
+
+    /* If backdrop-filter is not supported, fallback to solid background */
+    @supports not (backdrop-filter: blur(20px)) {
+        .dropdown-menu {
+            background: rgba(15, 15, 15, 0.95) !important;
+        }
+
+        .nav {
+            background: rgba(0, 0, 0, 0.85) !important;
+        }
+    }
+}
+
+/* ===== EDGE-SPECIFIC FIXES ===== */
+@supports (-ms-ime-align: auto) {
+
+    /* Legacy Edge */
+    .dropdown-menu {
+        background: rgba(20, 20, 20, 0.9) !important;
+    }
+
+    .nav {
+        background: rgba(0, 0, 0, 0.75) !important;
+    }
+}
+
+/* ===== UNIVERSAL CROSS-BROWSER IMPROVEMENTS ===== */
+
+/* Ensure consistent box-sizing across all browsers */
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+/* Smooth scrolling for all browsers */
+html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+
+/* Consistent font rendering across browsers */
+body {
+    font-size: 1rem !important;
+    /* Force consistent body font size */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+/* Fix for Chrome/Edge dropdown border issue */
+.dropdown-menu {
+    outline: none !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+/* Ensure backdrop-filter works consistently */
+.nav,
+.dropdown-menu {
+    will-change: backdrop-filter;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+/* Fix for transition smoothness in all browsers */
+.dropdown-menu,
+.nav {
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+/* Ensure glassmorphism effect is visible in all browsers */
+@supports (backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px)) {
+    .nav {
+        background: rgba(0, 0, 0, 0.6) !important;
+    }
+
+    .dropdown-menu {
+        background: rgba(20, 20, 20, 0.98) !important;
+    }
+}
+
+/* Fallback for browsers that don't support backdrop-filter */
+@supports not ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px))) {
+    .nav {
+        background: rgba(0, 0, 0, 0.85) !important;
+    }
+
+    .dropdown-menu {
+        background: rgba(15, 15, 15, 0.95) !important;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6),
+            0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+    }
+}
+
+/* Fix gradient rendering in all browsers */
+.splash-title-left,
+.splash-title-right {
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+}
+
+/* Ensure animations work smoothly across browsers */
+@keyframes menuItemFadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        -webkit-transform: translateY(0);
+        -moz-transform: translateY(0);
+    }
+}
+
+/* Fix for Chrome's default button styling */
+button,
+.dropdown-toggle {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+/* Ensure consistent border-radius rendering */
+.dropdown-menu {
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+}
+
+/* Fix for Safari-specific transform issues that might affect other browsers */
+.dropdown-menu {
+    -webkit-transform-origin: top right;
+    -moz-transform-origin: top right;
+    -ms-transform-origin: top right;
+    transform-origin: top right;
+}
+
+/* Ensure consistent opacity transitions */
+.dropdown-menu {
+    -webkit-transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1),
+        transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    -moz-transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1),
+        transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1),
+        transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== MOBILE/TABLET OVERRIDES FOR NAV DROPDOWN APPEARANCE ===== */
+/* Scoped to .nav-links so contact form dropdowns keep their backgrounds */
+@media (max-width: 991px) {
+    .nav-links .dropdown-menu {
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+    .nav-links .dropdown.open .dropdown-menu {
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    .nav-links .dropdown-toggle,
+    .nav-links .dropdown-toggle:hover,
+    .nav-links .dropdown-toggle:focus,
+    .nav-links .dropdown-toggle:active,
+    .nav-links .dropdown.open .dropdown-toggle {
+        background: transparent !important;
+        box-shadow: none !important;
+        outline: none !important;
+        border: none !important;
+    }
+}
+
+/* ===== SAFARI & WEBKIT SPECIFIC FIXES ===== */
+/* Target Safari specifically via its lack of support for certain features or UA quirks */
+
+/* Fix for older Safari (< 14.1) lack of Flexbox gap support */
+@supports not (gap: 1rem) {
+    .nav-links {
+        display: flex;
+    }
+
+    .nav-links>*+* {
+        margin-left: var(--spacing-md);
+    }
+
+    .stats-grid {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .stat-card {
+        margin: 10px;
+        flex: 1 1 calc(50% - 20px);
+    }
+
+    .solutions-grid {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .solution-card {
+        margin: 15px;
+        flex: 1 1 calc(33.333% - 30px);
+    }
+
+    .gallery-grid {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .gallery-card {
+        margin: 1rem;
+        flex: 1 1 calc(33.333% - 2rem);
+    }
+
+    @media (max-width: 768px) {
+        .solution-card {
+            flex: 1 1 calc(100% - 30px);
+        }
+
+        .stat-card {
+            flex: 1 1 calc(100% - 20px);
+        }
+    }
+}
+
+/* Fix for Safari 100vh issue on mobile */
+.splash-screen,
+.hero-image-section {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+}
+
+/* Ensure Safari handles backdrop-filter transitions smoothly */
+.nav,
+.dropdown-menu {
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    transition: -webkit-backdrop-filter 0.3s ease, backdrop-filter 0.3s ease;
+}
+
+/* Fix for Safari "ghost" buttons or focus rings */
+button:focus,
+a:focus {
+    outline: none !important;
+}
+
+/* Webkit-specific smooth scrolling fix */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    html {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* ===== OUR CLIENTS SECTION STABILIZATION ===== */
+.our-clients-section {
+    position: relative !important;
+    z-index: 10 !important;
+    padding: 2.5rem 0 !important;
+    transition: none !important;
+    margin-bottom: 2rem;
+}
+
+.our-clients-section .section-title-small {
+    margin: 0 0 2rem 0 !important;
+    transition: none !important;
+}
+
+.our-clients-grid {
+    transition: none !important;
+}
+
+/* FINAL HERO SPACING FIX (Universal Desktop/Laptop) */
+@media (min-width: 992px) {
+    #main-content-wrapper .hero-image-section {
+        margin-top: 0 !important;
+        /* Match the fixed nav height so the hero sits directly below the nav.
+           Use 86px as the default nav height; reduce the overly-large 110px value
+           that caused the large gap on desktop/laptop breakpoints. */
+        padding-top: 86px !important;
+        min-height: calc(100vh - 86px) !important;
+        display: block !important;
+    }
+}
