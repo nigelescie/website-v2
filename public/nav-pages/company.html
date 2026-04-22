@@ -493,7 +493,7 @@
         // Function to load all page content from API
         async function loadPageContent() {
             try {
-                const response = await fetch('/api/content');
+                const response = await fetch(CONFIG.API_BASE + '/content');
                 if (!response.ok) throw new Error('Failed to fetch content');
                 const data = await response.json();
 
@@ -882,6 +882,7 @@
             </div>
         </div>
     </div>
+    <script src="../js/config.js"></script>
     <script src="../js/utils.js"></script>
     <!-- Chat AI Script -->
     <script src="../scripts/chat-ai.js"></script>

@@ -1663,7 +1663,7 @@
     <script>
         (async function loadContactContent() {
             try {
-                const res = await fetch('/api/content');
+                const res = await fetch(CONFIG.API_BASE + '/content');
                 const data = await res.json();
                 const contactData = data.contactPage || {};
 
@@ -2408,6 +2408,7 @@
         </div>
     </div>
     <!-- Chat AI Script -->
+    <script src="../js/config.js"></script>
     <script src="../js/utils.js"></script>
     <script src="../scripts/chat-ai.js"></script>
     <!-- Analytics -->

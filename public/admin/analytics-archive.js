@@ -40,9 +40,7 @@ function toggleYearArchivesSidebar(year) {
 async function loadArchivesList() {
     console.log('Loading archives list...');
     try {
-        const res = await fetch('/api/analytics/archives', {
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('adminToken')}` }
-        });
+        const res = await authenticatedFetch(CONFIG.API_BASE + '/analytics/archives');
 
         if (!res.ok) {
             console.error('Archives fetch failed:', res.status, res.statusText);
@@ -108,9 +106,7 @@ async function loadArchivesList() {
 
 async function viewArchive(archiveId) {
     try {
-        const res = await fetch(`/api/analytics/archive/${archiveId}`, {
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('adminToken')}` }
-        });
+        const res = await authenticatedFetch(`${CONFIG.API_BASE}/analytics/archive/${archiveId}`);
 
         if (!res.ok) throw new Error('Failed to load');
 
@@ -215,9 +211,8 @@ async function deleteArchive(archiveId) {
     }
 
     try {
-        const res = await fetch(`/api/analytics/archive/${archiveId}`, {
+        const res = await authenticatedFetch(`${CONFIG.API_BASE}/analytics/archive/${archiveId}`, {
             method: 'DELETE',
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('adminToken')}` }
         });
 
         if (!res.ok) throw new Error('Failed to delete');

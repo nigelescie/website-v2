@@ -8,43 +8,15 @@
     }
 })();
 
-const API_URL = '/api/content';
-const UPLOAD_URL = '/api/upload';
-const LOGIN_URL = '/api/login';
-const CHANGE_PASSWORD_URL = '/api/change-password';
-
-// Helper function to get auth headers
-function getAuthHeaders() {
-    const token = localStorage.getItem('adminToken');
-    return {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-    };
+// Resolve asset path: uploads go to CDN, static assets stay relative
+function assetUrl(path) {
+    if (!path) return '';
+    if (path.startsWith('http') || path.startsWith('data:')) return path;
+    if (path.startsWith('uploads/')) return CONFIG.UPLOADS_BASE + '/' + path.replace(/^uploads\//, '');
+    return '/' + path.replace(/^\//, '');
 }
 
-// Helper function for authenticated requests
-async function authenticatedFetch(url, options = {}) {
-    const token = localStorage.getItem('adminToken');
-    if (!token) {
-        throw new Error('No authentication token found');
-    }
-
-    // Validate URL to prevent SSRF - only allow relative URLs to internal API
-    if (!url.startsWith('/api/')) {
-        throw new Error('Invalid API endpoint');
-    }
-
-    const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        ...options.headers
-    };
-
-    return fetch(url, {
-        ...options,
-        headers
-    });
-}
+// authenticatedFetch and Cognito helpers are provided by adminAuth.js
 
 // Password strength checker
 function checkPasswordStrength(password) {
@@ -143,30 +115,22 @@ let appData = {};
 let apiIcons = [];
 
 // Fetch available icons once at startup
-fetch('/api/icons')
+fetch(CONFIG.API_BASE + '/icons')
     .then(res => res.json())
     .then(icons => { apiIcons = icons; })
     .catch(err => console.error('Failed to load icons:', err));
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Check for Password Reset Mode
-    const urlParams = new URLSearchParams(window.location.search);
-    const mode = urlParams.get('mode');
-    const token = urlParams.get('token');
-
-    if (mode === 'reset' && token) {
-        document.getElementById('login-screen').style.display = 'flex';
-        document.getElementById('login-form').style.display = 'none';
-        document.getElementById('reset-password-form').style.display = 'block';
-        document.getElementById('reset-token').value = token;
-    }
-    // Check if logged in (very basic check)
-    if (!localStorage.getItem('adminToken')) {
-        document.getElementById('login-screen').style.display = 'flex';
-        document.getElementById('dashboard').style.display = 'none';
-    } else {
-        initDashboard();
-    }
+    // Check if already logged in via Cognito session
+    getIdToken().then(token => {
+        if (token) {
+            document.getElementById('login-screen').style.display = 'none';
+            initDashboard();
+        } else {
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('dashboard').style.display = 'none';
+        }
+    });
 
     // Login Handler
     document.getElementById('login-form').addEventListener('submit', async (e) => {
@@ -175,32 +139,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = document.getElementById('password').value;
 
         try {
-            const res = await fetch(LOGIN_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
-            });
-            const data = await res.json();
-            if (data.success) {
-                localStorage.setItem('adminToken', data.token);
-                localStorage.setItem('user', JSON.stringify(data.user));
-
-                // Check if password change is required
-                if (data.forcePasswordChange) {
-                    alert('For security reasons, you must change your password after first login.');
-                    // Switch to settings tab
-                    document.querySelector('.main-nav li[data-main-tab="settings"]').click();
-                }
-
-                document.getElementById('login-screen').style.display = 'none';
-                initDashboard();
-
-            } else {
-                document.getElementById('login-error').textContent = data.message;
+            const result = await cognitoLogin(username, password);
+            if (result.newPasswordRequired) {
+                alert('You must set a new password before continuing.');
+                return;
             }
+            document.getElementById('login-screen').style.display = 'none';
+            initDashboard();
         } catch (err) {
             console.error('Login failed:', err);
-            document.getElementById('login-error').textContent = 'Unable to connect to server. Please try again later.';
+            document.getElementById('login-error').textContent = err.message || 'Login failed. Please try again.';
         }
     });
 
@@ -218,47 +166,40 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('login-form').style.display = 'block';
     });
 
-    // Forgot Password Form Submit
+    // Forgot Password Form Submit — sends Cognito verification code
     document.getElementById('forgot-password-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const email = document.getElementById('forgot-email').value;
+        const username = document.getElementById('forgot-email').value;
         const msg = document.getElementById('forgot-message');
         const btn = e.target.querySelector('button');
 
         btn.disabled = true;
         btn.textContent = 'Sending...';
         msg.textContent = '';
-        msg.className = 'error-msg'; // Reset class
         msg.style.color = '';
 
         try {
-            const res = await fetch('/api/forgot-password', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email })
-            });
-            const data = await res.json();
-
-            if (data.success) {
-                msg.textContent = data.message;
-                msg.style.color = '#28a745';
-            } else {
-                msg.textContent = data.message;
-                msg.style.color = '#e74c3c';
-            }
+            await cognitoForgotPassword(username);
+            msg.textContent = 'Verification code sent to your email. Enter it below to reset your password.';
+            msg.style.color = '#28a745';
+            // Show reset form
+            document.getElementById('forgot-password-form').style.display = 'none';
+            document.getElementById('reset-password-form').style.display = 'block';
+            document.getElementById('reset-username').value = username;
         } catch (err) {
-            msg.textContent = 'An error occurred. Please try again.';
+            msg.textContent = err.message || 'An error occurred. Please try again.';
             msg.style.color = '#e74c3c';
         } finally {
             btn.disabled = false;
-            btn.textContent = 'Send Reset Link';
+            btn.textContent = 'Send Reset Code';
         }
     });
 
-    // Reset Password Form Submit
+    // Reset Password Form Submit — confirms with Cognito verification code
     document.getElementById('reset-password-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const token = document.getElementById('reset-token').value;
+        const username = document.getElementById('reset-username').value;
+        const code = document.getElementById('reset-code').value;
         const newPassword = document.getElementById('reset-new-password').value;
         const confirmPassword = document.getElementById('reset-confirm-password').value;
         const msg = document.getElementById('reset-message');
@@ -275,27 +216,15 @@ document.addEventListener('DOMContentLoaded', () => {
         msg.textContent = '';
 
         try {
-            const res = await fetch('/api/reset-password', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token, newPassword })
-            });
-            const data = await res.json();
-
-            if (data.success) {
-                msg.textContent = 'Password reset successful! Redirecting to login...';
-                msg.style.color = '#28a745';
-                setTimeout(() => {
-                    window.location.href = window.location.pathname; // Reload to clear params and show login
-                }, 2000);
-            } else {
-                msg.textContent = data.message;
-                msg.style.color = '#e74c3c';
-                btn.disabled = false;
-                btn.textContent = 'Update Password';
-            }
+            await cognitoConfirmPassword(username, code, newPassword);
+            msg.textContent = 'Password reset successful! You can now log in.';
+            msg.style.color = '#28a745';
+            setTimeout(() => {
+                document.getElementById('reset-password-form').style.display = 'none';
+                document.getElementById('login-form').style.display = 'block';
+            }, 2000);
         } catch (err) {
-            msg.textContent = 'An error occurred. Please try again.';
+            msg.textContent = err.message || 'An error occurred. Please try again.';
             msg.style.color = '#e74c3c';
             btn.disabled = false;
             btn.textContent = 'Update Password';
@@ -307,25 +236,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const input = document.getElementById(inputId);
         const button = document.getElementById(buttonId);
         if (!input || !button) return;
-
         const icon = button.querySelector('svg');
-
         button.addEventListener('click', () => {
             const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
             input.setAttribute('type', type);
-
-            // Toggle eye icon
             if (type === 'text') {
-                icon.innerHTML = `
-                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                    <line x1="1" y1="1" x2="23" y2="23"></line>
-                `;
+                icon.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>`;
             } else {
-                icon.innerHTML = `
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                    <line x1="1" y1="1" x2="23" y2="23"></line>
-                `;
+                icon.innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle><line x1="1" y1="1" x2="23" y2="23"></line>`;
             }
         });
     }
@@ -333,7 +251,6 @@ document.addEventListener('DOMContentLoaded', () => {
     togglePasswordVisibility('reset-new-password', 'toggle-reset-password');
     togglePasswordVisibility('reset-confirm-password', 'toggle-reset-confirm-password');
 
-    // Password Strength Meter for Reset Form
     const resetPasswordInput = document.getElementById('reset-new-password');
     if (resetPasswordInput) {
         resetPasswordInput.addEventListener('input', () => {
@@ -344,10 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Logout
     document.getElementById('logout-btn').addEventListener('click', () => {
         if (confirm('Are you sure you want to logout?')) {
-            // For JWT, we just remove the token from client-side
-            // No server call needed since JWT is stateless
-            localStorage.removeItem('adminToken');
-            localStorage.removeItem('user');
+            cognitoSignOut();
             location.reload();
         }
     });
@@ -705,17 +619,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (legalSection) legalSection.classList.add('active-tab');
             renderFooterNPCSeal();
         } else if (tabId === 'account-settings') {
-            // Fetch current admin profile to populate email
-            fetch('/api/admin/profile', {
-                headers: { 'Authorization': `Bearer ${localStorage.getItem('adminToken')}` }
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.email) {
-                        document.getElementById('admin-email').value = data.email;
-                    }
-                })
-                .catch(err => console.error('Failed to load admin profile:', err));
+            cognitoGetEmail().then(email => {
+                if (email) document.getElementById('admin-email').value = email;
+            });
         } else if (tabId === 'perks') {
             renderPerksSection(document.getElementById('perks-editor-container'));
         } else if (tabId === 'footer-brand') {
@@ -933,7 +839,7 @@ async function initDashboard() {
 
     // Fetch Data
     try {
-        const res = await fetch(API_URL);
+        const res = await authenticatedFetch(CONFIG.API_BASE + '/content');
         const serverData = await res.json();
         const defaults = getDefaultAppData();
 
@@ -1198,7 +1104,7 @@ window.renderOurClientsEditor = function() {
         card.innerHTML = `
             <div style="display:flex; gap:15px; align-items:flex-start; flex-wrap:wrap;">
                 <div style="flex-shrink:0;">
-                    ${client.logo ? `<img src="/${client.logo}" alt="Client Logo" style="width:100px; height:50px; object-fit:contain; background:#111; border-radius:6px; padding:6px; border:1px solid #333;">` : `<div style="width:100px; height:50px; background:#2a2a2a; border-radius:6px; border:1px dashed #555; display:flex; align-items:center; justify-content:center; font-size:0.75rem; color:#888;">No Logo</div>`}
+                    ${client.logo ? `<img src="${assetUrl(client.logo)}" alt="Client Logo" style="width:100px; height:50px; object-fit:contain; background:#111; border-radius:6px; padding:6px; border:1px solid #333;">` : `<div style="width:100px; height:50px; background:#2a2a2a; border-radius:6px; border:1px dashed #555; display:flex; align-items:center; justify-content:center; font-size:0.75rem; color:#888;">No Logo</div>`}
                 </div>
                 <div style="flex:1; min-width:200px;">
                     <div class="form-group" style="margin-bottom:8px;">
@@ -1254,28 +1160,10 @@ window.toggleOurClientVisibility = function(index) {
 window.uploadOurClientLogo = async function(inputEl, index) {
     const file = inputEl.files[0];
     if (!file) return;
-
-    // Convert HEIC if needed
-    let processedFile = file;
-    if (file.name.toLowerCase().endsWith('.heic') && window.heic2any) {
-        try {
-            const blob = await heic2any({ blob: file, toType: 'image/jpeg' });
-            processedFile = new File([blob], file.name.replace(/\.heic$/i, '.jpg'), { type: 'image/jpeg' });
-        } catch(e) { console.error('HEIC conversion failed', e); }
-    }
-
-    const formData = new FormData();
-    formData.append('image', processedFile);
-    const token = localStorage.getItem('adminToken');
     try {
-        const res = await fetch('/api/upload', { method: 'POST', headers: { 'Authorization': `Bearer ${token}` }, body: formData });
-        const data = await res.json();
-        if (data.success) {
-            appData.ourClients[index].logo = data.filePath;
-            renderOurClientsEditor();
-        } else {
-            alert('Upload failed: ' + (data.message || 'Unknown error'));
-        }
+        const filePath = await processAndUpload(file);
+        appData.ourClients[index].logo = filePath;
+        renderOurClientsEditor();
     } catch(e) {
         console.error('Logo upload error', e);
         alert('Upload error. Please try again.');
@@ -1432,7 +1320,7 @@ function renderForms() {
                         width: 40px; height: 40px; background: #eee; display: flex; align-items: center; justify-content: center;
                         border: 1px solid #ccc; border-radius: 4px;
                     ">
-                        <img src="/${stat.icon || 'assets/icon-placeholder.svg'}" style="width: 24px; height: 24px;">
+                        <img src="${assetUrl(stat.icon || 'assets/icon-placeholder.svg')}" style="width: 24px; height: 24px;">
                     </div>
                     <button type="button" onclick="openIconPicker(${index})" style="padding: 0.5rem; cursor: pointer;">Browse Library</button>
                     <input type="hidden" value="${stat.icon}" id="stat-icon-input-${index}"> 
@@ -1508,7 +1396,7 @@ function renderForms() {
             };
 
             item.innerHTML = `
-                <img src="/${iconPath}" style="width: 32px; height: 32px; object-fit: contain;">
+                <img src="${assetUrl(iconPath)}" style="width: 32px; height: 32px; object-fit: contain;">
                 <span style="font-size: 10px; word-break: break-all; text-align: center;">${iconPath.split('/').pop()}</span>
             `;
             grid.appendChild(item);
@@ -1613,7 +1501,7 @@ let trafficChart = null;
 
 async function renderDashboard() {
     try {
-        const res = await authenticatedFetch('/api/analytics');
+        const res = await authenticatedFetch(CONFIG.API_BASE + '/analytics');
         if (!res.ok) {
             const errorData = await res.json();
             throw new Error(errorData.message || 'Failed to fetch analytics');
@@ -2016,7 +1904,7 @@ function renderSingleSectionEditor(sIndex) {
                         <label>Product Image/Logo</label>
                         <input type="file" onchange="uploadProductImage(this, ${sIndex}, ${pIndex})" style="font-size:0.8rem;">
                         <input type="text" value="${prod.image || ''}" readonly style="background:#f5f5f5; margin-top:5px; border:1px solid #ccc; padding:0.4rem; color:#666; width:100%;" placeholder="Image Path">
-                        ${prod.image ? `<img src="/${prod.image}" class="preview-img" style="margin-top:10px;">` : ''}
+                        ${prod.image ? `<img src="${assetUrl(prod.image)}" class="preview-img" style="margin-top:10px;">` : ''}
                     </div>
                 </div>
 
@@ -2028,7 +1916,7 @@ function renderSingleSectionEditor(sIndex) {
                         <label>Features Intro Image</label>
                         <input type="file" onchange="uploadProductImage(this, ${sIndex}, ${pIndex}, 'introImage')" style="font-size:0.8rem;">
                         <input type="text" value="${prod.introImage || ''}" readonly style="background:#f5f5f5; margin-top:5px; border:1px solid #ccc; padding:0.4rem; color:#666; width:100%;" placeholder="Image Path">
-                        ${prod.introImage ? `<img src="/${prod.introImage}" class="preview-img" style="margin-top:10px;">` : ''}
+                        ${prod.introImage ? `<img src="${assetUrl(prod.introImage)}" class="preview-img" style="margin-top:10px;">` : ''}
                     </div>
 
                     <div class="form-group">
@@ -2050,7 +1938,7 @@ function renderSingleSectionEditor(sIndex) {
                         <label>Demo Video</label>
                         <input type="file" accept="video/*" onchange="uploadProductVideo(this, ${sIndex}, ${pIndex})" style="font-size:0.8rem;">
                         <input type="text" value="${prod.video || ''}" readonly style="background:#f5f5f5; margin-top:5px; border:1px solid #ccc; padding:0.4rem; color:#666; width:100%;" placeholder="Video Path">
-                        ${prod.video ? `<video controls style="width:100%; max-width:300px; margin-top:10px;"><source src="/${prod.video}" type="video/mp4"></video>` : ''}
+                        ${prod.video ? `<video controls style="width:100%; max-width:300px; margin-top:10px;"><source src="${assetUrl(prod.video)}" type="video/mp4"></video>` : ''}
                     </div>
                     
                     <div class="form-group">
@@ -2070,7 +1958,7 @@ function renderSingleSectionEditor(sIndex) {
                 iconInputHtml = `
                     <div style="display: flex; gap: 10px; align-items: center;">
                         <div onclick="openFeatureIconPicker(${sIndex}, ${pIndex}, ${fIndex})" style="width: 38px; height: 38px; background: #fff; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; transition: border-color 0.2s;" onmouseover="this.style.borderColor='#0f3460'" onmouseout="this.style.borderColor='#ccc'">
-                            <img src="/${icon || 'assets/icons/check.svg'}" style="width: 22px; height: 22px; object-fit: contain;">
+                            <img src="${assetUrl(icon || 'assets/icons/check.svg')}" style="width: 22px; height: 22px; object-fit: contain;">
                         </div>
                         <button type="button" onclick="openFeatureIconPicker(${sIndex}, ${pIndex}, ${fIndex})" style="padding: 4px 10px; cursor: pointer; font-size: 11px; background: #f0f0f0; color: #333; border: 1px solid #ccc; font-weight: normal;">Browse Library</button>
                     </div>
@@ -2417,7 +2305,7 @@ window.openFeatureIconPicker = function (sIndex, pIndex, fIndex) {
         };
 
         item.innerHTML = `
-            <img src="/${iconPath}" style="width: 32px; height: 32px; object-fit: contain;">
+            <img src="${assetUrl(iconPath)}" style="width: 32px; height: 32px; object-fit: contain;">
             <span style="font-size: 10px; word-break: break-all; text-align: center;">${iconPath.split('/').pop()}</span>
         `;
         grid.appendChild(item);
@@ -2467,7 +2355,7 @@ window.openDepartmentIconPicker = function (deptIndex) {
         };
 
         item.innerHTML = `
-            <img src="/${iconPath}" style="width: 32px; height: 32px; object-fit: contain;">
+            <img src="${assetUrl(iconPath)}" style="width: 32px; height: 32px; object-fit: contain;">
             <span style="font-size: 10px; word-break: break-all; text-align: center;">${iconPath.split('/').pop()}</span>
         `;
         grid.appendChild(item);
@@ -2492,94 +2380,27 @@ function selectIconForDepartment(iconPath) {
     document.getElementById('icon-picker-modal').style.display = 'none';
 }
 
-// Helper to convert HEIC to WebP/JPEG if needed
-async function processHeicImage(file) {
-    if (!file) return file;
-    const fileName = file.name.toLowerCase();
-
-    // Check if it's HEIC/HEIF
-    if (fileName.endsWith('.heic') || fileName.endsWith('.heif') || file.type === 'image/heic' || file.type === 'image/heif') {
-        try {
-            // Check if library is loaded
-            if (typeof heic2any !== 'undefined') {
-                // Show a brief loading indicator or just console log since it might take a second
-                console.log('Converting HEIC image to JPEG...');
-
-                const convertedBlob = await heic2any({
-                    blob: file,
-                    toType: 'image/jpeg',
-                    quality: 0.8
-                });
-
-                // heic2any might return an array of blobs if it's an image sequence, grab the first one
-                const finalBlob = Array.isArray(convertedBlob) ? convertedBlob[0] : convertedBlob;
-
-                // Create a new File object
-                const newFileName = file.name.replace(/\.heic$/i, '.jpg').replace(/\.heif$/i, '.jpg');
-                return new File([finalBlob], newFileName, { type: 'image/jpeg' });
-            } else {
-                console.warn('heic2any library not found, uploading original file.');
-                return file;
-            }
-        } catch (err) {
-            console.error('Error converting HEIC image:', err);
-            // Fallback to original file
-            return file;
-        }
-    }
-    return file;
-}
 
 window.uploadProductVideo = async function (input, sIndex, pIndex) {
     const file = input.files[0];
     if (!file) return;
-
-    const formData = new FormData();
-    formData.append('image', file);
-
     try {
-        const token = localStorage.getItem('adminToken');
-        const res = await fetch(UPLOAD_URL, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            body: formData
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-            if (res.status === 401 || res.status === 403) {
-                alert('Authentication failed. Please log in again.');
-                localStorage.removeItem('adminToken');
-                location.reload();
-                return;
-            }
-            alert(data?.message || 'Upload failed');
-            return;
+        const filePath = await uploadFileToS3(file);
+        appData.productsPage.sections[sIndex].products[pIndex].video = filePath;
+        const parent = input.parentElement;
+        parent.querySelector('input[type=text]').value = filePath;
+        let video = parent.querySelector('video');
+        if (!video) {
+            video = document.createElement('video');
+            video.controls = true;
+            video.style.cssText = 'width:100%; max-width:300px; margin-top:10px;';
+            const source = document.createElement('source');
+            source.type = 'video/mp4';
+            video.appendChild(source);
+            parent.appendChild(video);
         }
-
-        if (data.success) {
-            appData.productsPage.sections[sIndex].products[pIndex].video = data.filePath;
-            // Update UI
-            const parent = input.parentElement;
-            parent.querySelector('input[type=text]').value = data.filePath;
-            let video = parent.querySelector('video');
-            if (!video) {
-                video = document.createElement('video');
-                video.controls = true;
-                video.style.cssText = 'width:100%; max-width:300px; margin-top:10px;';
-                const source = document.createElement('source');
-                source.type = 'video/mp4';
-                video.appendChild(source);
-                parent.appendChild(video);
-            }
-            video.querySelector('source').src = '/' + data.filePath;
-            video.load();
-        } else {
-            alert(data?.message || 'Upload failed');
-        }
+        video.querySelector('source').src = CONFIG.UPLOADS_BASE + '/' + filePath.replace(/^uploads\//, '');
+        video.load();
     } catch (err) {
         console.error(err);
         alert('Error uploading video');
@@ -2589,58 +2410,21 @@ window.uploadProductVideo = async function (input, sIndex, pIndex) {
 window.uploadVideo = async function (input, path, index, field) {
     const file = input.files[0];
     if (!file) return;
-
-    const formData = new FormData();
-    formData.append('image', file); // API expects 'image' field for videos too
-
     try {
-        const token = localStorage.getItem('adminToken');
-        const res = await fetch(UPLOAD_URL, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            body: formData
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-            alert(data?.message || 'Upload failed');
-            return;
+        const filePath = await uploadFileToS3(file);
+        const parts = path.split('.');
+        let target = appData;
+        for (let i = 0; i < parts.length; i++) {
+            if (Array.isArray(target)) { target = target[index]; }
+            else if (target[parts[i]]) { target = target[parts[i]]; }
         }
-
-        if (data.success) {
-            // Update appData
-            const parts = path.split('.');
-            let target = appData;
-            for (let i = 0; i < parts.length; i++) {
-                if (Array.isArray(target)) {
-                    target = target[index];
-                } else if (target[parts[i]]) {
-                    target = target[parts[i]];
-                }
-            }
-
-            if (Array.isArray(target)) {
-                target[index][field] = data.filePath;
-            } else {
-                target[field] = data.filePath;
-            }
-
-            // Update UI
-            const parent = input.parentElement;
-            const textInput = parent.querySelector('input[type=text]');
-            if (textInput) textInput.value = data.filePath;
-
-            const videoPreview = parent.querySelector('video');
-            if (videoPreview) {
-                videoPreview.src = '/' + data.filePath;
-                videoPreview.load();
-            }
-        } else {
-            alert(data?.message || 'Upload failed');
-        }
+        if (Array.isArray(target)) { target[index][field] = filePath; }
+        else { target[field] = filePath; }
+        const parent = input.parentElement;
+        const textInput = parent.querySelector('input[type=text]');
+        if (textInput) textInput.value = filePath;
+        const videoPreview = parent.querySelector('video');
+        if (videoPreview) { videoPreview.src = CONFIG.UPLOADS_BASE + '/' + filePath.replace(/^uploads\//, ''); videoPreview.load(); }
     } catch (err) {
         console.error(err);
         alert('Error uploading video');
@@ -2648,52 +2432,16 @@ window.uploadVideo = async function (input, path, index, field) {
 }
 
 window.uploadProductImage = async function (input, sIndex, pIndex, field = 'image') {
-    let file = input.files[0];
+    const file = input.files[0];
     if (!file) return;
-
-    // Process HEIC if needed
-    file = await processHeicImage(file);
-
-    const formData = new FormData();
-    formData.append('image', file);
-
     try {
-        const token = localStorage.getItem('adminToken');
-        const res = await fetch(UPLOAD_URL, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            body: formData
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-            if (res.status === 401 || res.status === 403) {
-                alert('Authentication failed. Please log in again.');
-                localStorage.removeItem('adminToken');
-                location.reload();
-                return;
-            }
-            alert(data?.message || 'Upload failed');
-            return;
-        }
-
-        if (data.success) {
-            appData.productsPage.sections[sIndex].products[pIndex][field] = data.filePath;
-            const parent = input.parentElement;
-            parent.querySelector('input[type=text]').value = data.filePath;
-            let img = parent.querySelector('img');
-            if (!img) {
-                img = document.createElement('img');
-                img.className = 'preview-img';
-                parent.appendChild(img);
-            }
-            img.src = '/' + data.filePath;
-        } else {
-            alert(data?.message || 'Upload failed');
-        }
+        const filePath = await processAndUpload(file);
+        appData.productsPage.sections[sIndex].products[pIndex][field] = filePath;
+        const parent = input.parentElement;
+        parent.querySelector('input[type=text]').value = filePath;
+        let img = parent.querySelector('img');
+        if (!img) { img = document.createElement('img'); img.className = 'preview-img'; parent.appendChild(img); }
+        img.src = CONFIG.UPLOADS_BASE + '/' + filePath.replace(/^uploads\//, '');
     } catch (err) {
         console.error(err);
         alert('Error uploading image');
@@ -2736,7 +2484,7 @@ function renderHeroSlides() {
                 <label>Image</label>
                 <input type="file" onchange="uploadImage(this, 'hero.slides', ${index}, 'image')">
                 <input type="text" value="${slide.image}" readonly style="background:#f5f5f5; margin-top:5px; border:1px solid #ccc; padding:0.5rem; color:#333;" placeholder="Image Path">
-                ${slide.image ? `<img src="/${slide.image}" class="preview-img">` : ''}
+                ${slide.image ? `<img src="${assetUrl(slide.image)}" class="preview-img">` : ''}
             </div>
             <div class="form-group">
                 <label>Accessibility Label</label>
@@ -2804,7 +2552,7 @@ function renderList(containerId, dataArray, arrayName, fields, templateObj) {
                         <label>${capitalizedLabel}</label>
                         <input type="file" onchange="uploadImage(this, '${arrayName}', ${index}, '${field}')">
                         <input type="text" value="${val}" readonly style="background:#f5f5f5; margin-top:5px; border:1px solid #ccc; padding:0.5rem; color:#333;" placeholder="Image Path">
-                        ${val ? `<img src="/${val}" class="preview-img">` : ''}
+                        ${val ? `<img src="${assetUrl(val)}" class="preview-img">` : ''}
                     </div>
                 `;
             } else if (field === 'description' || field === 'quote') {
@@ -2944,85 +2692,36 @@ window.updateArrayField = function (path, index, field, value) {
 }
 
 window.uploadImage = async function (input, arrayName, index, field, reRenderFnName) {
-    let file = input.files[0];
+    const file = input.files[0];
     if (!file) return;
-
-    // Process HEIC if needed
-    file = await processHeicImage(file);
-
-    const formData = new FormData();
-    formData.append('image', file);
-
     try {
-        const token = localStorage.getItem('adminToken');
-        const res = await fetch(UPLOAD_URL, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            body: formData
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-            if (res.status === 401 || res.status === 403) {
-                alert('Authentication failed. Please log in again.');
-                localStorage.removeItem('adminToken');
-                location.reload();
-                return;
+        const filePath = await processAndUpload(file);
+        let target = appData;
+        const parts = arrayName.split('.');
+        for (const part of parts) {
+            const arrayMatch = part.match(/(\w+)\[(\d+)\]/);
+            if (arrayMatch) {
+                const name = arrayMatch[1];
+                const idx = parseInt(arrayMatch[2]);
+                if (!target[name]) target[name] = [];
+                target = target[name][idx];
+            } else {
+                if (!target[part]) target[part] = {};
+                target = target[part];
             }
-            alert(data?.message || 'Upload failed');
-            return;
         }
-
-        if (data.success) {
-            // Update data model using path traversal
-            let target = appData;
-            const parts = arrayName.split('.');
-            for (const part of parts) {
-                const arrayMatch = part.match(/(\w+)\[(\d+)\]/);
-                if (arrayMatch) {
-                    const name = arrayMatch[1];
-                    const idx = parseInt(arrayMatch[2]);
-                    if (!target[name]) target[name] = [];
-                    target = target[name][idx];
-                } else {
-                    if (!target[part]) target[part] = {};
-                    target = target[part];
-                }
-            }
-
-            if (index !== null && index !== undefined) {
-                target[index][field] = data.filePath;
-            } else {
-                target[field] = data.filePath;
-            }
-
-            // Save changes automatically
-            if (window.saveData) {
-                await window.saveData();
-            }
-
-            // Re-render if callback provided
-            if (reRenderFnName && typeof window[reRenderFnName] === 'function') {
-                window[reRenderFnName]();
-            } else {
-                // Update UI preview manually if no re-render function
-                const parent = input.parentElement;
-                const pathInput = parent.querySelector('input[type=text]');
-                if (pathInput) pathInput.value = data.filePath;
-
-                let img = parent.querySelector('img');
-                if (!img) {
-                    img = document.createElement('img');
-                    img.className = 'preview-img';
-                    parent.appendChild(img);
-                }
-                img.src = '/' + data.filePath;
-            }
+        if (index !== null && index !== undefined) { target[index][field] = filePath; }
+        else { target[field] = filePath; }
+        if (window.saveData) await window.saveData();
+        if (reRenderFnName && typeof window[reRenderFnName] === 'function') {
+            window[reRenderFnName]();
         } else {
-            alert(data?.message || 'Upload failed');
+            const parent = input.parentElement;
+            const pathInput = parent.querySelector('input[type=text]');
+            if (pathInput) pathInput.value = filePath;
+            let img = parent.querySelector('img');
+            if (!img) { img = document.createElement('img'); img.className = 'preview-img'; parent.appendChild(img); }
+            img.src = CONFIG.UPLOADS_BASE + '/' + filePath.replace(/^uploads\//, '');
         }
     } catch (err) {
         console.error(err);
@@ -3041,77 +2740,20 @@ window.changeEmail = async function () {
     }
 
     try {
-        const res = await authenticatedFetch('/api/change-email', {
-            method: 'POST',
-            body: JSON.stringify({ newEmail })
-        });
-
-        if (!res.ok) {
-            const data = await res.json();
-            msg.style.color = 'red';
-            msg.textContent = data.message || 'Failed to update email';
-            return;
-        }
-
-        const data = await res.json();
-        if (data.success) {
-            msg.style.color = 'green';
-            msg.textContent = 'Email updated successfully!';
-        } else {
-            msg.style.color = 'red';
-            msg.textContent = data.message || 'Failed to update email';
-        }
+        await cognitoUpdateEmail(newEmail);
+        msg.style.color = 'green';
+        msg.textContent = 'Email updated successfully! Check your email to verify the change.';
     } catch (err) {
         msg.style.color = 'red';
-        msg.textContent = 'Error updating email';
+        msg.textContent = err.message || 'Failed to update email';
         console.error(err);
     }
 }
 
 window.changeUsername = async function () {
-    const newUsername = document.getElementById('new-username').value;
     const msg = document.getElementById('username-msg');
-
-    if (!newUsername) {
-        msg.style.color = 'red';
-        msg.textContent = 'Please enter a new username';
-        return;
-    }
-
-    try {
-        const res = await authenticatedFetch('/api/change-username', {
-            method: 'POST',
-            body: JSON.stringify({ newUsername })
-        });
-
-        if (!res.ok) {
-            if (res.status === 401 || res.status === 403) {
-                msg.style.color = 'red';
-                msg.textContent = 'Authentication failed. Please log in again.';
-                localStorage.removeItem('adminToken');
-                location.reload();
-                return;
-            }
-            const data = await res.json();
-            msg.style.color = 'red';
-            msg.textContent = data.message || 'Failed to update username';
-            return;
-        }
-
-        const data = await res.json();
-
-        if (data.success) {
-            msg.style.color = 'green';
-            msg.textContent = 'Username updated successfully!';
-            document.getElementById('new-username').value = '';
-        } else {
-            msg.style.color = 'red';
-            msg.textContent = data.message || 'Failed to update username';
-        }
-    } catch (err) {
-        msg.style.color = 'red';
-        msg.textContent = 'Error updating username';
-    }
+    msg.style.color = 'orange';
+    msg.textContent = 'Username changes are managed through the AWS Cognito console.';
 }
 
 window.changePassword = async function () {
@@ -3121,72 +2763,26 @@ window.changePassword = async function () {
     const msg = document.getElementById('password-msg');
 
     if (!currentPassword || !newPassword || !confirmPassword) {
-        msg.style.color = 'red';
-        msg.textContent = 'Please fill in all fields';
-        return;
+        msg.style.color = 'red'; msg.textContent = 'Please fill in all fields'; return;
     }
-
     if (newPassword !== confirmPassword) {
-        msg.style.color = 'red';
-        msg.textContent = 'New passwords do not match';
-        return;
+        msg.style.color = 'red'; msg.textContent = 'New passwords do not match'; return;
     }
-
-    // Check password strength
     const strength = checkPasswordStrength(newPassword);
     if (strength.level === 'weak') {
-        msg.style.color = 'red';
-        msg.textContent = 'Password is too weak. Please choose a stronger password.';
-        return;
-    }
-
-    if (newPassword.length < 8) {
-        msg.style.color = 'red';
-        msg.textContent = 'New password must be at least 8 characters';
-        return;
-    }
-
-    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(newPassword)) {
-        msg.style.color = 'red';
-        msg.textContent = 'Password must contain uppercase, lowercase, and numbers';
-        return;
+        msg.style.color = 'red'; msg.textContent = 'Password is too weak. Please choose a stronger password.'; return;
     }
 
     try {
-        const res = await authenticatedFetch('/api/change-password', {
-            method: 'POST',
-            body: JSON.stringify({ currentPassword, newPassword })
-        });
-
-        if (!res.ok) {
-            if (res.status === 401 || res.status === 403) {
-                msg.style.color = 'red';
-                msg.textContent = 'Authentication failed. Please log in again.';
-                localStorage.removeItem('adminToken');
-                location.reload();
-                return;
-            }
-            const data = await res.json();
-            msg.style.color = 'red';
-            msg.textContent = data.message || 'Failed to update password';
-            return;
-        }
-
-        const data = await res.json();
-
-        if (data.success) {
-            msg.style.color = 'green';
-            msg.textContent = 'Password updated successfully!';
-            document.getElementById('current-password').value = '';
-            document.getElementById('new-password').value = '';
-            document.getElementById('confirm-password').value = '';
-        } else {
-            msg.style.color = 'red';
-            msg.textContent = data.message || 'Failed to update password';
-        }
+        await cognitoChangePassword(currentPassword, newPassword);
+        msg.style.color = 'green';
+        msg.textContent = 'Password updated successfully!';
+        document.getElementById('current-password').value = '';
+        document.getElementById('new-password').value = '';
+        document.getElementById('confirm-password').value = '';
     } catch (err) {
         msg.style.color = 'red';
-        msg.textContent = 'Error updating password';
+        msg.textContent = err.message || 'Failed to update password';
     }
 }
 
@@ -3209,7 +2805,7 @@ async function saveData() {
     }
 
     try {
-        const res = await authenticatedFetch(API_URL, {
+        const res = await authenticatedFetch(CONFIG.API_BASE + '/content', {
             method: 'POST',
             body: JSON.stringify(appData)
         });
@@ -3226,7 +2822,7 @@ async function saveData() {
         if (!res.ok) {
             if (res.status === 401 || res.status === 403) {
                 alert('Authentication failed. Please log in again.');
-                localStorage.removeItem('adminToken');
+                cognitoSignOut();
                 location.reload();
                 return;
             }
@@ -3498,7 +3094,7 @@ function renderFamilyCultureSection(container) {
                 <input type="file" id="family-culture-image" accept="image/*,.heic" 
                        onchange="handleFamilyCultureImageUpload(this)">
                 <div class="image-preview" style="margin-top: 10px;">
-                    ${appData.familyCulture.imageUrl ? `<img src="${appData.familyCulture.imageUrl.startsWith('data:') || appData.familyCulture.imageUrl.startsWith('/') ? appData.familyCulture.imageUrl : '/' + appData.familyCulture.imageUrl}" alt="Current image" style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">` : '<p>No image uploaded</p>'}
+                    ${appData.familyCulture.imageUrl ? `<img src="${assetUrl(appData.familyCulture.imageUrl)}" alt="Current image" style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">` : '<p>No image uploaded</p>'}
                 </div>
             </div>
         </div>
@@ -3513,50 +3109,14 @@ function updateFamilyCultureData(field, value) {
 }
 
 window.handleFamilyCultureImageUpload = async function (input) {
-    let file = input.files[0];
+    const file = input.files[0];
     if (!file) return;
-
-    // Process HEIC if needed
-    file = await processHeicImage(file);
-
-    const formData = new FormData();
-    formData.append('image', file);
-
     try {
-        const token = localStorage.getItem('adminToken');
-        const res = await fetch(UPLOAD_URL, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            body: formData
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-            if (res.status === 401 || res.status === 403) {
-                alert('Authentication failed. Please log in again.');
-                localStorage.removeItem('adminToken');
-                location.reload();
-                return;
-            }
-            alert(data?.message || 'Upload failed');
-            return;
-        }
-
-        if (data.success) {
-            updateFamilyCultureData('imageUrl', data.filePath);
-
-            const preview = document.querySelector('#family-culture-image').nextElementSibling;
-            const src = data.filePath.startsWith('/') ? data.filePath : '/' + data.filePath;
-            preview.innerHTML = `<img src="${src}" alt="Uploaded image" style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">`;
-
-            // Persist to server
-            saveData();
-        } else {
-            alert(data?.message || 'Upload failed');
-        }
+        const filePath = await processAndUpload(file);
+        updateFamilyCultureData('imageUrl', filePath);
+        const preview = document.querySelector('#family-culture-image').nextElementSibling;
+        preview.innerHTML = `<img src="${CONFIG.UPLOADS_BASE}/${filePath.replace(/^uploads\//, '')}" alt="Uploaded image" style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">`;
+        saveData();
     } catch (err) {
         console.error(err);
         alert('Error uploading image');
@@ -3597,7 +3157,7 @@ function renderVisionSection(container) {
                 <input type="file" id="vision-image" accept="image/*,.heic" 
                        onchange="handleVisionImageUpload(this)">
                 <div class="image-preview" style="margin-top: 10px;">
-                    ${appData.vision.imageUrl ? `<img src="${appData.vision.imageUrl.startsWith('data:') || appData.vision.imageUrl.startsWith('/') ? appData.vision.imageUrl : '/' + appData.vision.imageUrl}" alt="Current image" style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">` : '<p>No image uploaded</p>'}
+                    ${appData.vision.imageUrl ? `<img src="${assetUrl(appData.vision.imageUrl)}" alt="Current image" style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">` : '<p>No image uploaded</p>'}
                 </div>
             </div>
         </div>
@@ -3612,52 +3172,14 @@ function updateVisionData(field, value) {
 }
 
 window.handleVisionImageUpload = async function (input) {
-    let file = input.files[0];
+    const file = input.files[0];
     if (!file) return;
-
-    // Process HEIC if needed
-    file = await processHeicImage(file);
-
-    const formData = new FormData();
-    formData.append('image', file);
-
     try {
-        const token = localStorage.getItem('adminToken');
-        const res = await fetch(UPLOAD_URL, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            body: formData
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-            if (res.status === 401 || res.status === 403) {
-                alert('Authentication failed. Please log in again.');
-                localStorage.removeItem('adminToken');
-                location.reload();
-                return;
-            }
-            alert(data?.message || 'Upload failed');
-            return;
-        }
-
-        if (data.success) {
-            // Update data with the server path instead of base64
-            updateVisionData('imageUrl', data.filePath);
-
-            // Update the preview immediately
-            const preview = document.querySelector('#vision-image').nextElementSibling;
-            const src = data.filePath.startsWith('/') ? data.filePath : '/' + data.filePath;
-            preview.innerHTML = `<img src="${src}" alt="Uploaded image" style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">`;
-
-            // Persist to server
-            saveData();
-        } else {
-            alert(data?.message || 'Upload failed');
-        }
+        const filePath = await processAndUpload(file);
+        updateVisionData('imageUrl', filePath);
+        const preview = document.querySelector('#vision-image').nextElementSibling;
+        preview.innerHTML = `<img src="${CONFIG.UPLOADS_BASE}/${filePath.replace(/^uploads\//, '')}" alt="Uploaded image" style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">`;
+        saveData();
     } catch (err) {
         console.error(err);
         alert('Error uploading image');
@@ -3699,7 +3221,7 @@ function renderMissionSection(container) {
                 <input type="file" id="mission-image" accept="image/*,.heic" 
                        onchange="handleMissionImageUpload(this)">
                 <div class="image-preview" style="margin-top: 10px;">
-                    ${appData.mission.imageUrl ? `<img src="${appData.mission.imageUrl.startsWith('data:') || appData.mission.imageUrl.startsWith('/') ? appData.mission.imageUrl : '/' + appData.mission.imageUrl}" alt="Current image" style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">` : '<p>No image uploaded</p>'}
+                    ${appData.mission.imageUrl ? `<img src="${assetUrl(appData.mission.imageUrl)}" alt="Current image" style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">` : '<p>No image uploaded</p>'}
                 </div>
             </div>
         </div>
@@ -3714,50 +3236,14 @@ function updateMissionData(field, value) {
 }
 
 window.handleMissionImageUpload = async function (input) {
-    let file = input.files[0];
+    const file = input.files[0];
     if (!file) return;
-
-    // Process HEIC if needed
-    file = await processHeicImage(file);
-
-    const formData = new FormData();
-    formData.append('image', file);
-
     try {
-        const token = localStorage.getItem('adminToken');
-        const res = await fetch(UPLOAD_URL, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            body: formData
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-            if (res.status === 401 || res.status === 403) {
-                alert('Authentication failed. Please log in again.');
-                localStorage.removeItem('adminToken');
-                location.reload();
-                return;
-            }
-            alert(data?.message || 'Upload failed');
-            return;
-        }
-
-        if (data.success) {
-            updateMissionData('imageUrl', data.filePath);
-
-            const preview = document.querySelector('#mission-image').nextElementSibling;
-            const src = data.filePath.startsWith('/') ? data.filePath : '/' + data.filePath;
-            preview.innerHTML = `<img src="${src}" alt="Uploaded image" style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">`;
-
-            // Persist to server
-            saveData();
-        } else {
-            alert(data?.message || 'Upload failed');
-        }
+        const filePath = await processAndUpload(file);
+        updateMissionData('imageUrl', filePath);
+        const preview = document.querySelector('#mission-image').nextElementSibling;
+        preview.innerHTML = `<img src="${CONFIG.UPLOADS_BASE}/${filePath.replace(/^uploads\//, '')}" alt="Uploaded image" style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">`;
+        saveData();
     } catch (err) {
         console.error(err);
         alert('Error uploading image');
@@ -3835,7 +3321,7 @@ function renderLeaderItems() {
                 <label>Profile Image</label>
                 <input type="file" accept="image/*,.heic" onchange="handleLeaderImageUpload(this, ${index})">
                 <div class="image-preview" style="margin-top: 10px;">
-                    ${leader.image ? `<img src="${leader.image.startsWith('data:') || leader.image.startsWith('/') ? leader.image : '/' + leader.image}" alt="Profile" style="max-width: 150px; max-height: 150px; border-radius: 4px; border: 1px solid #ddd;">` : '<p>No image uploaded</p>'}
+                    ${leader.image ? `<img src="${assetUrl(leader.image)}" alt="Profile" style="max-width: 150px; max-height: 150px; border-radius: 4px; border: 1px solid #ddd;">` : '<p>No image uploaded</p>'}
                 </div>
             </div>
         `;
@@ -3872,38 +3358,13 @@ window.updateLeaderData = function (index, field, value) {
 };
 
 window.handleLeaderImageUpload = async function (input, index) {
-    let file = input.files[0];
+    const file = input.files[0];
     if (!file) return;
-
-    // Process HEIC if needed
-    file = await processHeicImage(file);
-
-    const formData = new FormData();
-    formData.append('image', file);
-
     try {
-        const token = localStorage.getItem('adminToken');
-        const res = await fetch(UPLOAD_URL, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            body: formData
-        });
-
-        if (!res.ok) throw new Error('Upload failed');
-
-        const result = await res.json();
-        if (result.success && result.filePath) {
-            appData.leaders.list[index].image = result.filePath;
-            renderLeaderItems();
-            // Persist change to content.json
-            if (window.saveData) {
-                await window.saveData();
-            }
-        } else {
-            alert('Upload failed: ' + (result.message || 'Unknown error'));
-        }
+        const filePath = await processAndUpload(file);
+        appData.leaders.list[index].image = filePath;
+        renderLeaderItems();
+        if (window.saveData) await window.saveData();
     } catch (err) {
         console.error('Error uploading leader image:', err);
         alert('Error uploading image.');
@@ -3986,7 +3447,7 @@ function renderPerkItems() {
                 <label>Benefit Image</label>
                 <input type="file" accept="image/*,.heic" onchange="handlePerkImageUpload(this, ${index})">
                 <div class="image-preview" style="margin-top: 10px;">
-                    ${perk.image ? `<img src="${perk.image.startsWith('data:') || perk.image.startsWith('/') ? perk.image : '/' + perk.image}" alt="Perk Image" style="max-width: 150px; max-height: 150px; border-radius: 4px; border: 1px solid #ddd;">` : '<p>No image uploaded</p>'}
+                    ${perk.image ? `<img src="${assetUrl(perk.image)}" alt="Perk Image" style="max-width: 150px; max-height: 150px; border-radius: 4px; border: 1px solid #ddd;">` : '<p>No image uploaded</p>'}
                 </div>
             </div>
         `;
@@ -4016,38 +3477,13 @@ window.updatePerkValue = function (index, field, value) {
 };
 
 window.handlePerkImageUpload = async function (input, index) {
-    let file = input.files[0];
+    const file = input.files[0];
     if (!file) return;
-
-    // Process HEIC if needed
-    file = await processHeicImage(file);
-
-    const formData = new FormData();
-    formData.append('image', file);
-
     try {
-        const token = localStorage.getItem('adminToken');
-        const res = await fetch(UPLOAD_URL, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            body: formData
-        });
-
-        if (!res.ok) throw new Error('Upload failed');
-
-        const result = await res.json();
-        if (result.success && result.filePath) {
-            appData.perks.list[index].image = result.filePath;
-            renderPerkItems();
-            // Persist change to content.json
-            if (window.saveData) {
-                await window.saveData();
-            }
-        } else {
-            alert('Upload failed: ' + (result.message || 'Unknown error'));
-        }
+        const filePath = await processAndUpload(file);
+        appData.perks.list[index].image = filePath;
+        renderPerkItems();
+        if (window.saveData) await window.saveData();
     } catch (err) {
         console.error('Error uploading perk image:', err);
         alert('Error uploading image.');
@@ -4104,8 +3540,7 @@ window.savePageContent = async function (page) {
     }
 
     try {
-        const token = localStorage.getItem('adminToken');
-        const response = await authenticatedFetch('/api/save-page', {
+        const response = await authenticatedFetch(CONFIG.API_BASE + '/save-page', {
             method: 'POST',
             body: JSON.stringify({
                 page: page,
@@ -4168,7 +3603,7 @@ window.renderIntroSlides = function () {
                 <input type="file" onchange="uploadImage(this, 'careersPage.intro.slides', ${index}, 'image', 'renderIntroSlides')">
                 <input type="text" value="${slide.image || ''}" placeholder="Image path" readonly style="margin-top:5px; background:rgba(0,0,0,0.1);">
                 <div class="image-preview" style="margin-top:10px;">
-                    ${slide.image ? `<img src="${slide.image.startsWith('/') || slide.image.startsWith('http') ? slide.image : '/' + slide.image}" style="max-width:150px; border-radius:8px; border:1px solid #ddd;">` : ''}
+                    ${slide.image ? `<img src="${assetUrl(slide.image)}" style="max-width:150px; border-radius:8px; border:1px solid #ddd;">` : ''}
                 </div>
             </div>
         `;
@@ -4235,7 +3670,7 @@ function renderWhyJoinCards() {
             <div class="form-group">
                 <label>Card Image</label>
                 <div class="image-preview-container" style="margin-bottom: 10px;">
-                    ${card.image ? `<img src="/${card.image}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; margin-bottom: 10px; display: block;">` : '<div style="width: 50px; height: 50px; background: #eee; display: flex; align-items: center; justify-content: center; border-radius: 4px; margin-bottom: 10px;">No Image</div>'}
+                    ${card.image ? `<img src="${assetUrl(card.image)}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; margin-bottom: 10px; display: block;">` : '<div style="width: 50px; height: 50px; background: #eee; display: flex; align-items: center; justify-content: center; border-radius: 4px; margin-bottom: 10px;">No Image</div>'}
                 </div>
                 <input type="file" onchange="uploadImage(this, 'careersPage.whyJoin.cards', ${index}, 'image', 'renderWhyJoinCards')">
             </div>
@@ -4255,8 +3690,8 @@ function renderWhyJoinCards() {
                     ${(card.galleryImages || []).map((img, imgIndex) => {
             const isVideo = img.match(/\.(mp4|webm|ogg)$/i);
             const mediaTag = isVideo
-                ? `<video src="${img.startsWith('/') ? img : '/' + img}" style="width:100%; height:100%; object-fit:cover; border-radius:4px; border:1px solid #ddd;" muted loop autoplay></video>`
-                : `<img src="${img.startsWith('/') ? img : '/' + img}" style="width:100%; height:100%; object-fit:cover; border-radius:4px; border:1px solid #ddd;">`;
+                ? `<video src="${assetUrl(img)}" style="width:100%; height:100%; object-fit:cover; border-radius:4px; border:1px solid #ddd;" muted loop autoplay></video>`
+                : `<img src="${assetUrl(img)}" style="width:100%; height:100%; object-fit:cover; border-radius:4px; border:1px solid #ddd;">`;
             return `
                         <div style="position: relative; aspect-ratio: 1/1;">
                             ${mediaTag}
@@ -4287,37 +3722,16 @@ window.deleteWhyJoinCard = function (index) {
 };
 
 window.uploadWhyJoinGalleryImage = async function (input, cardIndex) {
-    let file = input.files[0];
+    const file = input.files[0];
     if (!file) return;
-
-    // Process HEIC if needed
-    file = await processHeicImage(file);
-
-    const formData = new FormData();
-    formData.append('image', file);
-
     try {
-        const token = localStorage.getItem('adminToken');
-        const res = await fetch(UPLOAD_URL, {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${token}` },
-            body: formData
-        });
-
-        const result = await res.json();
-
-        if (result.success) {
-            if (!appData.careersPage.whyJoin.cards[cardIndex].galleryImages) {
-                appData.careersPage.whyJoin.cards[cardIndex].galleryImages = [];
-            }
-            appData.careersPage.whyJoin.cards[cardIndex].galleryImages.push(result.filePath);
-
-            // Save and re-render
-            await saveData();
-            renderWhyJoinCards();
-        } else {
-            alert('Upload failed: ' + (result.message || 'Unknown error'));
+        const filePath = await processAndUpload(file);
+        if (!appData.careersPage.whyJoin.cards[cardIndex].galleryImages) {
+            appData.careersPage.whyJoin.cards[cardIndex].galleryImages = [];
         }
+        appData.careersPage.whyJoin.cards[cardIndex].galleryImages.push(filePath);
+        await saveData();
+        renderWhyJoinCards();
     } catch (error) {
         console.error('Error uploading gallery image:', error);
         alert('Error uploading image');
@@ -4360,7 +3774,7 @@ function renderOurCultureEditor() {
                 <label>Video</label>
                 <input type="file" accept="video/*" onchange="uploadVideo(this, 'careersPage.teamCulture', 0, 'videoUrl')">
                 <input type="text" value="${data.teamCulture.videoUrl}" placeholder="Video path" readonly style="margin-top:5px; background:rgba(0,0,0,0.1);">
-                ${data.teamCulture.videoUrl ? `<video controls style="max-width:300px; margin-top:10px;"><source src="${data.teamCulture.videoUrl.startsWith('/') ? data.teamCulture.videoUrl : '/' + data.teamCulture.videoUrl}" type="video/mp4"></video>` : ''}
+                ${data.teamCulture.videoUrl ? `<video controls style="max-width:300px; margin-top:10px;"><source src="${assetUrl(data.teamCulture.videoUrl)}" type="video/mp4"></video>` : ''}
             </div>
         </div>
     `;
@@ -4411,7 +3825,7 @@ function renderOfficeCultureCards() {
             <div class="form-group">
                 <label>Card Image</label>
                 <div class="image-preview-container" style="margin-bottom: 10px;">
-                    ${card.image ? `<img src="/${card.image}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; margin-bottom: 10px; display: block;">` : '<div style="width: 50px; height: 50px; background: #eee; display: flex; align-items: center; justify-content: center; border-radius: 4px; margin-bottom: 10px;">No Image</div>'}
+                    ${card.image ? `<img src="${assetUrl(card.image)}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; margin-bottom: 10px; display: block;">` : '<div style="width: 50px; height: 50px; background: #eee; display: flex; align-items: center; justify-content: center; border-radius: 4px; margin-bottom: 10px;">No Image</div>'}
                 </div>
                 <input type="file" onchange="uploadImage(this, 'careersPage.officeCulture.cards', ${index}, 'image', 'renderOfficeCultureCards')">
             </div>
@@ -4431,8 +3845,8 @@ function renderOfficeCultureCards() {
                     ${(card.galleryImages || []).map((img, imgIndex) => {
             const isVideo = img.match(/\.(mp4|webm|ogg)$/i);
             const mediaTag = isVideo
-                ? `<video src="${img.startsWith('/') ? img : '/' + img}" style="width:100%; height:100%; object-fit:cover; border-radius:4px; border:1px solid #ddd;" muted loop autoplay></video>`
-                : `<img src="${img.startsWith('/') ? img : '/' + img}" style="width:100%; height:100%; object-fit:cover; border-radius:4px; border:1px solid #ddd;">`;
+                ? `<video src="${assetUrl(img)}" style="width:100%; height:100%; object-fit:cover; border-radius:4px; border:1px solid #ddd;" muted loop autoplay></video>`
+                : `<img src="${assetUrl(img)}" style="width:100%; height:100%; object-fit:cover; border-radius:4px; border:1px solid #ddd;">`;
             return `
                         <div style="position: relative; aspect-ratio: 1/1;">
                             ${mediaTag}
@@ -4462,37 +3876,16 @@ window.deleteOfficeCultureCard = function (index) {
 };
 
 window.uploadOfficeCultureGalleryImage = async function (input, cardIndex) {
-    let file = input.files[0];
+    const file = input.files[0];
     if (!file) return;
-
-    // Process HEIC if needed
-    file = await processHeicImage(file);
-
-    const formData = new FormData();
-    formData.append('image', file);
-
     try {
-        const token = localStorage.getItem('adminToken');
-        const res = await fetch(UPLOAD_URL, {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${token}` },
-            body: formData
-        });
-
-        const result = await res.json();
-
-        if (result.success) {
-            if (!appData.careersPage.officeCulture.cards[cardIndex].galleryImages) {
-                appData.careersPage.officeCulture.cards[cardIndex].galleryImages = [];
-            }
-            appData.careersPage.officeCulture.cards[cardIndex].galleryImages.push(result.filePath);
-
-            // Save and re-render
-            await saveData();
-            renderOfficeCultureCards();
-        } else {
-            alert('Upload failed: ' + (result.message || 'Unknown error'));
+        const filePath = await processAndUpload(file);
+        if (!appData.careersPage.officeCulture.cards[cardIndex].galleryImages) {
+            appData.careersPage.officeCulture.cards[cardIndex].galleryImages = [];
         }
+        appData.careersPage.officeCulture.cards[cardIndex].galleryImages.push(filePath);
+        await saveData();
+        renderOfficeCultureCards();
     } catch (error) {
         console.error('Error uploading gallery image:', error);
         alert('Error uploading image');
@@ -4644,7 +4037,7 @@ window.renderSingleCareerOpportunityEditor = function (type, index) {
                          <input type="text" value="${item.image || ''}" placeholder="Image path" readonly style="margin-top:5px; background:rgba(0,0,0,0.1); width: 100%;">
                     </div>
                      <div class="image-preview" style="width: 100px; height: 100px; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; background: #f9f9f9; overflow: hidden; border-radius: 4px;">
-                        ${item.image ? `<img src="${item.image.startsWith('/') ? item.image : '/' + item.image}" style="width:100%; height:100%; object-fit:cover;">` : '<span style="color:#ccc">No Image</span>'}
+                        ${item.image ? `<img src="${assetUrl(item.image)}" style="width:100%; height:100%; object-fit:cover;">` : '<span style="color:#ccc">No Image</span>'}
                     </div>
                 </div>
             </div>
@@ -5194,7 +4587,7 @@ function renderBlogPostsListInternal(postsWithIndex) {
                     <label>Featured Image (Hero)</label>
                     <input type="file" accept="image/*,.heic" onchange="handleBlogImageUpload(this, ${index})" style="font-size:0.8rem;">
                     <input type="text" value="${post.image || ''}" readonly style="background:#f5f5f5; margin-top:5px; border:1px solid #ccc; padding:0.4rem; color:#666; width:100%;" placeholder="Image Path">
-                    ${post.image ? `<img src="${(post.image.startsWith('/') || post.image.startsWith('http')) ? post.image : '/' + post.image}" class="preview-img" style="margin-top:10px;">` : ''}
+                    ${post.image ? `<img src="${assetUrl(post.image)}" class="preview-img" style="margin-top:10px;">` : ''}
                 </div>
             </div>
 
@@ -5281,7 +4674,7 @@ function renderBlogBlocks(postIndex) {
                         </svg>
                     </div>
                     <button class="gallery-image-remove" onclick="removeImageFromGallery(${postIndex}, ${blockIndex}, ${imgIndex})" title="Remove image">×</button>
-                    <img src="/${img.url}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 8px;">
+                    <img src="${assetUrl(img.url)}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 8px;">
                     <input type="text" value="${img.caption || ''}" onchange="updateGalleryImageCaption(${postIndex}, ${blockIndex}, ${imgIndex}, this.value)" placeholder="Image caption..." style="width: 100%; padding: 6px; font-size: 0.85rem; background: #ffffff; border: 1px solid #ddd; color: #333; border-radius: 4px;">
                 </div>
             `).join('');
@@ -5328,7 +4721,7 @@ function renderBlogBlocks(postIndex) {
                 </div>` : ''}
                 ${!embedUrl && videoUrl ? `
                 <div class="video-preview" style="margin: 10px 0; border-radius: 8px; overflow: hidden; background: #000;">
-                    <video src="${(videoUrl.startsWith('/') || videoUrl.startsWith('http')) ? videoUrl : '/' + videoUrl}" controls preload="auto" onloadeddata="this.currentTime=1" style="width: 100%; max-height: 400px; display: block;"></video>
+                    <video src="${assetUrl(videoUrl)}" controls preload="auto" onloadeddata="this.currentTime=1" style="width: 100%; max-height: 400px; display: block;"></video>
                 </div>
                 ` : ''}
                 <div class="form-group">
@@ -5511,25 +4904,10 @@ window.updateBlockData = function (postIndex, blockIndex, field, value) {
 window.handleBlockImageUpload = async function (input, postIndex, blockIndex) {
     const file = input.files[0];
     if (!file) return;
-
-    const formData = new FormData();
-    formData.append('image', file);
-
     try {
-        const token = localStorage.getItem('adminToken');
-        const res = await fetch(UPLOAD_URL, {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${token}` },
-            body: formData
-        });
-
-        const data = await res.json();
-        if (data.success) {
-            appData.blogPage.posts[postIndex].blocks[blockIndex].url = data.filePath;
-            renderBlogBlocks(postIndex);
-        } else {
-            alert(data.message || 'Upload failed');
-        }
+        const filePath = await processAndUpload(file);
+        appData.blogPage.posts[postIndex].blocks[blockIndex].url = filePath;
+        renderBlogBlocks(postIndex);
     } catch (err) {
         console.error(err);
         alert('Error uploading image');
@@ -5540,40 +4918,16 @@ window.handleBlockImageUpload = async function (input, postIndex, blockIndex) {
 window.handleMultipleBlockImageUpload = async function (input, postIndex, blockIndex) {
     const files = input.files;
     if (!files || files.length === 0) return;
-
     let hasError = false;
-
-    // Optional: show a loading indicator here if needed since this can take a while for multiple large images
-
     for (let i = 0; i < files.length; i++) {
-        let file = files[i];
-
-        // Process HEIC if needed
-        file = await processHeicImage(file);
-
-        const formData = new FormData();
-        formData.append('image', file);
-
         try {
-            const token = localStorage.getItem('adminToken');
-            const res = await fetch(UPLOAD_URL, {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${token}` },
-                body: formData
-            });
-
-            const data = await res.json();
-            if (data.success) {
-                const block = appData.blogPage.posts[postIndex].blocks[blockIndex];
-                if (!block.images) block.images = [];
-                block.images.push({ url: data.filePath, caption: '' });
-            } else {
-                alert(`Failed to upload ${file.name}: ${data.message || 'Unknown error'}`);
-                hasError = true;
-            }
+            const filePath = await processAndUpload(files[i]);
+            const block = appData.blogPage.posts[postIndex].blocks[blockIndex];
+            if (!block.images) block.images = [];
+            block.images.push({ url: filePath, caption: '' });
         } catch (err) {
             console.error('Error uploading gallery image:', err);
-            alert(`Error uploading ${file.name}`);
+            alert(`Error uploading ${files[i].name}`);
             hasError = true;
         }
     }
@@ -5729,53 +5083,16 @@ window.removeBlogPost = function (index) {
 };
 
 window.handleBlogImageUpload = async function (input, index) {
-    let file = input.files[0];
+    const file = input.files[0];
     if (!file) return;
-
-    // Process HEIC if needed
-    file = await processHeicImage(file);
-
-    const formData = new FormData();
-    formData.append('image', file);
-
     try {
-        const token = localStorage.getItem('adminToken');
-        const res = await fetch(UPLOAD_URL, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            body: formData
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-            if (res.status === 401 || res.status === 403) {
-                alert('Authentication failed. Please log in again.');
-                localStorage.removeItem('adminToken');
-                location.reload();
-                return;
-            }
-            alert(data?.message || 'Upload failed');
-            return;
-        }
-
-        if (data.success) {
-            appData.blogPage.posts[index].image = data.filePath;
-            const parent = input.parentElement;
-            parent.querySelector('input[type=text]').value = data.filePath;
-            let img = parent.querySelector('img');
-            if (!img) {
-                img = document.createElement('img');
-                img.className = 'preview-img';
-                img.style.marginTop = '10px';
-                parent.appendChild(img);
-            }
-            img.src = '/' + data.filePath;
-        } else {
-            alert(data?.message || 'Upload failed');
-        }
+        const filePath = await processAndUpload(file);
+        appData.blogPage.posts[index].image = filePath;
+        const parent = input.parentElement;
+        parent.querySelector('input[type=text]').value = filePath;
+        let img = parent.querySelector('img');
+        if (!img) { img = document.createElement('img'); img.className = 'preview-img'; img.style.marginTop = '10px'; parent.appendChild(img); }
+        img.src = CONFIG.UPLOADS_BASE + '/' + filePath.replace(/^uploads\//, '');
     } catch (err) {
         console.error(err);
         alert('Error uploading image');
@@ -6005,7 +5322,7 @@ function renderSingleDepartmentEditor(deptIndex) {
                 <label>Department Icon</label>
                 <div style="display: flex; gap: 10px; align-items: center;">
                     <div onclick="openDepartmentIconPicker(${deptIndex})" style="width: 48px; height: 48px; background: #fff; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; transition: border-color 0.2s;" onmouseover="this.style.borderColor='#0f3460'" onmouseout="this.style.borderColor='#ccc'">
-                        <img src="/${dept.icon || 'assets/icons/business.svg'}" style="width: 24px; height: 24px; object-fit: contain;">
+                        <img src="${assetUrl(dept.icon || 'assets/icons/business.svg')}" style="width: 24px; height: 24px; object-fit: contain;">
                     </div>
                     <div style="flex: 1;">
                         <input type="text" value="${dept.icon || ''}" readonly style="background:#f5f5f5; border:1px solid #ccc; padding:0.6rem; color:#666; width:100%; border-radius: 4px; font-size: 0.9rem;" placeholder="No icon selected">
@@ -6278,55 +5595,26 @@ function getEmbedUrl(url) {
 window.handleBlockVideoUpload = async function (input, postIndex, blockIndex) {
     const file = input.files[0];
     if (!file) return;
-
-    // Basic validation
-    // Looser check to allow more video types if browser MIME detection is flaky
     if (!file.type.startsWith('video/') && !file.name.match(/\.(mp4|mov|webm|ogg|mkv)$/i)) {
         alert('Please select a valid video file.');
         return;
     }
-
-    // UI Feedback
     const label = input.closest('label');
-    const originalText = label.childNodes[0].textContent; // "Upload Video" text node
-    label.childNodes[0].textContent = "Uploading... ";
-    label.style.opacity = "0.7";
-    label.style.pointerEvents = "none";
-
-    const formData = new FormData();
-    formData.append('image', file); // API expects 'image'
-
+    label.childNodes[0].textContent = 'Uploading... ';
+    label.style.opacity = '0.7';
+    label.style.pointerEvents = 'none';
     try {
-        const token = localStorage.getItem('adminToken');
-        const res = await fetch(UPLOAD_URL, {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${token}` },
-            body: formData
-        });
-
-        const data = await res.json();
-
-        // Reset UI
-        label.childNodes[0].textContent = "Upload Video";
-        label.style.opacity = "1";
-        label.style.pointerEvents = "auto";
-        input.value = ''; // Reset input to allow re-uploading same file
-
-        if (data.success) {
-            appData.blogPage.posts[postIndex].blocks[blockIndex].url = data.filePath;
-            renderBlogBlocks(postIndex);
-            // alert('Video uploaded successfully!');
-            alert('Upload failed: ' + (data.message || 'Unknown error'));
-        }
+        const filePath = await uploadFileToS3(file);
+        appData.blogPage.posts[postIndex].blocks[blockIndex].url = filePath;
+        renderBlogBlocks(postIndex);
     } catch (error) {
         console.error('Upload Error:', error);
-
-        // Reset UI
-        label.childNodes[0].textContent = "Upload Video";
-        label.style.opacity = "1";
-        label.style.pointerEvents = "auto";
-
         alert('Upload Error. Check console for details.');
+    } finally {
+        label.childNodes[0].textContent = 'Upload Video';
+        label.style.opacity = '1';
+        label.style.pointerEvents = 'auto';
+        input.value = '';
     }
 };
 
@@ -6339,10 +5627,7 @@ const subscribersPerPage = 10;
 
 async function loadSubscribers() {
     try {
-        const token = localStorage.getItem('adminToken');
-        const res = await fetch('/api/subscribers', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const res = await authenticatedFetch(CONFIG.API_BASE + '/subscribers');
         allSubscribers = await res.json();
 
         // ensure newest first
@@ -6518,13 +5803,8 @@ window.deleteSubscriber = async function (email) {
     if (!confirm(`Are you sure you want to remove ${email} from the list?`)) return;
 
     try {
-        const token = localStorage.getItem('adminToken');
-        const res = await fetch('/api/subscribers', {
+        const res = await authenticatedFetch(CONFIG.API_BASE + '/subscribers', {
             method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
             body: JSON.stringify({ email })
         });
         const data = await res.json();
@@ -6542,10 +5822,7 @@ window.deleteSubscriber = async function (email) {
 
 window.downloadSubscribersCSV = async function () {
     try {
-        const token = localStorage.getItem('adminToken');
-        const res = await fetch('/api/subscribers', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const res = await authenticatedFetch(CONFIG.API_BASE + '/subscribers');
         const subscribers = await res.json();
 
         if (!subscribers || subscribers.length === 0) {
@@ -6598,7 +5875,7 @@ function renderFooterBrand() {
                 <input type="file" id="footer-brand-logo" accept="image/*,.heic" 
                        onchange="handleFooterBrandLogoUpload(this)">
                 <div class="image-preview" style="margin-top: 10px;">
-                    ${brand.logoUrl ? `<img src="${brand.logoUrl.startsWith('data:') || brand.logoUrl.startsWith('/') ? brand.logoUrl : '/' + brand.logoUrl}" alt="Brand Logo" style="max-width: 200px; max-height: 100px; border: 1px solid #ddd; border-radius: 4px;">` : '<p>No logo uploaded</p>'}
+                    ${brand.logoUrl ? `<img src="${assetUrl(brand.logoUrl)}" alt="Brand Logo" style="max-width: 200px; max-height: 100px; border: 1px solid #ddd; border-radius: 4px;">` : '<p>No logo uploaded</p>'}
                 </div>
             </div>
             <div class="form-group">
@@ -6620,37 +5897,13 @@ function updateFooterBrand(field, value) {
 
 async function handleFooterBrandLogoUpload(input) {
     if (!input.files[0]) return;
-
-    const file = input.files[0];
-
-    if (file.type === 'image/heic' || file.type === 'image/heif') {
-        try {
-            const converted = await heic2any({ blob: file });
-            const formData = new FormData();
-            formData.append('file', converted);
-
-            const uploadRes = await authenticatedFetch(UPLOAD_URL, { method: 'POST', body: formData });
-            const uploadData = await uploadRes.json();
-
-            if (uploadData.filename) {
-                appData.footer.brand.logoUrl = uploadData.filename;
-                renderFooterBrand();
-            }
-        } catch (error) {
-            console.error('Error converting HEIC file:', error);
-            alert('Error processing image file.');
-        }
-    } else {
-        const formData = new FormData();
-        formData.append('file', file);
-
-        const uploadRes = await authenticatedFetch(UPLOAD_URL, { method: 'POST', body: formData });
-        const uploadData = await uploadRes.json();
-
-        if (uploadData.filename) {
-            appData.footer.brand.logoUrl = uploadData.filename;
-            renderFooterBrand();
-        }
+    try {
+        const filePath = await processAndUpload(input.files[0]);
+        appData.footer.brand.logoUrl = filePath;
+        renderFooterBrand();
+    } catch (error) {
+        console.error('Error uploading footer brand logo:', error);
+        alert('Error processing image file.');
     }
 }
 
@@ -6790,7 +6043,7 @@ function renderFooterNPCSeal() {
                 <input type="file" id="footer-npc-image" accept=".png, .jpg, .jpeg, image/png, image/jpeg" 
                        onchange="handleFooterNPCImageUpload(this)">
                 <div class="image-preview" style="margin-top: 15px; text-align: center;">
-                    ${npc.imageUrl ? `<img src="${npc.imageUrl.startsWith('data:') || npc.imageUrl.startsWith('/') ? npc.imageUrl : '/' + npc.imageUrl}" alt="NPC Seal" style="max-width: 100%; max-height: 250px; border: 1px solid #eee; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">` : '<p style="color: #999; font-style: italic;">No image uploaded yet</p>'}
+                    ${npc.imageUrl ? `<img src="${assetUrl(npc.imageUrl)}" alt="NPC Seal" style="max-width: 100%; max-height: 250px; border: 1px solid #eee; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">` : '<p style="color: #999; font-style: italic;">No image uploaded yet</p>'}
                 </div>
             </div>
         </div>
@@ -6816,34 +6069,17 @@ async function handleFooterNPCImageUpload(input) {
         return;
     }
 
-    const formData = new FormData();
-    formData.append('image', file); // API expects 'image'
-
     try {
-        const token = localStorage.getItem('adminToken');
-        // Use direct fetch to avoid authenticatedFetch's application/json override
-        const uploadRes = await fetch(UPLOAD_URL, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            body: formData
-        });
-        const uploadData = await uploadRes.json();
+        const filePath = await uploadFileToS3(file);
 
-        if (uploadData.success && uploadData.filePath) {
-            if (!appData.footer.legal) appData.footer.legal = {};
-            if (!appData.footer.legal.npcSeal) appData.footer.legal.npcSeal = {};
+        if (!appData.footer.legal) appData.footer.legal = {};
+        if (!appData.footer.legal.npcSeal) appData.footer.legal.npcSeal = {};
 
-            appData.footer.legal.npcSeal.imageUrl = uploadData.filePath;
-            renderFooterNPCSeal();
+        appData.footer.legal.npcSeal.imageUrl = filePath;
+        renderFooterNPCSeal();
 
-            // Persist to backend
-            if (window.saveData) {
-                await window.saveData();
-            }
-        } else {
-            alert('Upload failed: ' + (uploadData.message || 'Unknown error'));
+        if (window.saveData) {
+            await window.saveData();
         }
     } catch (error) {
         console.error('Error uploading NPC Seal:', error);
@@ -7758,15 +6994,10 @@ window.deleteBlock = function(bIdx) {
 
 window.uploadBlockImage = async function(bIdx, file) {
     if (!file) return;
-    const formData = new FormData();
-    formData.append('image', file);
     try {
-        const res = await fetch(UPLOAD_URL, { method: 'POST', body: formData });
-        const data = await res.json();
-        if (data.url) {
-            updateBlockField(bIdx, 'imageUrl', data.url);
-            document.getElementById(`prev-block-${bIdx}`).src = data.url;
-        }
+        const filePath = await uploadFileToS3(file);
+        updateBlockField(bIdx, 'imageUrl', filePath);
+        document.getElementById(`prev-block-${bIdx}`).src = CONFIG.UPLOADS_BASE + '/' + filePath.replace(/^uploads\//, '');
     } catch (e) { console.error(e); }
 };
 

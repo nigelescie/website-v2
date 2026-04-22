@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!sliderContainer) return;
 
     try {
-        const res = await fetch('/api/content');
+        const res = await fetch(CONFIG.API_BASE + '/content');
         if (res.ok) {
             const data = await res.json();
             if (data.hero && data.hero.slides && data.hero.slides.length > 0) {

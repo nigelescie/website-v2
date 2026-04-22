@@ -5,7 +5,7 @@
         if (window.hasTrackedPageView) return;
         window.hasTrackedPageView = true;
 
-        fetch('/api/analytics/track', {
+        fetch(CONFIG.API_BASE + '/analytics/track', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

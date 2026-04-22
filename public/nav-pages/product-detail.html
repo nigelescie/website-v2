@@ -1224,7 +1224,7 @@
             }
 
             try {
-                const res = await fetch('/api/content');
+                const res = await fetch(CONFIG.API_BASE + '/content');
                 if (!res.ok) throw new Error('Failed to fetch content');
                 const data = await res.json();
 
@@ -1425,6 +1425,7 @@
             </div>
         </div>
     </div>
+    <script src="../js/config.js"></script>
     <script src="../js/utils.js"></script>
     <!-- Chat AI Script -->
     <script src="../scripts/chat-ai.js"></script>

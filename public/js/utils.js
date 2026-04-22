@@ -1,6 +1,6 @@
 // public/js/utils.js
 
-const API_CONTENT_URL = '/api/content';
+const API_CONTENT_URL = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE) ? CONFIG.API_BASE + '/content' : '/api/content';
 
 async function loadContent() {
     try {

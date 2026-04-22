@@ -715,7 +715,7 @@
         // Initialize blog grid
         async function initializeBlog() {
             try {
-                const response = await fetch('/api/content');
+                const response = await fetch(CONFIG.API_BASE + '/content');
                 const data = await response.json();
 
                 if (data && data.sectionVisibility && data.sectionVisibility.blogPageHidden) {
@@ -997,7 +997,7 @@
             button.disabled = true;
 
             try {
-                const res = await fetch('/api/subscribe', {
+                const res = await fetch(CONFIG.API_BASE + '/subscribe', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email })
@@ -1070,6 +1070,7 @@
         </div>
     </div>
     <!-- Chat AI Script -->
+    <script src="../js/config.js"></script>
     <script src="../scripts/chat-ai.js"></script>
     <!-- Analytics -->
     <script src="../scripts/analytics.js"></script>

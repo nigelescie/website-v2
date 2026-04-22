@@ -493,7 +493,7 @@
             if (!container) return;
 
             try {
-                const res = await fetch('/api/content', {
+                const res = await fetch(CONFIG.API_BASE + '/content', {
                     cache: 'no-store',
                     headers: { 'Cache-Control': 'no-cache' }
                 });
@@ -793,6 +793,7 @@
         }
         window.scrollTo(0, 0);
     </script>
+    <script src="../js/config.js"></script>
     <script src="../js/utils.js"></script>
     <script src="../scripts/main-script.js"></script>
     <script src="../scripts/nav-dropdown.js"></script>

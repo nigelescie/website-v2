@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fetch dynamic products from the content API
     async function loadDynamicKnowledgeBase() {
         try {
-            const response = await fetch('/api/content');
+            const response = await fetch(CONFIG.API_BASE + '/content');
             const data = await response.json();
 
             if (data && data.productsPage && data.productsPage.sections) {

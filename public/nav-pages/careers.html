@@ -725,7 +725,7 @@
             // Load all careers content
             async function loadCareersContent() {
                 try {
-                    const response = await fetch('/api/content', {
+                    const response = await fetch(CONFIG.API_BASE + '/content', {
                         cache: 'no-store',
                         headers: { 'Cache-Control': 'no-cache' }
                     });
@@ -1226,6 +1226,7 @@
             </div>
         </div>
         <!-- Chat AI Script -->
+        <script src="../js/config.js"></script>
         <script src="../scripts/chat-ai.js"></script>
         <!-- Analytics -->
         <script src="../scripts/analytics.js"></script>
