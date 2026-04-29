@@ -328,24 +328,24 @@ const CONFIG = {
 
 ```bash
 # Sync the public directory to the static bucket
-aws s3 sync public/ s3://esc-website-static/ \
+aws s3 sync public/ s3://escwebsite-dev-web/ \
   --delete \
   --cache-control "public, max-age=86400" \
   --exclude ".DS_Store"
 
 # Set shorter cache for HTML files (so updates propagate faster)
-aws s3 sync public/ s3://esc-website-static/ \
+aws s3 sync public/ s3://escwebsite-dev-web/ \
   --exclude "*" \
   --include "*.html" \
   --cache-control "public, max-age=300"
-
+ 
 # Set no-cache for config.js (always fetch latest)
-aws s3 cp public/js/config.js s3://esc-website-static/js/config.js \
+aws s3 cp public/js/config.js s3://escwebsite-dev-web/js/config.js \
   --cache-control "no-cache, no-store, must-revalidate"
 
 # Invalidate CloudFront cache
 aws cloudfront create-invalidation \
-  --distribution-id <your-distribution-id> \
+  --distribution-id E36TVXSCZ97LQM \
   --paths "/*"
 ```
 
