@@ -843,52 +843,65 @@ async function initDashboard() {
         const serverData = await res.json();
         const defaults = getDefaultAppData();
 
-        // Deep merge logic (simplified)
-        appData = { ...defaults, ...serverData };
-
-        // Ensure nested objects like careersPage are also merged if they exist in serverData
-        if (serverData.careersPage) {
-            appData.careersPage = { ...defaults.careersPage, ...serverData.careersPage };
-            // Further deep merge for nested careersPage sections
-            if (serverData.careersPage.hero) appData.careersPage.hero = { ...defaults.careersPage.hero, ...serverData.careersPage.hero };
-            if (serverData.careersPage.intro) appData.careersPage.intro = { ...defaults.careersPage.intro, ...serverData.careersPage.intro };
-            if (serverData.careersPage.whyJoin) appData.careersPage.whyJoin = { ...defaults.careersPage.whyJoin, ...serverData.careersPage.whyJoin };
-            if (serverData.careersPage.teamCulture) appData.careersPage.teamCulture = { ...defaults.careersPage.teamCulture, ...serverData.careersPage.teamCulture };
-            if (serverData.careersPage.officeCulture) appData.careersPage.officeCulture = { ...defaults.careersPage.officeCulture, ...serverData.careersPage.officeCulture };
-            if (serverData.careersPage.customSections) appData.careersPage.customSections = serverData.careersPage.customSections;
-            if (serverData.careersPage.opportunities) appData.careersPage.opportunities = { ...defaults.careersPage.opportunities, ...serverData.careersPage.opportunities };
-            if (serverData.careersPage.apply) appData.careersPage.apply = { ...defaults.careersPage.apply, ...serverData.careersPage.apply };
+        // Unwrap { data: "..." } envelope and parse JSON strings from DynamoDB
+        const parsed = {};
+        for (const key of Object.keys(serverData)) {
+            const val = serverData[key];
+            const raw = (val && typeof val === 'object' && 'data' in val) ? val.data : val;
+            if (typeof raw === 'string') {
+                try { parsed[key] = JSON.parse(raw); } catch { parsed[key] = raw; }
+            } else {
+                parsed[key] = raw;
+            }
         }
 
-        if (serverData.homePage && serverData.homePage.customSections) {
-            appData.homePage = { customSections: serverData.homePage.customSections };
+        // Deep merge logic (simplified)
+        appData = { ...defaults, ...parsed };
+        const serverDataParsed = parsed;
+
+        // Ensure nested objects like careersPage are also merged if they exist in serverDataParsed
+        if (serverDataParsed.careersPage) {
+            appData.careersPage = { ...defaults.careersPage, ...serverDataParsed.careersPage };
+            // Further deep merge for nested careersPage sections
+            if (serverDataParsed.careersPage.hero) appData.careersPage.hero = { ...defaults.careersPage.hero, ...serverDataParsed.careersPage.hero };
+            if (serverDataParsed.careersPage.intro) appData.careersPage.intro = { ...defaults.careersPage.intro, ...serverDataParsed.careersPage.intro };
+            if (serverDataParsed.careersPage.whyJoin) appData.careersPage.whyJoin = { ...defaults.careersPage.whyJoin, ...serverDataParsed.careersPage.whyJoin };
+            if (serverDataParsed.careersPage.teamCulture) appData.careersPage.teamCulture = { ...defaults.careersPage.teamCulture, ...serverDataParsed.careersPage.teamCulture };
+            if (serverDataParsed.careersPage.officeCulture) appData.careersPage.officeCulture = { ...defaults.careersPage.officeCulture, ...serverDataParsed.careersPage.officeCulture };
+            if (serverDataParsed.careersPage.customSections) appData.careersPage.customSections = serverDataParsed.careersPage.customSections;
+            if (serverDataParsed.careersPage.opportunities) appData.careersPage.opportunities = { ...defaults.careersPage.opportunities, ...serverDataParsed.careersPage.opportunities };
+            if (serverDataParsed.careersPage.apply) appData.careersPage.apply = { ...defaults.careersPage.apply, ...serverDataParsed.careersPage.apply };
+        }
+
+        if (serverDataParsed.homePage && serverDataParsed.homePage.customSections) {
+            appData.homePage = { customSections: serverDataParsed.homePage.customSections };
         } else {
             appData.homePage = { customSections: [] };
         }
 
-        if (serverData.companyPage && serverData.companyPage.customSections) {
-            appData.companyPage = { customSections: serverData.companyPage.customSections };
+        if (serverDataParsed.companyPage && serverDataParsed.companyPage.customSections) {
+            appData.companyPage = { customSections: serverDataParsed.companyPage.customSections };
         } else {
             appData.companyPage = { customSections: [] };
         }
 
-        if (serverData.contactPage) {
-            appData.contactPage = { ...defaults.contactPage, ...serverData.contactPage };
-            if (serverData.contactPage.officeLocation) appData.contactPage.officeLocation = { ...defaults.contactPage.officeLocation, ...serverData.contactPage.officeLocation };
-            if (serverData.contactPage.businessHours) appData.contactPage.businessHours = { ...defaults.contactPage.businessHours, ...serverData.contactPage.businessHours };
+        if (serverDataParsed.contactPage) {
+            appData.contactPage = { ...defaults.contactPage, ...serverDataParsed.contactPage };
+            if (serverDataParsed.contactPage.officeLocation) appData.contactPage.officeLocation = { ...defaults.contactPage.officeLocation, ...serverDataParsed.contactPage.officeLocation };
+            if (serverDataParsed.contactPage.businessHours) appData.contactPage.businessHours = { ...defaults.contactPage.businessHours, ...serverDataParsed.contactPage.businessHours };
         }
 
-        if (serverData.footer) {
-            appData.footer = { ...defaults.footer, ...serverData.footer };
-            if (serverData.footer.brand) appData.footer.brand = { ...defaults.footer.brand, ...serverData.footer.brand };
-            if (serverData.footer.contact) appData.footer.contact = { ...defaults.footer.contact, ...serverData.footer.contact };
-            if (serverData.footer.legal) {
-                appData.footer.legal = { ...defaults.footer.legal, ...serverData.footer.legal };
-                if (serverData.footer.legal.termsAndConditions) appData.footer.legal.termsAndConditions = { ...defaults.footer.legal.termsAndConditions, ...serverData.footer.legal.termsAndConditions };
-                if (serverData.footer.legal.privacyPolicy) appData.footer.legal.privacyPolicy = { ...defaults.footer.legal.privacyPolicy, ...serverData.footer.legal.privacyPolicy };
-                if (serverData.footer.legal.npcSeal) appData.footer.legal.npcSeal = { ...defaults.footer.legal.npcSeal, ...serverData.footer.legal.npcSeal };
+        if (serverDataParsed.footer) {
+            appData.footer = { ...defaults.footer, ...serverDataParsed.footer };
+            if (serverDataParsed.footer.brand) appData.footer.brand = { ...defaults.footer.brand, ...serverDataParsed.footer.brand };
+            if (serverDataParsed.footer.contact) appData.footer.contact = { ...defaults.footer.contact, ...serverDataParsed.footer.contact };
+            if (serverDataParsed.footer.legal) {
+                appData.footer.legal = { ...defaults.footer.legal, ...serverDataParsed.footer.legal };
+                if (serverDataParsed.footer.legal.termsAndConditions) appData.footer.legal.termsAndConditions = { ...defaults.footer.legal.termsAndConditions, ...serverDataParsed.footer.legal.termsAndConditions };
+                if (serverDataParsed.footer.legal.privacyPolicy) appData.footer.legal.privacyPolicy = { ...defaults.footer.legal.privacyPolicy, ...serverDataParsed.footer.legal.privacyPolicy };
+                if (serverDataParsed.footer.legal.npcSeal) appData.footer.legal.npcSeal = { ...defaults.footer.legal.npcSeal, ...serverDataParsed.footer.legal.npcSeal };
             }
-            if (serverData.footer.connect) appData.footer.connect = { ...defaults.footer.connect, ...serverData.footer.connect };
+            if (serverDataParsed.footer.connect) appData.footer.connect = { ...defaults.footer.connect, ...serverDataParsed.footer.connect };
         }
 
         renderForms();
@@ -1161,7 +1174,7 @@ window.uploadOurClientLogo = async function(inputEl, index) {
     const file = inputEl.files[0];
     if (!file) return;
     try {
-        const filePath = await processAndUpload(file);
+        const filePath = await processAndUpload(file, 'our-clients');
         appData.ourClients[index].logo = filePath;
         renderOurClientsEditor();
     } catch(e) {
@@ -2385,7 +2398,7 @@ window.uploadProductVideo = async function (input, sIndex, pIndex) {
     const file = input.files[0];
     if (!file) return;
     try {
-        const filePath = await uploadFileToS3(file);
+        const filePath = await uploadFileToS3(file, 'products');
         appData.productsPage.sections[sIndex].products[pIndex].video = filePath;
         const parent = input.parentElement;
         parent.querySelector('input[type=text]').value = filePath;
@@ -2411,7 +2424,7 @@ window.uploadVideo = async function (input, path, index, field) {
     const file = input.files[0];
     if (!file) return;
     try {
-        const filePath = await uploadFileToS3(file);
+        const filePath = await uploadFileToS3(file, 'videos');
         const parts = path.split('.');
         let target = appData;
         for (let i = 0; i < parts.length; i++) {
@@ -2435,7 +2448,7 @@ window.uploadProductImage = async function (input, sIndex, pIndex, field = 'imag
     const file = input.files[0];
     if (!file) return;
     try {
-        const filePath = await processAndUpload(file);
+        const filePath = await processAndUpload(file, 'products');
         appData.productsPage.sections[sIndex].products[pIndex][field] = filePath;
         const parent = input.parentElement;
         parent.querySelector('input[type=text]').value = filePath;
@@ -2695,7 +2708,22 @@ window.uploadImage = async function (input, arrayName, index, field, reRenderFnN
     const file = input.files[0];
     if (!file) return;
     try {
-        const filePath = await processAndUpload(file);
+        const folderMap = {
+            'hero.slides': 'hero',
+            'stats': 'stats',
+            'solutions': 'solutions',
+            'testimonials': 'testimonials',
+            'careersPage.intro.slides': 'careers-intro',
+            'careersPage.whyJoin.cards': 'why-join',
+            'careersPage.officeCulture.cards': 'office-culture',
+        };
+        let folder = folderMap[arrayName];
+        if (!folder) {
+            if (arrayName.startsWith('productsPage.')) folder = 'products';
+            else if (arrayName.startsWith('careersPage.opportunities')) folder = 'career-opportunities';
+            else folder = arrayName.replace(/[\[\].]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+        }
+        const filePath = await processAndUpload(file, folder);
         let target = appData;
         const parts = arrayName.split('.');
         for (const part of parts) {
@@ -2804,10 +2832,17 @@ async function saveData() {
         if (problemTextColorEl) appData.problem.textColor = problemTextColorEl.value;
     }
 
+    // Wrap each top-level value in { data: stringifiedJSON } to match DynamoDB storage format
+    const payload = {};
+    for (const key of Object.keys(appData)) {
+        const val = appData[key];
+        payload[key] = { data: (val !== null && typeof val === 'object') ? JSON.stringify(val) : val };
+    }
+
     try {
         const res = await authenticatedFetch(CONFIG.API_BASE + '/content', {
             method: 'POST',
-            body: JSON.stringify(appData)
+            body: JSON.stringify(payload)
         });
 
         let result;
@@ -3112,7 +3147,7 @@ window.handleFamilyCultureImageUpload = async function (input) {
     const file = input.files[0];
     if (!file) return;
     try {
-        const filePath = await processAndUpload(file);
+        const filePath = await processAndUpload(file, 'family-culture');
         updateFamilyCultureData('imageUrl', filePath);
         const preview = document.querySelector('#family-culture-image').nextElementSibling;
         preview.innerHTML = `<img src="${CONFIG.UPLOADS_BASE}/${filePath.replace(/^uploads\//, '')}" alt="Uploaded image" style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">`;
@@ -3175,7 +3210,7 @@ window.handleVisionImageUpload = async function (input) {
     const file = input.files[0];
     if (!file) return;
     try {
-        const filePath = await processAndUpload(file);
+        const filePath = await processAndUpload(file, 'vision');
         updateVisionData('imageUrl', filePath);
         const preview = document.querySelector('#vision-image').nextElementSibling;
         preview.innerHTML = `<img src="${CONFIG.UPLOADS_BASE}/${filePath.replace(/^uploads\//, '')}" alt="Uploaded image" style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">`;
@@ -3239,7 +3274,7 @@ window.handleMissionImageUpload = async function (input) {
     const file = input.files[0];
     if (!file) return;
     try {
-        const filePath = await processAndUpload(file);
+        const filePath = await processAndUpload(file, 'mission');
         updateMissionData('imageUrl', filePath);
         const preview = document.querySelector('#mission-image').nextElementSibling;
         preview.innerHTML = `<img src="${CONFIG.UPLOADS_BASE}/${filePath.replace(/^uploads\//, '')}" alt="Uploaded image" style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">`;
@@ -3361,7 +3396,7 @@ window.handleLeaderImageUpload = async function (input, index) {
     const file = input.files[0];
     if (!file) return;
     try {
-        const filePath = await processAndUpload(file);
+        const filePath = await processAndUpload(file, 'leaders');
         appData.leaders.list[index].image = filePath;
         renderLeaderItems();
         if (window.saveData) await window.saveData();
@@ -3480,7 +3515,7 @@ window.handlePerkImageUpload = async function (input, index) {
     const file = input.files[0];
     if (!file) return;
     try {
-        const filePath = await processAndUpload(file);
+        const filePath = await processAndUpload(file, 'perks');
         appData.perks.list[index].image = filePath;
         renderPerkItems();
         if (window.saveData) await window.saveData();
@@ -3725,7 +3760,7 @@ window.uploadWhyJoinGalleryImage = async function (input, cardIndex) {
     const file = input.files[0];
     if (!file) return;
     try {
-        const filePath = await processAndUpload(file);
+        const filePath = await processAndUpload(file, 'why-join');
         if (!appData.careersPage.whyJoin.cards[cardIndex].galleryImages) {
             appData.careersPage.whyJoin.cards[cardIndex].galleryImages = [];
         }
@@ -3879,7 +3914,7 @@ window.uploadOfficeCultureGalleryImage = async function (input, cardIndex) {
     const file = input.files[0];
     if (!file) return;
     try {
-        const filePath = await processAndUpload(file);
+        const filePath = await processAndUpload(file, 'office-culture');
         if (!appData.careersPage.officeCulture.cards[cardIndex].galleryImages) {
             appData.careersPage.officeCulture.cards[cardIndex].galleryImages = [];
         }
@@ -4905,7 +4940,7 @@ window.handleBlockImageUpload = async function (input, postIndex, blockIndex) {
     const file = input.files[0];
     if (!file) return;
     try {
-        const filePath = await processAndUpload(file);
+        const filePath = await processAndUpload(file, 'blog');
         appData.blogPage.posts[postIndex].blocks[blockIndex].url = filePath;
         renderBlogBlocks(postIndex);
     } catch (err) {
@@ -4921,7 +4956,7 @@ window.handleMultipleBlockImageUpload = async function (input, postIndex, blockI
     let hasError = false;
     for (let i = 0; i < files.length; i++) {
         try {
-            const filePath = await processAndUpload(files[i]);
+            const filePath = await processAndUpload(files[i], 'blog');
             const block = appData.blogPage.posts[postIndex].blocks[blockIndex];
             if (!block.images) block.images = [];
             block.images.push({ url: filePath, caption: '' });
@@ -5086,7 +5121,7 @@ window.handleBlogImageUpload = async function (input, index) {
     const file = input.files[0];
     if (!file) return;
     try {
-        const filePath = await processAndUpload(file);
+        const filePath = await processAndUpload(file, 'blog');
         appData.blogPage.posts[index].image = filePath;
         const parent = input.parentElement;
         parent.querySelector('input[type=text]').value = filePath;
@@ -5604,7 +5639,7 @@ window.handleBlockVideoUpload = async function (input, postIndex, blockIndex) {
     label.style.opacity = '0.7';
     label.style.pointerEvents = 'none';
     try {
-        const filePath = await uploadFileToS3(file);
+        const filePath = await uploadFileToS3(file, 'blog');
         appData.blogPage.posts[postIndex].blocks[blockIndex].url = filePath;
         renderBlogBlocks(postIndex);
     } catch (error) {
@@ -5898,7 +5933,7 @@ function updateFooterBrand(field, value) {
 async function handleFooterBrandLogoUpload(input) {
     if (!input.files[0]) return;
     try {
-        const filePath = await processAndUpload(input.files[0]);
+        const filePath = await processAndUpload(input.files[0], 'footer');
         appData.footer.brand.logoUrl = filePath;
         renderFooterBrand();
     } catch (error) {
@@ -6070,7 +6105,7 @@ async function handleFooterNPCImageUpload(input) {
     }
 
     try {
-        const filePath = await uploadFileToS3(file);
+        const filePath = await uploadFileToS3(file, 'footer');
 
         if (!appData.footer.legal) appData.footer.legal = {};
         if (!appData.footer.legal.npcSeal) appData.footer.legal.npcSeal = {};
@@ -6995,7 +7030,7 @@ window.deleteBlock = function(bIdx) {
 window.uploadBlockImage = async function(bIdx, file) {
     if (!file) return;
     try {
-        const filePath = await uploadFileToS3(file);
+        const filePath = await uploadFileToS3(file, 'custom-sections');
         updateBlockField(bIdx, 'imageUrl', filePath);
         document.getElementById(`prev-block-${bIdx}`).src = CONFIG.UPLOADS_BASE + '/' + filePath.replace(/^uploads\//, '');
     } catch (e) { console.error(e); }

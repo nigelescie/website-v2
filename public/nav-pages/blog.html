@@ -716,7 +716,7 @@
         async function initializeBlog() {
             try {
                 const response = await fetch(CONFIG.API_BASE + '/content');
-                const data = await response.json();
+                const data = parseApiResponse(await response.json());
 
                 if (data && data.sectionVisibility && data.sectionVisibility.blogPageHidden) {
                     const blogHero = document.querySelector('.blog-hero');

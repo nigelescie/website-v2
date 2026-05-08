@@ -5,25 +5,42 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (!sliderContainer) return;
 
-    try {
-        const res = await fetch(CONFIG.API_BASE + '/content');
-        if (res.ok) {
-            const data = await res.json();
-            if (data.hero && data.hero.slides && data.hero.slides.length > 0) {
-                sliderContainer.innerHTML = '';
-                data.hero.slides.forEach(slideData => {
-                    const slide = document.createElement('div');
-                    slide.classList.add('hero-slide');
-                    const img = document.createElement('img');
-                    img.src = slideData.image;
-                    img.alt = slideData.label || 'Hero Slide';
-                    slide.appendChild(img);
-                    sliderContainer.appendChild(slide);
-                });
+    const fallbackSlides = [
+        { image: 'assets/hero-1.png', label: 'Hero Slide 1' },
+        { image: 'assets/hero-2.png', label: 'Hero Slide 2' },
+    ];
+
+    function populateSlides(slidesData) {
+        sliderContainer.innerHTML = '';
+        slidesData.forEach(slideData => {
+            const slide = document.createElement('div');
+            slide.classList.add('hero-slide');
+            const img = document.createElement('img');
+            img.src = slideData.image;
+            img.alt = slideData.label || 'Hero Slide';
+            slide.appendChild(img);
+            sliderContainer.appendChild(slide);
+        });
+    }
+
+    const existingSlides = sliderContainer.querySelectorAll('.hero-slide');
+    if (existingSlides.length === 0) {
+        try {
+            const res = await fetch(CONFIG.API_BASE + '/content');
+            if (res.ok) {
+                const data = await res.json();
+                if (data.hero && data.hero.slides && data.hero.slides.length > 0) {
+                    populateSlides(data.hero.slides);
+                } else {
+                    populateSlides(fallbackSlides);
+                }
+            } else {
+                populateSlides(fallbackSlides);
             }
+        } catch (error) {
+            console.error('Error fetching hero slides:', error);
+            populateSlides(fallbackSlides);
         }
-    } catch (error) {
-        console.error('Error fetching hero slides:', error);
     }
 
     const slides = Array.from(sliderContainer.querySelectorAll('.hero-slide'));

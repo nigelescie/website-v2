@@ -495,7 +495,7 @@
             try {
                 const response = await fetch(CONFIG.API_BASE + '/content');
                 if (!response.ok) throw new Error('Failed to fetch content');
-                const data = await response.json();
+                const data = parseApiResponse(await response.json());
 
                 // 1. Update "Who We Are"
                 if (data.whoWeAre && data.whoWeAre.hidden) {

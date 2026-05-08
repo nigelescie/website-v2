@@ -1,15 +1,17 @@
 // Upload helpers — two-step pre-signed S3 PUT flow
 
-async function getPresignedUploadUrl(filename, contentType) {
-    const res = await authenticatedFetch(
-        `${CONFIG.API_BASE}/upload?filename=${encodeURIComponent(filename)}&contentType=${encodeURIComponent(contentType)}`
-    );
+async function getPresignedUploadUrl(filename, contentType, folder) {
+    const res = await authenticatedFetch(`${CONFIG.API_BASE}/upload`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename, contentType, folder }),
+    });
     if (!res.ok) throw new Error('Failed to get upload URL');
     return res.json(); // { uploadUrl, filePath }
 }
 
-async function uploadFileToS3(file) {
-    const { uploadUrl, filePath } = await getPresignedUploadUrl(file.name, file.type);
+async function uploadFileToS3(file, folder) {
+    const { uploadUrl, filePath } = await getPresignedUploadUrl(file.name, file.type, folder);
     const putRes = await fetch(uploadUrl, {
         method: 'PUT',
         headers: { 'Content-Type': file.type },
@@ -20,7 +22,7 @@ async function uploadFileToS3(file) {
 }
 
 // Process HEIC → JPEG if needed, then upload
-async function processAndUpload(file) {
+async function processAndUpload(file, folder) {
     if (!file) return null;
     const name = file.name.toLowerCase();
     if ((name.endsWith('.heic') || name.endsWith('.heif')) && typeof heic2any !== 'undefined') {
@@ -30,5 +32,5 @@ async function processAndUpload(file) {
             file = new File([final], file.name.replace(/\.(heic|heif)$/i, '.jpg'), { type: 'image/jpeg' });
         } catch (e) { console.error('HEIC conversion failed', e); }
     }
-    return uploadFileToS3(file);
+    return uploadFileToS3(file, folder);
 }

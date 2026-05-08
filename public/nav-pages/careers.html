@@ -730,7 +730,7 @@
                         headers: { 'Cache-Control': 'no-cache' }
                     });
                     if (!response.ok) throw new Error('Failed to fetch content');
-                    const data = await response.json();
+                    const data = parseApiResponse(await response.json());
 
                     await new Promise(resolve => setTimeout(resolve, 50));
 

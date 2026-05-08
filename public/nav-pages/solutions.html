@@ -498,7 +498,7 @@
                     headers: { 'Cache-Control': 'no-cache' }
                 });
                 if (!res.ok) throw new Error('Failed to fetch content');
-                const data = await res.json();                // Global Products Page hide is removed; we now hide individual categories and products.
+                const data = parseApiResponse(await res.json());                // Global Products Page hide is removed; we now hide individual categories and products.
 
                 if (!data.productsPage || !data.productsPage.sections) return;
 
@@ -521,7 +521,7 @@
                             productsHtml += `
                                 <div class="solution-card fade-up ${delayClass}" onclick="window.location.href='product-detail.html?id=${prod.id || ''}'" style="cursor: pointer;">
                                     <div class="product-logo-container">
-                                        ${prod.image ? `<img src="/${prod.image}" alt="${prod.title}" class="product-logo">` : ''}
+                                        ${prod.image ? `<img src="${resolveUrl(prod.image, '../')}" alt="${prod.title}" class="product-logo">` : ''}
                                         <h3 class="product-card-title">${prod.title}</h3>
                                     </div>
                                     <div class="solution-content">
@@ -536,7 +536,7 @@
                         <div class="container">
                             <h2 class="section-title-center">${section.title}</h2>
                             <p class="section-subtitle-center">${section.subtitle || ''}</p>
-                            <div class="solutions-grid">
+                            <div class="solutions-grid products-page-grid">
                                 ${productsHtml}
                             </div>
                         </div>

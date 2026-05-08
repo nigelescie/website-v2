@@ -5,14 +5,37 @@ const API_CONTENT_URL = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE) ? CON
 async function loadContent() {
     try {
         const response = await fetch(API_CONTENT_URL);
-        const data = await response.json();
-        if (data) {
+        const raw = await response.json();
+        if (raw) {
+            const data = parseApiResponse(raw);
             window.lastLoadedData = data;
             updateDOM(data);
         }
     } catch (error) {
         console.error("Error loading content:", error);
     }
+}
+
+function parseApiResponse(raw) {
+    if (!raw) return {};
+    const data = {};
+    for (const key in raw) {
+        const entry = raw[key];
+        if (entry && typeof entry.data === 'string') {
+            try { data[key] = JSON.parse(entry.data); } catch { data[key] = entry.data; }
+        } else {
+            data[key] = entry;
+        }
+    }
+    return data;
+}
+
+function resolveUrl(url, pathPrefix) {
+    if (!url || url.startsWith('http') || url.startsWith('/') || url.startsWith('data:')) return url || '';
+    if (url.startsWith('uploads/')) {
+        return (typeof CONFIG !== 'undefined' ? CONFIG.UPLOADS_BASE.replace(/\/uploads$/, '') : '') + '/' + url;
+    }
+    return (pathPrefix || '') + url;
 }
 
 function slugify(text) {
@@ -44,17 +67,21 @@ function updateDOM(data) {
     if (data.hero && data.hero.hidden) {
         const heroSection = document.querySelector('.hero');
         if (heroSection) heroSection.style.display = 'none';
-        const heroBanner = document.querySelector('.hero-banner');
-        if (heroBanner) heroBanner.style.display = 'none';
     } else if (data.hero) {
+        if (data.hero.buttonText) {
+            const heroBtn = document.querySelector('.hero-cta-buttons .hero-btn');
+            if (heroBtn) heroBtn.textContent = data.hero.buttonText;
+        }
         if (data.hero.slides && data.hero.slides.length > 0) {
-            const sliderContainer = document.getElementById('sliderContainer');
+            const sliderContainer = document.querySelector('.hero-image-slider');
             if (sliderContainer) {
-                let slidesHtml = '';
+                sliderContainer.innerHTML = '';
                 data.hero.slides.filter(s => !s.hidden).forEach(slide => {
-                    slidesHtml += `<div class="hero-slide-item" style="background-image: url('${slide.image}');" role="img" aria-label="${slide.label || 'Hero Slide'}"></div>`;
+                    const el = document.createElement('div');
+                    el.className = 'hero-slide';
+                    el.innerHTML = `<img src="${resolveUrl(slide.image, '')}" alt="${slide.label || 'Hero Slide'}">`;
+                    sliderContainer.appendChild(el);
                 });
-                sliderContainer.innerHTML = slidesHtml;
                 if (window.initHeroSlider) window.initHeroSlider();
             }
         }
@@ -69,9 +96,10 @@ function updateDOM(data) {
     }
 
     // 2.5 Our Clients
+    console.log("Updating Our Clients section with data:", data.ourClients)
     if (visibility.ourClientsHidden) {
         const ourClientsSection = document.getElementById('our-clients');
-        if (ourClientsSection) ourClientsSection.style.display = 'none';
+        // if (ourClientsSection) ourClientsSection.style.display = 'none';
     } else if (data.ourClients && Array.isArray(data.ourClients)) {
         renderOurClients(data.ourClients);
     }
@@ -114,7 +142,7 @@ function updateDOM(data) {
                 const delayClass = index > 0 && index <= 3 ? ` delay-${index}` : '';
                 card.className = `solution-card fade-up${delayClass} visible`;
                 card.innerHTML = `
-                    <div class="solution-banner"><img src="${item.image || ''}" alt="${item.title || ''}" class="solution-image" /></div>
+                    <div class="solution-banner"><img src="${resolveUrl(item.image, '')}" alt="${item.title || ''}" class="solution-image" /></div>
                     <div class="solution-content"><h3>${item.title || ''}</h3><p>${item.description || ''}</p></div>
                 `;
                 whyUsGrid.appendChild(card);
@@ -135,7 +163,7 @@ function updateDOM(data) {
                 slide.className = 'testimonial-slide';
                 slide.innerHTML = `
                     <div class="testimonial-header">
-                        <div class="client-logo-container"><img src="${item.logo || ''}" alt="Client Logo" class="client-logo" /></div>
+                        <div class="client-logo-container"><img src="${resolveUrl(item.logo, '')}" alt="Client Logo" class="client-logo" /></div>
                         <div class="company-name">${item.company || ''}</div>
                     </div>
                     <div class="testimonial-content"><p>"${item.quote || ''}"</p></div>
@@ -298,8 +326,7 @@ function renderCustomSections(sections) {
             sectionEl.classList.add('premium-hero-style');
             const bgBlock = (section.blocks || []).find(b => b.type === 'image');
             if (bgBlock && bgBlock.imageUrl) {
-                let url = bgBlock.imageUrl;
-                if (url && !url.startsWith('http') && !url.startsWith('/') && !url.startsWith('data:')) url = pathPrefix + url;
+                const url = resolveUrl(bgBlock.imageUrl, pathPrefix);
                 sectionEl.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('${url}')`;
             }
         }
@@ -418,8 +445,7 @@ function buildBlockHtml(block, pathPrefix, section) {
     } else if (block.type === 'image') {
         // Skip image-as-bg for centered-hero (already used as background)
         if (section.template === 'centered-hero') return '';
-        let url = block.imageUrl || 'assets/placeholder.png';
-        if (url && !url.startsWith('http') && !url.startsWith('/') && !url.startsWith('data:')) url = pathPrefix + url;
+        const url = resolveUrl(block.imageUrl || 'assets/placeholder.png', pathPrefix);
         if (url.includes('via.placeholder.com')) url = url.replace('via.placeholder.com', 'placehold.co');
         return `<div class="visual-card"><div class="visual-content"><img src="${url}" class="visual-image" style="width:100%; height:auto; display:block;" /></div></div>`;
     } else if (block.type === 'button') {
@@ -458,10 +484,7 @@ function renderOurClients(clientsData) {
         // Use a 5-item staggered delay for consistent entry animation
         logoWrapper.classList.add(`delay-${index % 5}`);
         
-        let url = client.logo || 'assets/placeholder.png';
-        if (url && !url.startsWith('http') && !url.startsWith('/') && !url.startsWith('data:')) {
-            url = pathPrefix + url;
-        }
+        const url = resolveUrl(client.logo || 'assets/placeholder.png', pathPrefix);
         logoWrapper.innerHTML = `<img src="${url}" alt="${client.name || 'Client Logo'}" />`;
         clientsGrid.appendChild(logoWrapper);
     });
@@ -511,7 +534,7 @@ function renderStats(statsData, containerSelector = '.stats-grid') {
     });
 }
 
-function renderSolutions(solutionsData, containerSelector = '.solutions-grid:not(#why-us-grid)') {
+function renderSolutions(solutionsData, containerSelector = '.solutions-grid:not(#why-us-grid):not(.products-page-grid)') {
     const solutionsGrid = document.querySelector(containerSelector);
     if (!solutionsGrid) return;
     solutionsGrid.innerHTML = '';
@@ -531,7 +554,7 @@ function renderSolutions(solutionsData, containerSelector = '.solutions-grid:not
             card.style.cursor = 'pointer';
         }
         card.innerHTML = `
-            <div class="solution-banner"><img src="${item.image || ''}" alt="${item.title || ''}" class="solution-image" /></div>
+            <div class="solution-banner"><img src="${resolveUrl(item.image, '')}" alt="${item.title || ''}" class="solution-image" /></div>
             <div class="solution-content"><h3>${item.title || ''}</h3><p>${item.description || ''}</p></div>
         `;
         solutionsGrid.appendChild(card);

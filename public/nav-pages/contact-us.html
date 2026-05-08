@@ -1664,7 +1664,7 @@
         (async function loadContactContent() {
             try {
                 const res = await fetch(CONFIG.API_BASE + '/content');
-                const data = await res.json();
+                const data = parseApiResponse(await res.json());
                 const contactData = data.contactPage || {};
 
                 // Update departments

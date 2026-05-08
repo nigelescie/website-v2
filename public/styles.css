@@ -8395,15 +8395,13 @@ body {
     max-width: 140px;
     max-height: 45px;
     object-fit: contain;
-    /* Force white silhouettes: black (brightness(0)) then inverted (invert(1)) */
-    filter: brightness(0) invert(1) opacity(0.5);
+    filter: grayscale(1) opacity(0.6);
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .client-logo-wrapper img:hover {
-    /* Reveals original colors with a vibrant blue-green glow matching the site theme */
-    filter: brightness(1.1) invert(0) opacity(1) 
-            drop-shadow(0 0 15px rgba(0, 212, 255, 0.4)) 
+    filter: grayscale(0) opacity(1)
+            drop-shadow(0 0 15px rgba(0, 212, 255, 0.4))
             drop-shadow(0 0 25px rgba(23, 184, 148, 0.25));
     transform: scale(1.08);
 }
