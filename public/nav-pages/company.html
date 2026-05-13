@@ -396,10 +396,12 @@
     <button id="backToTop" class="back-to-top" aria-label="Back to Top">↑</button>
 
     <script src="../scripts/main-script.js"></script>
-        <script src="../scripts/page-transition.js"></script>
+    <script src="../scripts/page-transition.js"></script>
     <script src="../scripts/nav-dropdown.js"></script>
     <script src="../scripts/mobile-nav.js"></script>
     <script src="../scripts/section-scroll-animation.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/utils.js"></script>
     <script>
         // Timeline Management System
         document.addEventListener('DOMContentLoaded', function () {
@@ -575,6 +577,16 @@
                     renderPerks(data.perks);
                 }
 
+                // 8. Custom Sections & Reorder
+                if (data.companyPage) {
+                    if (data.companyPage.customSections) {
+                        renderCustomSections(data.companyPage.customSections);
+                    }
+                    if (data.companyPage.sectionOrder) {
+                        reorderSections('companyPage', data.companyPage.sectionOrder);
+                    }
+                }
+
             } catch (error) {
                 console.error('Error loading page content:', error);
                 loadDefaultTimeline();
@@ -593,7 +605,7 @@
                 // Ensure path starts with / if it's not a data URL and doesn't have it
                 let src = data.imageUrl;
                 if (!src.startsWith('data:') && !src.startsWith('/') && !src.startsWith('http')) {
-                    src = '/' + src;
+                    src = resolveUrl(src, '');
                 }
                 image.src = src;
                 image.alt = data.title || defaultTitle;
@@ -796,7 +808,7 @@
 
                     let imgSrc = leader.image || '../assets/placeholder-profile.png';
                     if (imgSrc && !imgSrc.startsWith('data:') && !imgSrc.startsWith('/') && !imgSrc.startsWith('http')) {
-                        imgSrc = '/' + imgSrc;
+                        imgSrc = resolveUrl(imgSrc, '');
                     }
 
                     card.innerHTML = `
@@ -835,7 +847,7 @@
                 const card = document.createElement('div');
                 card.className = 'perk-card';
 
-                const imgSrc = perk.image ? (perk.image.startsWith('/') ? perk.image : '/' + perk.image) : '/assets/icon-placeholder.svg';
+                const imgSrc = perk.image ? (perk.image.startsWith('/') ? perk.image : resolveUrl(perk.image, '')) : '/assets/icon-placeholder.svg';
 
                 card.innerHTML = `
                     <div class="perk-banner">
@@ -882,8 +894,6 @@
             </div>
         </div>
     </div>
-    <script src="../js/config.js"></script>
-    <script src="../js/utils.js"></script>
     <!-- Chat AI Script -->
     <script src="../scripts/chat-ai.js"></script>
     <!-- Analytics -->

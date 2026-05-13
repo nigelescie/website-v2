@@ -96,7 +96,6 @@ function updateDOM(data) {
     }
 
     // 2.5 Our Clients
-    console.log("Updating Our Clients section with data:", data.ourClients)
     if (visibility.ourClientsHidden) {
         const ourClientsSection = document.getElementById('our-clients');
         // if (ourClientsSection) ourClientsSection.style.display = 'none';

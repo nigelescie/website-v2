@@ -895,7 +895,7 @@
 
             noBlogResults.style.display = 'none';
             blogGrid.innerHTML = paginatedPosts.map(post => {
-                const imgPath = (post.image.startsWith('/') || post.image.startsWith('http')) ? post.image : '/' + post.image;
+                const imgPath = resolveUrl(post.image, '');
                 return `
                 <div class="blog-card" id="post-${post.id}" onclick="navigateToBlogPost(${post.id})">
                     <img src="${imgPath}" alt="${post.title}" class="blog-featured-image">

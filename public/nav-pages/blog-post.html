@@ -1121,7 +1121,7 @@
                 const heroSection = document.querySelector('.blog-post-hero');
 
                 if (post.image) {
-                    const fullPath = (post.image.startsWith('/') || post.image.startsWith('http')) ? post.image : '/' + post.image;
+                    const fullPath = resolveUrl(post.image, '');
 
                     // Use as dynamic background for hero depth
                     if (heroSection) {
@@ -1149,7 +1149,7 @@
                                     if (block.images && block.images.length > 0) {
                                         // New multi-image gallery format
                                         const imagesHtml = block.images.map(img => {
-                                            const imgPath = (img.url.startsWith('/') || img.url.startsWith('http')) ? img.url : '/' + img.url;
+                                            const imgPath = resolveUrl(img.url, '');
                                             const hasCaption = img.caption && img.caption.trim() !== '';
                                             return `
                                                 <div class="gallery-image-wrapper ${!hasCaption ? 'no-caption' : ''}">
@@ -1167,7 +1167,7 @@
                                             </div>`;
                                     } else if (block.url) {
                                         // Legacy single image format
-                                        const imgPath = (block.url.startsWith('/') || block.url.startsWith('http')) ? block.url : '/' + block.url;
+                                        const imgPath = resolveUrl(block.url, '');
                                         blockHtml = `
                                             <div class="blog-block blog-image-block wp-block-image animate-on-scroll">
                                                 <img src="${imgPath}" alt="${block.caption || ''}">
@@ -1201,7 +1201,7 @@
                                                 </div>`;
                                         } else {
                                             // Handle local video file
-                                            const vidPath = (videoUrl.startsWith('/') || videoUrl.startsWith('http')) ? videoUrl : '/' + videoUrl;
+                                            const vidPath = resolveUrl(videoUrl, '');
                                             blockHtml = `
                                                 <div class="blog-block blog-video-block animate-on-scroll" style="margin: 4.5rem 0;">
                                                     <div class="video-native-wrapper" style="border-radius: 24px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); background: #000;">
@@ -1284,7 +1284,7 @@
 
                         if (recommended.length > 0) {
                             relatedGrid.innerHTML = recommended.map((rp, index) => {
-                                const imgPath = (rp.image && (rp.image.startsWith('/') || rp.image.startsWith('http'))) ? rp.image : '/' + (rp.image || 'assets/hero-bg.jpg');
+                                const imgPath = resolveUrl(rp.image || 'assets/hero-bg.jpg', '');
                                 // Added slight delay for each card
                                 return `
                                     <div class="blog-related-card animate-on-scroll" onclick="navigateToPost(${rp.id})" style="transition-delay: ${index * 100}ms">

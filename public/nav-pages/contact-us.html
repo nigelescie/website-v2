@@ -1743,7 +1743,7 @@
             const getIcon = (dept) => {
                 if (dept.icon) {
                     // Use class so CSS filter tints it to primary cyan
-                    return `<img src="/${dept.icon}" alt="" class="dept-icon-img" style="${iconStyle}">`;
+                    return `<img src="${resolveUrl(dept.icon, '')}" alt="" class="dept-icon-img" style="${iconStyle}">`;
                 }
                 // Fall back to known SVG or the generic department SVG
                 return svgs[dept.id] || genericSvg;
@@ -1920,7 +1920,7 @@
             // The icon to show in the button
             const iconStyle = 'width: 20px; height: 20px; object-fit: contain; color: var(--primary-color); flex-shrink: 0;';
             const iconHtml = dept.icon
-                ? `<img src="/${dept.icon}" alt="" class="dept-icon-img" style="${iconStyle}">`
+                ? `<img src="${resolveUrl(dept.icon, '')}" alt="" class="dept-icon-img" style="${iconStyle}">`
                 : '';
 
             const wrapper = document.createElement('div');
@@ -2019,7 +2019,7 @@
 
                 // Use the uploaded icon if present (tinted via CSS filter), else fall back to SVG
                 const titleIcon = dept.icon
-                    ? `<img src="/${dept.icon}" alt="" class="dept-icon-img" style="width:24px;height:24px;object-fit:contain;vertical-align:middle;margin-right:8px;">`
+                    ? `<img src="${resolveUrl(dept.icon, '')}" alt="" class="dept-icon-img" style="width:24px;height:24px;object-fit:contain;vertical-align:middle;margin-right:8px;">`
                     : getDeptIcon(dept.id);
 
                 deptDiv.innerHTML = `

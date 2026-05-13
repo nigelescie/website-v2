@@ -1215,24 +1215,47 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
-            const params = new URLSearchParams(window.location.search);
-            const productId = params.get('id');
+            // Support both hash-based (#id=value) and query-based (?id=value) params
+            let productId = null;
+            const hash = window.location.hash;
+            if (hash && hash.includes('id=')) {
+                const hashParams = new URLSearchParams(hash.substring(1));
+                productId = hashParams.get('id');
+            }
+            if (!productId) {
+                const params = new URLSearchParams(window.location.search);
+                productId = params.get('id');
+            }
+            console.log('Product ID:', productId);
 
             if (!productId) {
-                window.location.href = 'solutions.html';
+                // window.location.href = 'solutions.html';
                 return;
             }
+
+            const decodedProductId = decodeURIComponent(productId);
 
             try {
                 const res = await fetch(CONFIG.API_BASE + '/content');
                 if (!res.ok) throw new Error('Failed to fetch content');
                 const data = await res.json();
 
+                let productsPage = null;
+                if (data.productsPage && data.productsPage.data) {
+                    try {
+                        productsPage = JSON.parse(data.productsPage.data);
+                    } catch (e) {
+                        productsPage = data.productsPage;
+                    }
+                } else if (data.productsPage && data.productsPage.sections) {
+                    productsPage = data.productsPage;
+                }
+
                 let foundProduct = null;
-                if (data.productsPage && data.productsPage.sections) {
-                    for (const section of data.productsPage.sections) {
+                if (productsPage && productsPage.sections) {
+                    for (const section of productsPage.sections) {
                         if (section.products) {
-                            foundProduct = section.products.find(p => p.id === productId);
+                            foundProduct = section.products.find(p => p.id === decodedProductId);
                             if (foundProduct) break;
                         }
                     }
@@ -1257,14 +1280,14 @@
 
                 // Update Intro Image
                 if (foundProduct.introImage) {
-                    document.getElementById('detail-intro-image').src = '/' + foundProduct.introImage;
+                    document.getElementById('detail-intro-image').src = resolveUrl(foundProduct.introImage, '');
                     document.getElementById('detail-intro-image').alt = foundProduct.title;
                     document.getElementById('intro-visual-wrapper').style.display = 'block';
                 }
 
                 // Update Image
                 if (foundProduct.image) {
-                    document.getElementById('detail-image').src = '/' + foundProduct.image;
+                    document.getElementById('detail-image').src = resolveUrl(foundProduct.image, '');
                     document.getElementById('detail-image').alt = foundProduct.title;
                     document.getElementById('hero-logo-wrapper').style.display = 'flex';
                 }
@@ -1287,7 +1310,7 @@
                             if (feature.icon) {
                                 iconHtml = `
                                     <div class="feature-icon-wrapper">
-                                        <img src="/${feature.icon}" class="feature-icon" alt="${title}">
+                                        <img src="${resolveUrl(feature.icon, '')}" class="feature-icon" alt="${title}">
                                     </div>
                                 `;
                             }
@@ -1342,7 +1365,7 @@
                         document.getElementById('detail-use-case').innerText = foundProduct.useCase;
                     }
                     if (foundProduct.video) {
-                        document.getElementById('detail-video').src = '/' + foundProduct.video;
+                        document.getElementById('detail-video').src = resolveUrl(foundProduct.video, '');
                         document.getElementById('video-container').style.display = 'block';
                     }
                     document.getElementById('use-case-video-section').style.display = 'block';

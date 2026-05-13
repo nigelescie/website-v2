@@ -2989,7 +2989,7 @@ function addTimelineItem() {
     const newItem = {
         id: Date.now(),
         title: "New Timeline Event",
-        year: "2024",
+        year: new Date().getFullYear().toString(),
         description: "Description of the new timeline event.",
         position: appData.timeline.length % 2 === 0 ? "left" : "right"
     };
