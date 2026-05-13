@@ -179,6 +179,7 @@
 
         .field-wrapper input,
         .field-wrapper textarea,
+        .field-wrapper select,
         .custom-dropdown .dropdown-toggle {
             width: 100%;
             padding: 0.85rem 1.25rem 0.85rem 3.2rem;
@@ -189,6 +190,17 @@
             font-size: 1rem;
             font-family: var(--font-primary);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .field-wrapper select {
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+
+        .field-wrapper select option {
+            background: #1a1a1a;
+            color: white;
         }
 
         /* Textarea icon alignment fix */
@@ -208,6 +220,7 @@
 
         .field-wrapper input:focus,
         .field-wrapper textarea:focus,
+        .field-wrapper select:focus,
         .custom-dropdown.open .dropdown-toggle {
             outline: none;
             background-color: rgba(255, 255, 255, 0.07);
@@ -282,6 +295,9 @@
             color: var(--text-light);
             transition: all 0.2s ease;
             font-size: 0.95rem;
+            opacity: 1;
+            transform: none;
+            animation: none;
         }
 
         .custom-dropdown .dropdown-menu li:hover {
@@ -785,6 +801,7 @@
 
             .field-wrapper input,
             .field-wrapper textarea,
+            .field-wrapper select,
             .custom-dropdown .dropdown-toggle {
                 padding: 0.65rem 1rem 0.65rem 2.8rem;
                 font-size: 0.88rem;
@@ -922,6 +939,7 @@
 
             .field-wrapper input,
             .field-wrapper textarea,
+            .field-wrapper select,
             .custom-dropdown .dropdown-toggle {
                 padding: 0.7rem 1rem 0.7rem 2.8rem;
                 /* Compact inputs */
@@ -1107,67 +1125,15 @@
                 <form>
                     <div class="form-group">
                         <label for="department">Department</label>
-                        <div class="custom-dropdown field-wrapper" id="department-custom">
-                            <button type="button" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false"
-                                id="deptToggle">
-                                <span>Select Department</span>
-                                <svg class="chev" width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"
-                                    focusable="false">
-                                    <path fill="currentColor" d="M7 10l5 5 5-5z" />
-                                </svg>
-                            </button>
+                        <div class="field-wrapper">
+                            <select id="department" name="department" required>
+                                <option value="" disabled selected>Loading departments...</option>
+                            </select>
                             <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
                                 <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
                             </svg>
-                            <ul class="dropdown-menu" id="deptMenu">
-                                <!-- Flat fallbacks shown before API data loads -->
-                                <li class="dept-menu-item no-sub" data-dept-id="sales"
-                                    data-email="sales@electronicscience.net">
-                                    <div class="dept-item-left">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round" style="color:var(--primary-color);flex-shrink:0">
-                                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-                                        </svg>
-                                        <span>Sales - New Business Inquiries</span>
-                                    </div>
-                                    <span class="submenu-arrow">&#9657;</span>
-                                </li>
-                                <li class="dept-menu-item no-sub" data-dept-id="support"
-                                    data-email="support@electronicscience.net">
-                                    <div class="dept-item-left">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round" style="color:var(--primary-color);flex-shrink:0">
-                                            <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
-                                            <path
-                                                d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z">
-                                            </path>
-                                        </svg>
-                                        <span>Customer Support - Technical Assistance</span>
-                                    </div>
-                                    <span class="submenu-arrow">&#9657;</span>
-                                </li>
-                                <li class="dept-menu-item no-sub" data-dept-id="hr"
-                                    data-email="hrd@electronicscience.net">
-                                    <div class="dept-item-left">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round" style="color:var(--primary-color);flex-shrink:0">
-                                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                            <circle cx="9" cy="7" r="4"></circle>
-                                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                        </svg>
-                                        <span>HR - Careers &amp; Employment</span>
-                                    </div>
-                                    <span class="submenu-arrow">&#9657;</span>
-                                </li>
-                            </ul>
-                            <input type="hidden" name="department" id="department" required>
                         </div>
                     </div>
 
@@ -1245,276 +1211,19 @@
 
                 <div class="form-group">
                     <label for="contact-department">Department</label>
-                    <div class="custom-dropdown" id="contact-department-custom">
-                        <button type="button" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false"
-                            id="contactDeptToggle">
-                            <span>Sales & Marketing</span>
-                            <svg class="chev" width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"
-                                focusable="false">
-                                <path fill="currentColor" d="M7 10l5 5 5-5z" />
-                            </svg>
-                        </button>
-                        <ul class="dropdown-menu" id="contactDeptMenu">
-                            <li data-value="sales">Sales & Marketing</li>
-                            <li data-value="support">Customer Support</li>
-                            <li data-value="hr">Human Resources</li>
-                        </ul>
-                        <input type="hidden" id="contact-department" value="sales">
+                    <div class="field-wrapper">
+                        <select id="contact-department">
+                            <option value="" disabled selected>Loading departments...</option>
+                        </select>
+                        <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                        </svg>
                     </div>
                 </div>
 
-                <!-- Sales & Marketing Department -->
-                <div class="department-content" id="sales-content">
-                    <div class="dept-details">
-                        <h4>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-                            </svg>
-                            Sales and Marketing Department
-                        </h4>
-                        <p>For new business inquiries, product demonstrations, and partnership opportunities</p>
-
-                        <div class="contact-method">
-                            <div class="method-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path
-                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
-                                    </path>
-                                    <polyline points="22,6 12,13 2,6"></polyline>
-                                </svg>
-                            </div>
-                            <div class="method-content">
-                                <div class="method-label">Sales Inquiries</div>
-                                <div class="method-value"><a
-                                        href="mailto:sales@electronicscience.net">sales@electronicscience.net</a></div>
-                            </div>
-                        </div>
-
-                        <div class="contact-method">
-                            <div class="method-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path
-                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
-                                    </path>
-                                    <polyline points="22,6 12,13 2,6"></polyline>
-                                </svg>
-                            </div>
-                            <div class="method-content">
-                                <div class="method-label">Marketing</div>
-                                <div class="method-value"><a
-                                        href="mailto:marketing@electronicscience.net">marketing@electronicscience.net</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="contact-method">
-                            <div class="method-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path
-                                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
-                                    </path>
-                                </svg>
-                            </div>
-                            <div class="method-content">
-                                <div class="method-label">Phone</div>
-                                <div class="method-value"><a href="tel:02-8850-1324">02-8850-1324</a></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Customer Support Department -->
-                <div class="department-content" id="support-content">
-                    <div class="dept-details">
-                        <h4>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
-                                <path
-                                    d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z">
-                                </path>
-                            </svg>
-                            Customer Support
-                        </h4>
-                        <p>Technical assistance, product support, and issue resolution available 24/7</p>
-
-                        <div class="contact-method">
-                            <div class="method-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-                                    <line x1="12" y1="18" x2="12.01" y2="18"></line>
-                                </svg>
-                            </div>
-                            <div class="method-content">
-                                <div class="method-label">GLOBE Mobile</div>
-                                <div class="method-value">
-                                    <a href="tel:+639778364867">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path
-                                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
-                                            </path>
-                                        </svg>
-                                        (+63) 977 8364 867
-                                    </a>
-                                    <a href="tel:+639178842975">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path
-                                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
-                                            </path>
-                                        </svg>
-                                        (+63) 917 8842 975
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="contact-method">
-                            <div class="method-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-                                    <line x1="12" y1="18" x2="12.01" y2="18"></line>
-                                </svg>
-                            </div>
-                            <div class="method-content">
-                                <div class="method-label">SMART Mobile</div>
-                                <div class="method-value">
-                                    <a href="tel:+639088107057">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path
-                                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
-                                            </path>
-                                        </svg>
-                                        (+63) 908 8107 057
-                                    </a>
-                                    <a href="tel:+639988495159">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path
-                                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
-                                            </path>
-                                        </svg>
-                                        (+63) 998 8495 159
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="contact-method">
-                            <div class="method-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                                </svg>
-                            </div>
-                            <div class="method-content">
-                                <div class="method-label">Facebook Support</div>
-                                <div class="method-value">
-                                    <a href="https://facebook.com/esciencesupport" target="_blank">@esciencesupport</a>
-                                    <a href="https://facebook.com/esciencecorp" target="_blank">@esciencecorp</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="contact-method">
-                            <div class="method-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path
-                                        d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-10.6 8.38 8.38 0 0 1 3.9.9L21 3.5Z">
-                                    </path>
-                                </svg>
-                            </div>
-                            <div class="method-content">
-                                <div class="method-label">IMS Support</div>
-                                <div class="method-value">
-                                    <a href="tel:+639176369606">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path
-                                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
-                                            </path>
-                                        </svg>
-                                        (+63) 917 636 9606
-                                    </a>
-                                    <a href="tel:+639989701129">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path
-                                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
-                                            </path>
-                                        </svg>
-                                        (+63) 998 970 1129
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- HR Department -->
-                <div class="department-content" id="hr-content">
-                    <div class="dept-details">
-                        <h4>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                            </svg>
-                            Human Resources
-                        </h4>
-                        <p>Career opportunities, employment inquiries, and talent development programs</p>
-
-                        <div class="contact-method">
-                            <div class="method-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path
-                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
-                                    </path>
-                                    <polyline points="22,6 12,13 2,6"></polyline>
-                                </svg>
-                            </div>
-                            <div class="method-content">
-                                <div class="method-label">HR Inquiries</div>
-                                <div class="method-value"><a
-                                        href="mailto:hrd@electronicscience.net">hrd@electronicscience.net</a></div>
-                            </div>
-                        </div>
-
-                        <div class="contact-method">
-                            <div class="method-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path
-                                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
-                                    </path>
-                                </svg>
-                            </div>
-                            <div class="method-content">
-                                <div class="method-label">Phone</div>
-                                <div class="method-value"><a href="tel:02-8850-1324">02-8850-1324</a></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Department details rendered dynamically by updateDepartmentContent() -->
 
                 <div class="business-hours-box">
                     <h4>
@@ -1654,8 +1363,10 @@
 
     <button id="backToTop" class="back-to-top" aria-label="Back to Top">↑</button>
 
+    <script src="../js/config.js"></script>
+    <script src="../js/utils.js"></script>
     <script src="../scripts/main-script.js"></script>
-        <script src="../scripts/page-transition.js"></script>
+    <script src="../scripts/page-transition.js"></script>
     <script src="../scripts/nav-dropdown.js"></script>
     <script src="../scripts/mobile-nav.js"></script>
 
@@ -1704,6 +1415,11 @@
                 }
             } catch (err) {
                 console.error('Error loading contact content:', err);
+                // Show disabled fallback in both dropdowns on error
+                const deptMenu = document.getElementById('deptMenu');
+                if (deptMenu) deptMenu.innerHTML = '<li class="dept-menu-item no-sub" style="pointer-events:none;opacity:0.5;"><div class="dept-item-left"><span>No departments available</span></div></li>';
+                const contactDeptMenu = document.getElementById('contactDeptMenu');
+                if (contactDeptMenu) contactDeptMenu.innerHTML = '<li style="pointer-events:none;opacity:0.5;">No departments available</li>';
             }
         })();
 
@@ -1729,6 +1445,54 @@
                     }
                 }
             });
+
+            // Populate native <select> elements
+            const formSelect = document.getElementById('department');
+            if (formSelect) {
+                formSelect.innerHTML = '<option value="" disabled selected>Select a department</option>' +
+                    departments.map(dept => `<option value="${dept.id}">${dept.dropdownLabel || dept.name}</option>`).join('');
+                formSelect.addEventListener('change', function() {
+                    const dept = departments.find(d => d.id === this.value);
+                    if (dept) updateFieldIcon(this, dept);
+                });
+            }
+            const contactSelect = document.getElementById('contact-department');
+            if (contactSelect) {
+                contactSelect.innerHTML = '<option value="" disabled selected>Select a department</option>' +
+                    departments.map(dept => `<option value="${dept.id}">${dept.name}</option>`).join('');
+                contactSelect.value = departments[0].id;
+                updateFieldIcon(contactSelect, departments[0]);
+                contactSelect.onchange = function() {
+                    const dept = departments.find(d => d.id === this.value);
+                    if (dept) updateFieldIcon(this, dept);
+                    if (window.showDepartment) window.showDepartment(this.value);
+                };
+            }
+
+            function updateFieldIcon(selectEl, dept) {
+                const wrapper = selectEl.closest('.field-wrapper');
+                if (!wrapper) return;
+                const oldIcon = wrapper.querySelector('.field-icon');
+                if (!oldIcon) return;
+                if (dept.icon) {
+                    const img = document.createElement('img');
+                    img.src = resolveUrl(dept.icon, '');
+                    img.alt = '';
+                    img.className = 'field-icon dept-icon-img';
+                    img.style.cssText = 'width:18px;height:18px;object-fit:contain;';
+                    oldIcon.replaceWith(img);
+                } else {
+                    // Use default SVG based on dept id
+                    const svgHtml = getDeptIcon(dept.id);
+                    const temp = document.createElement('div');
+                    temp.innerHTML = svgHtml;
+                    const svgEl = temp.firstElementChild;
+                    svgEl.classList.add('field-icon');
+                    svgEl.setAttribute('width', '18');
+                    svgEl.setAttribute('height', '18');
+                    oldIcon.replaceWith(svgEl);
+                }
+            }
 
             // Default hardcoded icons based on ID (fallback) with TEAL color
             const iconStyle = 'width: 20px; height: 20px; object-fit: contain; color: var(--primary-color); flex-shrink: 0;';
@@ -2132,22 +1896,7 @@
 
     <!-- Send us a Message: mailto handler + static fallback item wiring -->
     <script>
-        // Wire click handlers for the static hardcoded fallback dept-menu-items
-        // (shown before the API loads). Once API loads, #deptMenu is rebuilt in JS
-        // with its own listeners, so these only fire for the unloaded state.
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('#deptMenu .dept-menu-item.no-sub').forEach(item => {
-                item.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const deptId = item.dataset.deptId;
-                    const email = item.dataset.email;
-                    const labelEl = item.querySelector('span:not(.submenu-arrow)');
-                    const label = labelEl ? labelEl.textContent : deptId;
-                    const fakeDept = { id: deptId, name: label, dropdownLabel: label, icon: null };
-                    selectFormDepartment(fakeDept, label, email);
-                });
-            });
-        });
+
 
         document.querySelector('.contact-form form').addEventListener('submit', function (e) {
             e.preventDefault();
@@ -2408,8 +2157,6 @@
         </div>
     </div>
     <!-- Chat AI Script -->
-    <script src="../js/config.js"></script>
-    <script src="../js/utils.js"></script>
     <script src="../scripts/chat-ai.js"></script>
     <!-- Analytics -->
     <script src="../scripts/analytics.js"></script>

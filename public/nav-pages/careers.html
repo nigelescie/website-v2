@@ -648,9 +648,10 @@
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- Dynamic Custom Sections -->
-        <div id="dynamic-sections-container"></div>
+    <!-- Dynamic Custom Sections -->
+    <div id="dynamic-sections-container"></div>
     </main>
 
         <!-- Footer -->
@@ -926,6 +927,16 @@
                             if (cp.apply.buttonText) applyBtn.textContent = cp.apply.buttonText;
                             if (cp.apply.email) applyBtn.href = `mailto:${cp.apply.email}?subject=Job Application`;
                         }
+                    }
+
+                    // 9. Custom Sections
+                    if (cp.customSections) {
+                        renderCustomSections(cp.customSections);
+                    }
+
+                    // 10. Section Reordering
+                    if (cp.sectionOrder) {
+                        reorderSections('careersPage', cp.sectionOrder);
                     }
 
                 } catch (error) {

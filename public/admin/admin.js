@@ -1197,7 +1197,8 @@ window.toggleSectionVisibility = function(sectionKey, renderFuncStr, containerId
 
 // Toggle Hide/Show Item
 window.toggleHideItem = function (targetPath, index, callbackName) {
-    const pathParts = targetPath.split('.');
+    // Parse path supporting both dot notation and bracket notation (e.g. 'productsPage.sections[0].products')
+    const pathParts = targetPath.replace(/\[(\d+)\]/g, '.$1').split('.');
     let target = appData;
     for (let i = 0; i < pathParts.length; i++) {
         if (!target[pathParts[i]]) return;
@@ -1883,11 +1884,12 @@ function renderSingleSectionEditor(sIndex) {
 
     section.products.forEach((prod, pIndex) => {
         const prodDiv = document.createElement('div');
-        prodDiv.className = 'item-card';
+        prodDiv.className = `item-card ${prod.hidden ? 'hidden-item' : ''}`;
         prodDiv.id = `product-editor-${sIndex}-${pIndex}`;
         prodDiv.style.background = 'white';
         prodDiv.style.border = '1px solid #e0e0e0';
         prodDiv.style.transition = 'box-shadow 0.3s';
+        if (prod.hidden) prodDiv.style.opacity = '0.6';
 
         prodDiv.innerHTML = `
              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; background:#f8f9fa; padding:10px 15px; border-radius:6px; border:1px solid #eee;">
@@ -2177,6 +2179,7 @@ window.addProductFeature = function (sIndex, pIndex) {
 }
 
 window.deleteProductFeature = function (sIndex, pIndex, fIndex) {
+    if (!confirm('Delete this feature?')) return;
     appData.productsPage.sections[sIndex].products[pIndex].features.splice(fIndex, 1);
 
     const scrollPos = document.querySelector('.main-editor').scrollTop;
@@ -2208,6 +2211,7 @@ window.addProductBenefit = function (sIndex, pIndex) {
 }
 
 window.deleteProductBenefit = function (sIndex, pIndex, bIndex) {
+    if (!confirm('Delete this benefit?')) return;
     appData.productsPage.sections[sIndex].products[pIndex].benefits.splice(bIndex, 1);
 
     const scrollPos = document.querySelector('.main-editor').scrollTop;
@@ -3652,6 +3656,7 @@ window.addIntroSlide = function () {
 };
 
 window.deleteIntroSlide = function (index) {
+    if (!confirm('Delete this slide?')) return;
     appData.careersPage.intro.slides.splice(index, 1);
     renderIntroSlides();
 };
@@ -3906,6 +3911,7 @@ window.addOfficeCultureCard = function () {
 };
 
 window.deleteOfficeCultureCard = function (index) {
+    if (!confirm('Delete this culture card?')) return;
     appData.careersPage.officeCulture.cards.splice(index, 1);
     renderOfficeCultureCards();
 };
@@ -4111,11 +4117,10 @@ window.deleteCareerListing = function (type, index) {
     if (confirm('Are you sure you want to delete this listing?')) {
         appData.careersPage.opportunities[type].splice(index, 1);
         renderCareersJobsSidebar();
-        // Clear editor or select previous?
-        // Let's clear editor by showing empty message or first item
         document.getElementById('career-opportunities').innerHTML = '<div style="padding:40px; text-align:center; color:#666;">Select an item from the sidebar to edit.</div>';
         window.currentCareerType = null;
         window.currentCareerIndex = null;
+        saveData();
     }
 };
 
@@ -5549,6 +5554,7 @@ window.addContact = function (deptIndex) {
 
 window.removeContact = function (deptIndex, contactIndex) {
     if (!appData.contactPage?.departments?.[deptIndex]?.contacts) return;
+    if (!confirm('Remove this contact?')) return;
     appData.contactPage.departments[deptIndex].contacts.splice(contactIndex, 1);
     renderSingleDepartmentEditor(deptIndex);
 };

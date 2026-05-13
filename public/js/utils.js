@@ -35,6 +35,9 @@ function resolveUrl(url, pathPrefix) {
     if (url.startsWith('uploads/')) {
         return (typeof CONFIG !== 'undefined' ? CONFIG.UPLOADS_BASE.replace(/\/uploads$/, '') : '') + '/' + url;
     }
+    if (url.startsWith('assets/')) {
+        return '/' + url;
+    }
     return (pathPrefix || '') + url;
 }
 
@@ -98,7 +101,7 @@ function updateDOM(data) {
     // 2.5 Our Clients
     if (visibility.ourClientsHidden) {
         const ourClientsSection = document.getElementById('our-clients');
-        // if (ourClientsSection) ourClientsSection.style.display = 'none';
+        if (ourClientsSection) ourClientsSection.style.display = 'none';
     } else if (data.ourClients && Array.isArray(data.ourClients)) {
         renderOurClients(data.ourClients);
     }
