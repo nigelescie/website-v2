@@ -200,7 +200,98 @@ function updateDOM(data) {
         }
     }
 
-    // 12. Nav Spacer Adjustment
+    // 12. Footer brand & contact
+    if (data.footer && data.footer.brand) {
+        const brand = data.footer.brand;
+        if (brand.tagline) {
+            const taglineEl = document.getElementById('footer-tagline');
+            if (taglineEl) taglineEl.textContent = brand.tagline;
+        }
+        if (brand.logoUrl) {
+            const logoEl = document.querySelector('.footer-brand .footer-logo');
+            if (logoEl) logoEl.src = resolveUrl(brand.logoUrl, '');
+        }
+    }
+    if (data.footer && data.footer.contact) {
+        const contact = data.footer.contact;
+        if (contact.email) {
+            const emailEl = document.getElementById('footer-email');
+            if (emailEl) {
+                emailEl.textContent = contact.email;
+                emailEl.href = 'mailto:' + contact.email;
+            }
+        }
+        if (contact.phone) {
+            const phoneEl = document.getElementById('footer-phone');
+            if (phoneEl) {
+                phoneEl.textContent = contact.phone;
+                phoneEl.href = 'tel:' + contact.phone.replace(/[^+\d]/g, '');
+            }
+        }
+    }
+
+    // 12b. Footer connect (social links)
+    if (data.footer && data.footer.connect) {
+        const fbLink = document.getElementById('footer-fb-link');
+        const liLink = document.getElementById('footer-li-link');
+        if (fbLink && data.footer.connect.facebook && data.footer.connect.facebook.url) {
+            fbLink.href = data.footer.connect.facebook.url;
+            fbLink.target = '_blank';
+        }
+        if (liLink && data.footer.connect.linkedin && data.footer.connect.linkedin.url) {
+            liLink.href = data.footer.connect.linkedin.url;
+            liLink.target = '_blank';
+        }
+    }
+
+    // 12c. Legal Pages (Terms & Conditions / Privacy Policy) from footer.legal
+    if (data.footer && data.footer.legal) {
+        const termsContainer = document.querySelector('.terms-container');
+        if (termsContainer) {
+            const currentPage = window.location.pathname;
+            const isTermsPage = currentPage.includes('terms');
+            const isPrivacyPage = currentPage.includes('privacy');
+
+            if (isTermsPage && data.footer.legal.termsAndConditions && data.footer.legal.termsAndConditions.sections && data.footer.legal.termsAndConditions.sections.length > 0) {
+                termsContainer.innerHTML = '';
+                data.footer.legal.termsAndConditions.sections.forEach(section => {
+                    const div = document.createElement('div');
+                    div.className = 'terms-section fade-up visible';
+                    if (section.heading) div.innerHTML += `<h2>${section.heading}</h2>`;
+                    if (section.paragraphs && section.paragraphs.length > 0) {
+                        div.innerHTML += section.paragraphs.map(p => `<p>${p}</p>`).join('');
+                    }
+                    termsContainer.appendChild(div);
+                });
+            } else if (isPrivacyPage && data.footer.legal.privacyPolicy && data.footer.legal.privacyPolicy.sections && data.footer.legal.privacyPolicy.sections.length > 0) {
+                termsContainer.innerHTML = '';
+                data.footer.legal.privacyPolicy.sections.forEach(section => {
+                    const div = document.createElement('div');
+                    div.className = 'terms-section fade-up visible';
+                    if (section.heading) div.innerHTML += `<h2>${section.heading}</h2>`;
+                    if (section.htmlContent) {
+                        div.innerHTML += section.htmlContent;
+                    } else if (section.paragraphs && section.paragraphs.length > 0) {
+                        div.innerHTML += section.paragraphs.map(p => `<p>${p}</p>`).join('');
+                    }
+                    termsContainer.appendChild(div);
+                });
+            }
+        }
+    }
+
+    // 13. NPC Seal page image
+    if (data.footer && data.footer.legal && data.footer.legal.npcSeal) {
+        const npcImg = document.getElementById('npc-seal-page-image');
+        if (npcImg && data.footer.legal.npcSeal.imageUrl) {
+            npcImg.src = resolveUrl(data.footer.legal.npcSeal.imageUrl, '');
+        }
+        if (data.footer.legal.npcSeal.hidden && npcImg) {
+            npcImg.style.display = 'none';
+        }
+    }
+
+    // 13. Nav Spacer Adjustment
     setTimeout(() => {
         const mainElements = Array.from(document.body.children).filter(el => {
             const tag = el.tagName.toLowerCase();

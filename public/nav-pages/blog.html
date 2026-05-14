@@ -643,6 +643,7 @@
 
     <button id="backToTop" class="back-to-top" aria-label="Back to Top">↑</button>
 
+    <script src="../js/config.js"></script>
     <script src="../js/utils.js"></script>
     <script src="../scripts/main-script.js"></script>
         <script src="../scripts/page-transition.js"></script>
@@ -897,7 +898,7 @@
             blogGrid.innerHTML = paginatedPosts.map(post => {
                 const imgPath = resolveUrl(post.image, '');
                 return `
-                <div class="blog-card" id="post-${post.id}" onclick="navigateToBlogPost(${post.id})">
+                <a href="blog-post.html#id=${encodeURIComponent(post.id)}" class="blog-card" id="post-${post.id}" style="text-decoration: none; color: inherit;">
                     <img src="${imgPath}" alt="${post.title}" class="blog-featured-image">
                     <div class="blog-card-content">
                         <div class="blog-card-meta">
@@ -907,12 +908,12 @@
                         <h3 class="blog-card-title">${post.title}</h3>
                         <p class="blog-card-excerpt">${post.excerpt}</p>
                         <div class="blog-card-footer" style="justify-content: flex-end;">
-                            <a href="#" class="blog-read-more" onclick="navigateToBlogPost(${post.id}); return false;">
+                            <span class="blog-read-more">
                                 Read More <span>→</span>
-                            </a>
+                            </span>
                         </div>
                     </div>
-                </div>
+                </a>
             `;
             }).join('');
         }
@@ -978,7 +979,7 @@
 
         // Read blog post or navigate to blog post page
         function navigateToBlogPost(postId) {
-            window.location.href = `blog-post.html?id=${postId}`;
+            window.location.href = `blog-post.html#id=${encodeURIComponent(postId)}`;
         }
 
         // Newsletter subscription
@@ -1070,7 +1071,6 @@
         </div>
     </div>
     <!-- Chat AI Script -->
-    <script src="../js/config.js"></script>
     <script src="../scripts/chat-ai.js"></script>
     <!-- Analytics -->
     <script src="../scripts/analytics.js"></script>

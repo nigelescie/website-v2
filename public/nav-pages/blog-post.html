@@ -4,9 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Wonders of Vietnam: Da Nang Getaway 2025 - Company Blog</title>
-    <meta name="description"
-        content="Join eScience as we look back at our unforgettable 2025 team getaway to Da Nang and Hoi An, Vietnam.">
+    <title>Blog Post - eScience</title>
+    <meta name="description" content="Read the latest from eScience Corporation.">
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/LOGO.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../assets/LOGO.png">
     <link rel="shortcut icon" href="../assets/LOGO.png">
@@ -896,8 +895,8 @@
             Back to Articles
         </a>
         <div class="blog-post-header">
-            <div class="blog-post-category">Events</div>
-            <h1>Wonders of Vietnam: Da Nang Getaway 2025</h1>
+            <div class="blog-post-category"></div>
+            <h1>Loading...</h1>
 
             <div class="blog-post-meta">
                 <div class="blog-post-meta-item">
@@ -908,7 +907,7 @@
                         <line x1="8" y1="2" x2="8" y2="6"></line>
                         <line x1="3" y1="10" x2="21" y2="10"></line>
                     </svg>
-                    <span>February 27, 2025</span>
+                    <span></span>
                 </div>
                 <div class="blog-post-meta-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -916,7 +915,7 @@
                         <circle cx="12" cy="12" r="10"></circle>
                         <polyline points="12 6 12 12 16 14"></polyline>
                     </svg>
-                    <span>6 min read</span>
+                    <span></span>
                 </div>
             </div>
         </div>
@@ -1028,6 +1027,7 @@
 
     <button id="backToTop" class="back-to-top" aria-label="Back to Top">↑</button>
 
+    <script src="../js/config.js"></script>
     <script src="../js/utils.js"></script>
     <script src="../scripts/page-transition.js"></script>
     <script src="../scripts/nav-dropdown.js"></script>
@@ -1049,15 +1049,16 @@
 
         // Navigate to related post
         function navigateToPost(postId) {
-            window.location.href = `blog-post.html?id=${postId}`;
+            window.location.href = `blog-post.html#id=${encodeURIComponent(postId)}`;
         }
 
         async function loadBlogPost() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const postId = urlParams.get('id');
+            // Read id from hash (e.g. blog-post.html#id=123)
+            const hash = window.location.hash.substring(1);
+            const hashParams = new URLSearchParams(hash);
+            const postId = hashParams.get('id');
 
             if (!postId) {
-                // If no ID, default to the Vietnam post (id: 7) instead of redirecting
                 loadPostContent(7);
                 return;
             }
@@ -1068,7 +1069,8 @@
         async function loadPostContent(postId) {
             try {
                 const response = await fetch(CONFIG.API_BASE + '/content');
-                const data = await response.json();
+                const raw = await response.json();
+                const data = parseApiResponse(raw);
 
                 if (data && data.blogPage && data.blogPage.posts) {
                     const allPosts = data.blogPage.posts;
@@ -1232,7 +1234,7 @@
 
                         if (prevPost) {
                             navHtml += `
-                                <a href="blog-post.html?id=${prevPost.id}" class="nav-btn prev-post">
+                                <a href="blog-post.html#id=${encodeURIComponent(prevPost.id)}" class="nav-btn prev-post">
                                     <span class="nav-label">← Previous Article</span>
                                     <span class="nav-title">${prevPost.title}</span>
                                 </a>
@@ -1243,7 +1245,7 @@
 
                         if (nextPost) {
                             navHtml += `
-                                <a href="blog-post.html?id=${nextPost.id}" class="nav-btn next-post">
+                                <a href="blog-post.html#id=${encodeURIComponent(nextPost.id)}" class="nav-btn next-post">
                                     <span class="nav-label">Next Article →</span>
                                     <span class="nav-title">${nextPost.title}</span>
                                 </a>
@@ -1467,7 +1469,6 @@
         </div>
     </div>
     <!-- Chat AI Script -->
-    <script src="../js/config.js"></script>
     <script src="../scripts/chat-ai.js"></script>
     <!-- Analytics -->
     <script src="../scripts/analytics.js"></script>
