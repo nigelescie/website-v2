@@ -117,6 +117,27 @@
             font-weight: 600;
         }
 
+        .privacy-loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #a0a0a0;
+            font-size: 1.1rem;
+        }
+
+        .privacy-loading .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #00d4ff;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         @media (max-width: 768px) {
             .terms-hero {
                 padding: 180px 0 40px !important;
@@ -201,189 +222,14 @@
         <div class="container">
             <div class="terms-container">
 
-                <div class="terms-section fade-up">
-                    <p>Personal data and privacy is important to us. E-SCIENCE is committed to maintain any confidential
-                        information and to strictly limit any disclosure in accordance with local laws. We are at the
-                        forefront of not only implementing but complying with the Data Privacy Act of the Philippines.
-                        This Privacy Policy only applies to www.electroniscience.com.</p>
+                <!-- Loading placeholder shown while fetching privacy policy data -->
+                <div class="privacy-loading" id="privacyLoading">
+                    <div class="spinner"></div>
+                    <p>Loading Privacy Policy...</p>
                 </div>
 
-                <div class="terms-section fade-up">
-                    <h2>Your Rights and Your Preferences</h2>
-                    <p>You may be aware that the Data Privacy Act of 2012, gives certain rights to individuals in
-                        relation to their personal data. Accordingly, we have implemented additional transparency and
-                        access controls stated in this Privacy Policy to help users take advantage of those rights. As
-                        available and except as limited under applicable law, the rights afforded to individuals are:
-                    </p>
-                    <ul style="list-style-type: none; padding-left: 0;">
-                        <li style="position: relative; padding-left: 25px; margin-bottom: 15px;">
-                            <span style="position: absolute; left: 0; color: #00d4ff; font-weight: bold;">•</span>
-                            <strong>Right of Access :</strong> the right to be informed of and request access to the
-                            personal data we process about you;
-                        </li>
-                        <li style="position: relative; padding-left: 25px; margin-bottom: 15px;">
-                            <span style="position: absolute; left: 0; color: #00d4ff; font-weight: bold;">•</span>
-                            <strong>Right to Erasure :</strong> the right to request that we delete your personal data;
-                        </li>
-                        <li style="position: relative; padding-left: 25px; margin-bottom: 15px;">
-                            <span style="position: absolute; left: 0; color: #00d4ff; font-weight: bold;">•</span>
-                            <strong>Right to Restrict :</strong> the right to request that we temporarily or permanently
-                            stop processing all or some of your personal data;
-                        </li>
-                        <li style="position: relative; padding-left: 25px; margin-bottom: 15px;">
-                            <span style="position: absolute; left: 0; color: #00d4ff; font-weight: bold;">•</span>
-                            <strong>Right to Object :</strong>
-                            <ul style="list-style-type: none; padding-left: 0; margin-top: 10px;">
-                                <li style="position: relative; padding-left: 20px; margin-bottom: 5px;">
-                                    <span style="position: absolute; left: 0; color: #00d4ff;">-</span>
-                                    the right, at any time, to object to us processing your personal data on grounds
-                                    relating to your particular situation;
-                                </li>
-                                <li style="position: relative; padding-left: 20px; margin-bottom: 5px;">
-                                    <span style="position: absolute; left: 0; color: #00d4ff;">-</span>
-                                    the right to object to your personal data being processed for direct marketing
-                                    purposes;
-                                </li>
-                            </ul>
-                        </li>
-                        <li style="position: relative; padding-left: 25px; margin-bottom: 15px;">
-                            <span style="position: absolute; left: 0; color: #00d4ff; font-weight: bold;">•</span>
-                            <strong>Right to not be subject to a decision :</strong> based solely on automated decision
-                            making, including profiling, where the decision would have a legal effect on you or produce
-                            a similarly significant effect.
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="terms-section fade-up">
-                    <h2>How do we collect your personal data?</h2>
-                    <p>We collect your personal data in the following ways:</p>
-                    <p>We collect personal data on the CONTACT US portion of this website.</p>
-                </div>
-
-                <div class="terms-section fade-up">
-                    <h2>What personal data do we collect from you?</h2>
-                    <p>We collect the following basic personal information from the web site visitors by voluntarily
-                        typing in their:</p>
-                    <ul>
-                        <li>Full Name</li>
-                        <li>Company</li>
-                        <li>E-mail Address</li>
-                        <li>Contact Number</li>
-                        <li>Designation</li>
-                    </ul>
-                </div>
-
-                <div class="terms-section fade-up">
-                    <h2>What do we use your personal data for?</h2>
-                    <h3>Provide our services</h3>
-                    <p>We use your information to deliver our services. For example:</p>
-                    <ul>
-                        <li>To record client contact information.</li>
-                    </ul>
-
-                    <h3>Measure performance</h3>
-                    <p>We use data for analytics and measurement to understand how our services are used.</p>
-
-                    <h3>Communicate with you</h3>
-                    <ul>
-                        <li>We also use your information to send you updates, notices, announcements, and additional
-                            information related to the Services;</li>
-                        <li>We may also use your information to conduct surveys and questionnaires; And if you contact
-                            E-Science Corporation personnel, we may keep a record of your request in order to help solve
-                            any issues you might be facing.</li>
-                    </ul>
-                    <p>The Services may include an internal messaging system which provides you the ability to send and
-                        receive messages to and from other users, and to receive marketing messages from us. You hereby
-                        agree that we may use the internal messaging system for the purpose of informing you regarding
-                        products or services, which may interest you.</p>
-                </div>
-
-                <div class="terms-section fade-up">
-                    <h2>Sharing your personal data</h2>
-                    <p>E-Science Corporation does not sell, rent or lease your personal information to third parties
-                        without consent.</p>
-                    <p>E-Science Corporation will not share your personal information with others, without your
-                        permission, except for the following purposes and to the extent necessary in E-Science’s
-                        good-faith discretion:</p>
-                    <ul>
-                        <li>As necessary for the facilitation and operation of the Services;</li>
-                        <li>If E-Science Corporation reasonably believes that you have breached the Terms of Use or is
-                            investigating potential breach of the Terms of Use, or believes that you abused your rights
-                            to use the Services, or performed any act or omission that E-Science Corporation reasonably
-                            believes to be violating any applicable law, rules, or regulations. E-Science Corporation
-                            may share your information in these cases, with law enforcement agencies and other competent
-                            authorities and with any third party as may be required to handle any result of your
-                            wrongdoing;</li>
-                        <li>If E-Science Corporation is required, or reasonably believes that it is required by law to
-                            share or disclose your information;</li>
-                        <li>In any case of dispute, or legal proceeding of any kind between you and E-Science
-                            Corporation, or between you and other users with respect to, or in relation with the
-                            Services;</li>
-                        <li>In any case where E-Science Corporation reasonably believes that sharing information is
-                            necessary to protect against harm to the rights, property or safety of E-Science
-                            Corporation, our users, or the public as required or permitted by law, including to prevent
-                            imminent physical damage or damage to property;</li>
-                        <li>To detect, prevent, or otherwise address fraud, security, or technical issues;</li>
-                        <li>If E-Science Corporation organizes the operation of the Services within a different
-                            framework, or through another legal structure or entity, or if E-Science Corporation is
-                            acquired by, or merged into or with another entity, or if E-Science Corporation enters
-                            bankruptcy, provided however, that those entities agree to be bound by the provisions of
-                            this Privacy Policy, with respective changes taken into consideration;</li>
-                        <li>To collect, store, hold and manage your personal information through cloud based or hosting
-                            services or a third party or a party affiliated or connected to E-Science Corporation, as
-                            reasonable for business purposes, which may be located potentially countries outside of your
-                            jurisdiction;</li>
-                        <li>We may also have selected measurement services which help us understand how our users
-                            interaction with our ads and in order to measure E-Science Corporation own marketing
-                            efforts, by using and sharing the device’s identifier.</li>
-                        <li>Personal information may also be shared with E-Science Corporation trusted partners and
-                            service providers to process it for us, based on our instructions and in compliance with
-                            this policy and any other appropriate confidentiality and security measures.</li>
-                        <li>Anonymized data removes the data subject’s personally identifiable information.</li>
-                    </ul>
-                </div>
-
-                <div class="terms-section fade-up">
-                    <h2>Data retention and deletion</h2>
-                    <p>We keep your personal data only as long as necessary to provide you with the E-Science
-                        Corporation Service and for legitimate and essential business purposes, such as making
-                        data-driven business decisions about new features and offerings, complying with our legal
-                        obligations, and resolving disputes. We keep some of your personal data for as long as you are a
-                        user of the E-Science Corporation platform. Transactional records shall be maintained and safely
-                        stored for 365 Days from the date of transaction except where specific contract clause and/or
-                        regulations require a different retention period.</p>
-                </div>
-
-                <div class="terms-section fade-up">
-                    <h2>Keeping your data safe</h2>
-                    <p>We are committed to protecting our users’ personal data. We implement appropriate technical and
-                        organizational measures to help protect the security of your personal data; however, please note
-                        that no system is ever completely secure. We have implemented various policies including
-                        anonymization, encryption, access, and retention policies to guard against unauthorized access
-                        and unnecessary retention of personal data in our systems.</p>
-                    <p>Your password protects your user account, so we encourage you to use a unique and strong
-                        password, limit access to your computer and browser, and log out.</p>
-                </div>
-
-                <div class="terms-section fade-up">
-                    <h2>Changes to this Privacy Policy</h2>
-                    <p>This Privacy Notice is in effect as of April 30, 2019 and will continue to remain in effect
-                        unless otherwise directed by E-Science’s Data Protection Officer.</p>
-                    <p>This notice may be modified by the Acabar, and modifications to our Privacy Policy may be
-                        released via official issuances, to which you will be duly notified of by virtue of the online
-                        registration details you have provided to us.</p>
-                    <p>If significant changes to this Privacy Policy will affect your personal information, we shall
-                        notify you through the email address you have provided us.</p>
-                </div>
-
-                <div class="terms-section fade-up">
-                    <h2>How to contact us?</h2>
-                    <p>You have the right to ask for a copy of any personal information we hold about you, as well as to
-                        ask for it to be corrected if you think it is wrong. To do so, please contact <a
-                            href="mailto:privacy@electronicscience.com"
-                            style="text-decoration: none; color: #00d4ff;">privacy@electronicscience.com</a></p>
-                </div>
+                <!-- Dynamic content injected here once host responds -->
+                <div id="privacyContent" style="display: none;"></div>
 
             </div>
         </div>
@@ -470,6 +316,7 @@
 
     <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
 
+    <script src="../js/config.js"></script>
     <script src="../js/utils.js"></script>
     <script src="../scripts/main-script.js"></script>
     <script src="../scripts/nav-dropdown.js"></script>

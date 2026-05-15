@@ -244,38 +244,38 @@ function updateDOM(data) {
         }
     }
 
-    // 12c. Legal Pages (Terms & Conditions / Privacy Policy) from footer.legal
-    if (data.footer && data.footer.legal) {
+    // 12c. Legal Pages (Terms & Conditions / Privacy Policy) from legalPages
+    if (data.legalPages) {
         const termsContainer = document.querySelector('.terms-container');
         if (termsContainer) {
             const currentPage = window.location.pathname;
             const isTermsPage = currentPage.includes('terms');
             const isPrivacyPage = currentPage.includes('privacy');
+            const pageData = isTermsPage ? data.legalPages.terms : isPrivacyPage ? data.legalPages.privacy : null;
 
-            if (isTermsPage && data.footer.legal.termsAndConditions && data.footer.legal.termsAndConditions.sections && data.footer.legal.termsAndConditions.sections.length > 0) {
-                termsContainer.innerHTML = '';
-                data.footer.legal.termsAndConditions.sections.forEach(section => {
+            if (pageData && pageData.sections && pageData.sections.length > 0) {
+                // Hide loading placeholder, show content container
+                const loadingEl = document.getElementById('termsLoading') || document.getElementById('privacyLoading');
+                const contentEl = document.getElementById('termsContent') || document.getElementById('privacyContent');
+                if (loadingEl) loadingEl.style.display = 'none';
+                const target = contentEl || termsContainer;
+                if (contentEl) contentEl.style.display = '';
+                target.innerHTML = '';
+                pageData.sections.forEach(section => {
                     const div = document.createElement('div');
-                    div.className = 'terms-section fade-up visible';
-                    if (section.heading) div.innerHTML += `<h2>${section.heading}</h2>`;
-                    if (section.paragraphs && section.paragraphs.length > 0) {
-                        div.innerHTML += section.paragraphs.map(p => `<p>${p}</p>`).join('');
+                    div.className = 'terms-section fade-up';
+                    if (section.title) div.innerHTML += `<h2>${section.title}</h2>`;
+                    if (section.content) {
+                        div.innerHTML += section.content;
                     }
-                    termsContainer.appendChild(div);
+                    target.appendChild(div);
                 });
-            } else if (isPrivacyPage && data.footer.legal.privacyPolicy && data.footer.legal.privacyPolicy.sections && data.footer.legal.privacyPolicy.sections.length > 0) {
-                termsContainer.innerHTML = '';
-                data.footer.legal.privacyPolicy.sections.forEach(section => {
-                    const div = document.createElement('div');
-                    div.className = 'terms-section fade-up visible';
-                    if (section.heading) div.innerHTML += `<h2>${section.heading}</h2>`;
-                    if (section.htmlContent) {
-                        div.innerHTML += section.htmlContent;
-                    } else if (section.paragraphs && section.paragraphs.length > 0) {
-                        div.innerHTML += section.paragraphs.map(p => `<p>${p}</p>`).join('');
-                    }
-                    termsContainer.appendChild(div);
-                });
+                // Re-observe dynamically added fade-up elements
+                if (window.IntersectionObserver && typeof observer !== 'undefined' && observer) {
+                    target.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+                } else {
+                    target.querySelectorAll('.fade-up').forEach(el => el.classList.add('visible'));
+                }
             }
         }
     }

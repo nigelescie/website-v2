@@ -628,10 +628,6 @@ document.addEventListener('DOMContentLoaded', () => {
             renderFooterBrand();
         } else if (tabId === 'footer-contact') {
             renderFooterContact();
-        } else if (tabId === 'footer-terms') {
-            renderFooterTermsAndConditions();
-        } else if (tabId === 'footer-privacy') {
-            renderFooterPrivacyPolicy();
         } else if (tabId === 'footer-npc') {
             renderFooterNPCSeal();
         } else if (tabId === 'footer-connect') {
@@ -897,8 +893,6 @@ async function initDashboard() {
             if (serverDataParsed.footer.contact) appData.footer.contact = { ...defaults.footer.contact, ...serverDataParsed.footer.contact };
             if (serverDataParsed.footer.legal) {
                 appData.footer.legal = { ...defaults.footer.legal, ...serverDataParsed.footer.legal };
-                if (serverDataParsed.footer.legal.termsAndConditions) appData.footer.legal.termsAndConditions = { ...defaults.footer.legal.termsAndConditions, ...serverDataParsed.footer.legal.termsAndConditions };
-                if (serverDataParsed.footer.legal.privacyPolicy) appData.footer.legal.privacyPolicy = { ...defaults.footer.legal.privacyPolicy, ...serverDataParsed.footer.legal.privacyPolicy };
                 if (serverDataParsed.footer.legal.npcSeal) appData.footer.legal.npcSeal = { ...defaults.footer.legal.npcSeal, ...serverDataParsed.footer.legal.npcSeal };
             }
             if (serverDataParsed.footer.connect) appData.footer.connect = { ...defaults.footer.connect, ...serverDataParsed.footer.connect };
@@ -1027,14 +1021,6 @@ function getDefaultAppData() {
                 phone: "02-8850-1324"
             },
             legal: {
-                termsAndConditions: {
-                    title: "Terms and Conditions",
-                    content: ""
-                },
-                privacyPolicy: {
-                    title: "Privacy Policy",
-                    content: ""
-                },
                 npcSeal: {
                     title: "NPC Seal",
                     content: "",
@@ -1502,8 +1488,6 @@ function renderForms() {
     // 14. Footer
     renderFooterBrand();
     renderFooterContact();
-    renderFooterTermsAndConditions();
-    renderFooterPrivacyPolicy();
     renderFooterNPCSeal();
     renderFooterConnect();
 }
@@ -5987,78 +5971,6 @@ function updateFooterContact(field, value) {
     if (!appData.footer.contact) appData.footer.contact = {};
     appData.footer.contact[field] = value;
     localStorage.setItem('escience_footer_contact', JSON.stringify(appData.footer.contact));
-}
-
-function renderFooterTermsAndConditions() {
-    const container = document.getElementById('footer-terms-editor');
-    if (!container) return;
-
-    if (!appData.footer) {
-        appData.footer = getDefaultAppData().footer;
-    }
-
-    const terms = appData.footer.legal?.termsAndConditions || {};
-
-    container.innerHTML = `
-        <div class="item-card premium-card ${terms.hidden ? 'hidden-item' : ''}">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
-                <h4 style="margin:0;">Terms and Conditions ${terms.hidden ? '<span style="color:#e67e22; font-size:0.8rem; margin-left:10px;">(Hidden)</span>' : ''}</h4>
-                <button type="button" onclick="toggleSectionVisibility('footer.legal.termsAndConditions', 'renderFooterTermsAndConditions', 'footer-terms-editor')" style="background:${terms.hidden ? '#27ae60' : '#607d8b'}; color:white; padding:4px 8px; border:none; border-radius:4px; cursor:pointer; font-size:0.8rem;">
-                    ${terms.hidden ? 'Show Section' : 'Hide Section'}
-                </button>
-            </div>
-            <div class="form-group">
-                <label>Content</label>
-                <textarea id="footer-terms-content" rows="8" 
-                          onchange="updateFooterTermsAndConditions('content', this.value)"
-                          placeholder="Enter the terms and conditions content...">${terms.content || ''}</textarea>
-            </div>
-        </div>
-    `;
-}
-
-function updateFooterTermsAndConditions(field, value) {
-    if (!appData.footer) appData.footer = {};
-    if (!appData.footer.legal) appData.footer.legal = {};
-    if (!appData.footer.legal.termsAndConditions) appData.footer.legal.termsAndConditions = {};
-    appData.footer.legal.termsAndConditions[field] = value;
-    localStorage.setItem('escience_footer_terms', JSON.stringify(appData.footer.legal.termsAndConditions));
-}
-
-function renderFooterPrivacyPolicy() {
-    const container = document.getElementById('footer-privacy-editor');
-    if (!container) return;
-
-    if (!appData.footer) {
-        appData.footer = getDefaultAppData().footer;
-    }
-
-    const privacy = appData.footer.legal?.privacyPolicy || {};
-
-    container.innerHTML = `
-        <div class="item-card premium-card ${privacy.hidden ? 'hidden-item' : ''}">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
-                <h4 style="margin:0;">Privacy Policy ${privacy.hidden ? '<span style="color:#e67e22; font-size:0.8rem; margin-left:10px;">(Hidden)</span>' : ''}</h4>
-                <button type="button" onclick="toggleSectionVisibility('footer.legal.privacyPolicy', 'renderFooterPrivacyPolicy', 'footer-privacy-editor')" style="background:${privacy.hidden ? '#27ae60' : '#607d8b'}; color:white; padding:4px 8px; border:none; border-radius:4px; cursor:pointer; font-size:0.8rem;">
-                    ${privacy.hidden ? 'Show Section' : 'Hide Section'}
-                </button>
-            </div>
-            <div class="form-group">
-                <label>Content</label>
-                <textarea id="footer-privacy-content" rows="8" 
-                          onchange="updateFooterPrivacyPolicy('content', this.value)"
-                          placeholder="Enter the privacy policy content...">${privacy.content || ''}</textarea>
-            </div>
-        </div>
-    `;
-}
-
-function updateFooterPrivacyPolicy(field, value) {
-    if (!appData.footer) appData.footer = {};
-    if (!appData.footer.legal) appData.footer.legal = {};
-    if (!appData.footer.legal.privacyPolicy) appData.footer.legal.privacyPolicy = {};
-    appData.footer.legal.privacyPolicy[field] = value;
-    localStorage.setItem('escience_footer_privacy', JSON.stringify(appData.footer.legal.privacyPolicy));
 }
 
 function renderFooterNPCSeal() {
