@@ -5891,9 +5891,9 @@ function renderFooterBrand() {
         <div class="item-card premium-card ${brand.hidden ? 'hidden-item' : ''}">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
                 <h4 style="margin:0;">Footer Brand ${brand.hidden ? '<span style="color:#e67e22; font-size:0.8rem; margin-left:10px;">(Hidden)</span>' : ''}</h4>
-                <button type="button" onclick="toggleSectionVisibility('footer.brand', 'renderFooterBrand', 'footer-brand-editor')" style="background:${brand.hidden ? '#27ae60' : '#607d8b'}; color:white; padding:4px 8px; border:none; border-radius:4px; cursor:pointer; font-size:0.8rem;">
+                <!--<button type="button" onclick="toggleSectionVisibility('footer.brand', 'renderFooterBrand', 'footer-brand-editor')" style="background:${brand.hidden ? '#27ae60' : '#607d8b'}; color:white; padding:4px 8px; border:none; border-radius:4px; cursor:pointer; font-size:0.8rem;">
                     ${brand.hidden ? 'Show Section' : 'Hide Section'}
-                </button>
+                </button> -->
             </div>
             <div class="form-group">
                 <label>Brand Logo</label>
@@ -5946,9 +5946,9 @@ function renderFooterContact() {
         <div class="item-card premium-card ${contact.hidden ? 'hidden-item' : ''}">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
                 <h4 style="margin:0;">Contact Information ${contact.hidden ? '<span style="color:#e67e22; font-size:0.8rem; margin-left:10px;">(Hidden)</span>' : ''}</h4>
-                <button type="button" onclick="toggleSectionVisibility('footer.contact', 'renderFooterContact', 'footer-contact-editor')" style="background:${contact.hidden ? '#27ae60' : '#607d8b'}; color:white; padding:4px 8px; border:none; border-radius:4px; cursor:pointer; font-size:0.8rem;">
+                <!-- <button type="button" onclick="toggleSectionVisibility('footer.contact', 'renderFooterContact', 'footer-contact-editor')" style="background:${contact.hidden ? '#27ae60' : '#607d8b'}; color:white; padding:4px 8px; border:none; border-radius:4px; cursor:pointer; font-size:0.8rem;">
                     ${contact.hidden ? 'Show Section' : 'Hide Section'}
-                </button>
+                </button> -->
             </div>
             <div class="form-group">
                 <label>Email Address</label>
@@ -5987,9 +5987,9 @@ function renderFooterNPCSeal() {
         <div class="item-card premium-card ${npc.hidden ? 'hidden-item' : ''}">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
                 <h4 style="margin:0;">NPC Seal Image ${npc.hidden ? '<span style="color:#e67e22; font-size:0.8rem; margin-left:10px;">(Hidden)</span>' : ''}</h4>
-                <button type="button" onclick="toggleSectionVisibility('footer.legal.npcSeal', 'renderFooterNPCSeal', 'footer-npc-editor')" style="background:${npc.hidden ? '#27ae60' : '#607d8b'}; color:white; padding:4px 8px; border:none; border-radius:4px; cursor:pointer; font-size:0.8rem;">
+                <!-- <button type="button" onclick="toggleSectionVisibility('footer.legal.npcSeal', 'renderFooterNPCSeal', 'footer-npc-editor')" style="background:${npc.hidden ? '#27ae60' : '#607d8b'}; color:white; padding:4px 8px; border:none; border-radius:4px; cursor:pointer; font-size:0.8rem;">
                     ${npc.hidden ? 'Show Section' : 'Hide Section'}
-                </button>
+                </button> -->
             </div>
             <div class="form-group">
                 <label>Upload Image</label>
@@ -6056,9 +6056,9 @@ function renderFooterConnect() {
         <div class="item-card premium-card ${connect.hidden ? 'hidden-item' : ''}">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
                 <h4 style="margin:0;">Social Media Links ${connect.hidden ? '<span style="color:#e67e22; font-size:0.8rem; margin-left:10px;">(Hidden)</span>' : ''}</h4>
-                <button type="button" onclick="toggleSectionVisibility('footer.connect', 'renderFooterConnect', 'footer-connect-editor')" style="background:${connect.hidden ? '#27ae60' : '#607d8b'}; color:white; padding:4px 8px; border:none; border-radius:4px; cursor:pointer; font-size:0.8rem;">
+                <!-- <button type="button" onclick="toggleSectionVisibility('footer.connect', 'renderFooterConnect', 'footer-connect-editor')" style="background:${connect.hidden ? '#27ae60' : '#607d8b'}; color:white; padding:4px 8px; border:none; border-radius:4px; cursor:pointer; font-size:0.8rem;">
                     ${connect.hidden ? 'Show Section' : 'Hide Section'}
-                </button>
+                </button> -->
             </div>
             
             <div style="margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px solid #eee;">
