@@ -8,6 +8,19 @@
     }
 })();
 
+// Validate image file type (only JPEG, PNG, GIF accepted)
+function isValidImageFile(file) {
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+    return validTypes.includes(file.type);
+}
+
+// Validate media file type (images and videos)
+function isValidMediaFile(file) {
+    const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+    const validVideoTypes = ['video/mp4'];
+    return validImageTypes.includes(file.type) || validVideoTypes.includes(file.type);
+}
+
 // Resolve asset path: uploads go to CDN, static assets stay relative
 function assetUrl(path) {
     if (!path) return '';
@@ -1159,6 +1172,11 @@ window.toggleOurClientVisibility = function(index) {
 window.uploadOurClientLogo = async function(inputEl, index) {
     const file = inputEl.files[0];
     if (!file) return;
+    if (!isValidImageFile(file)) {
+        alert('Only JPEG, PNG, and GIF image files are accepted. Please convert your image before uploading.');
+        inputEl.value = '';
+        return;
+    }
     try {
         const filePath = await processAndUpload(file, 'our-clients');
         appData.ourClients[index].logo = filePath;
@@ -2385,6 +2403,11 @@ function selectIconForDepartment(iconPath) {
 window.uploadProductVideo = async function (input, sIndex, pIndex) {
     const file = input.files[0];
     if (!file) return;
+    if (file.type !== 'video/mp4') {
+        alert('Only MP4 video files are supported. Please convert your video to MP4 format before uploading.');
+        input.value = '';
+        return;
+    }
     try {
         const filePath = await uploadFileToS3(file, 'products');
         appData.productsPage.sections[sIndex].products[pIndex].video = filePath;
@@ -2411,6 +2434,11 @@ window.uploadProductVideo = async function (input, sIndex, pIndex) {
 window.uploadVideo = async function (input, path, index, field) {
     const file = input.files[0];
     if (!file) return;
+    if (file.type !== 'video/mp4') {
+        alert('Only MP4 video files are supported. Please convert your video to MP4 format before uploading.');
+        input.value = '';
+        return;
+    }
     try {
         const filePath = await uploadFileToS3(file, 'videos');
         const parts = path.split('.');
@@ -2435,6 +2463,11 @@ window.uploadVideo = async function (input, path, index, field) {
 window.uploadProductImage = async function (input, sIndex, pIndex, field = 'image') {
     const file = input.files[0];
     if (!file) return;
+    if (!isValidImageFile(file)) {
+        alert('Only JPEG, PNG, and GIF image files are accepted. Please convert your image before uploading.');
+        input.value = '';
+        return;
+    }
     try {
         const filePath = await processAndUpload(file, 'products');
         appData.productsPage.sections[sIndex].products[pIndex][field] = filePath;
@@ -2695,6 +2728,11 @@ window.updateArrayField = function (path, index, field, value) {
 window.uploadImage = async function (input, arrayName, index, field, reRenderFnName) {
     const file = input.files[0];
     if (!file) return;
+    if (!isValidImageFile(file)) {
+        alert('Only JPEG, PNG, and GIF image files are accepted. Please convert your image before uploading.');
+        input.value = '';
+        return;
+    }
     try {
         const folderMap = {
             'hero.slides': 'hero',
@@ -3114,7 +3152,7 @@ function renderFamilyCultureSection(container) {
             </div>
             <div class="form-group">
                 <label>Visual Card Image</label>
-                <input type="file" id="family-culture-image" accept="image/*,.heic" 
+                <input type="file" id="family-culture-image" accept="image/*" 
                        onchange="handleFamilyCultureImageUpload(this)">
                 <div class="image-preview" style="margin-top: 10px;">
                     ${appData.familyCulture.imageUrl ? `<img src="${assetUrl(appData.familyCulture.imageUrl)}" alt="Current image" style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">` : '<p>No image uploaded</p>'}
@@ -3134,6 +3172,11 @@ function updateFamilyCultureData(field, value) {
 window.handleFamilyCultureImageUpload = async function (input) {
     const file = input.files[0];
     if (!file) return;
+    if (!isValidImageFile(file)) {
+        alert('Only JPEG, PNG, and GIF image files are accepted. Please convert your image before uploading.');
+        input.value = '';
+        return;
+    }
     try {
         const filePath = await processAndUpload(file, 'family-culture');
         updateFamilyCultureData('imageUrl', filePath);
@@ -3177,7 +3220,7 @@ function renderVisionSection(container) {
             </div>
             <div class="form-group">
                 <label>Visual Card Image</label>
-                <input type="file" id="vision-image" accept="image/*,.heic" 
+                <input type="file" id="vision-image" accept="image/*" 
                        onchange="handleVisionImageUpload(this)">
                 <div class="image-preview" style="margin-top: 10px;">
                     ${appData.vision.imageUrl ? `<img src="${assetUrl(appData.vision.imageUrl)}" alt="Current image" style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">` : '<p>No image uploaded</p>'}
@@ -3197,6 +3240,11 @@ function updateVisionData(field, value) {
 window.handleVisionImageUpload = async function (input) {
     const file = input.files[0];
     if (!file) return;
+    if (!isValidImageFile(file)) {
+        alert('Only JPEG, PNG, and GIF image files are accepted. Please convert your image before uploading.');
+        input.value = '';
+        return;
+    }
     try {
         const filePath = await processAndUpload(file, 'vision');
         updateVisionData('imageUrl', filePath);
@@ -3241,7 +3289,7 @@ function renderMissionSection(container) {
             </div>
             <div class="form-group">
                 <label>Visual Card Image</label>
-                <input type="file" id="mission-image" accept="image/*,.heic" 
+                <input type="file" id="mission-image" accept="image/*" 
                        onchange="handleMissionImageUpload(this)">
                 <div class="image-preview" style="margin-top: 10px;">
                     ${appData.mission.imageUrl ? `<img src="${assetUrl(appData.mission.imageUrl)}" alt="Current image" style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">` : '<p>No image uploaded</p>'}
@@ -3261,6 +3309,11 @@ function updateMissionData(field, value) {
 window.handleMissionImageUpload = async function (input) {
     const file = input.files[0];
     if (!file) return;
+    if (!isValidImageFile(file)) {
+        alert('Only JPEG, PNG, and GIF image files are accepted. Please convert your image before uploading.');
+        input.value = '';
+        return;
+    }
     try {
         const filePath = await processAndUpload(file, 'mission');
         updateMissionData('imageUrl', filePath);
@@ -3342,7 +3395,7 @@ function renderLeaderItems() {
             
             <div class="form-group">
                 <label>Profile Image</label>
-                <input type="file" accept="image/*,.heic" onchange="handleLeaderImageUpload(this, ${index})">
+                <input type="file" accept="image/*" onchange="handleLeaderImageUpload(this, ${index})">
                 <div class="image-preview" style="margin-top: 10px;">
                     ${leader.image ? `<img src="${assetUrl(leader.image)}" alt="Profile" style="max-width: 150px; max-height: 150px; border-radius: 4px; border: 1px solid #ddd;">` : '<p>No image uploaded</p>'}
                 </div>
@@ -3383,6 +3436,11 @@ window.updateLeaderData = function (index, field, value) {
 window.handleLeaderImageUpload = async function (input, index) {
     const file = input.files[0];
     if (!file) return;
+    if (!isValidImageFile(file)) {
+        alert('Only JPEG, PNG, and GIF image files are accepted. Please convert your image before uploading.');
+        input.value = '';
+        return;
+    }
     try {
         const filePath = await processAndUpload(file, 'leaders');
         appData.leaders.list[index].image = filePath;
@@ -3468,7 +3526,7 @@ function renderPerkItems() {
             
             <div class="form-group">
                 <label>Benefit Image</label>
-                <input type="file" accept="image/*,.heic" onchange="handlePerkImageUpload(this, ${index})">
+                <input type="file" accept="image/*" onchange="handlePerkImageUpload(this, ${index})">
                 <div class="image-preview" style="margin-top: 10px;">
                     ${perk.image ? `<img src="${assetUrl(perk.image)}" alt="Perk Image" style="max-width: 150px; max-height: 150px; border-radius: 4px; border: 1px solid #ddd;">` : '<p>No image uploaded</p>'}
                 </div>
@@ -3502,6 +3560,11 @@ window.updatePerkValue = function (index, field, value) {
 window.handlePerkImageUpload = async function (input, index) {
     const file = input.files[0];
     if (!file) return;
+    if (!isValidImageFile(file)) {
+        alert('Only JPEG, PNG, and GIF image files are accepted. Please convert your image before uploading.');
+        input.value = '';
+        return;
+    }
     try {
         const filePath = await processAndUpload(file, 'perks');
         appData.perks.list[index].image = filePath;
@@ -3623,7 +3686,7 @@ window.renderIntroSlides = function () {
             </div>
             <div class="form-group">
                 <label>Image</label>
-                <input type="file" onchange="uploadImage(this, 'careersPage.intro.slides', ${index}, 'image', 'renderIntroSlides')">
+                <input type="file" accept="image/*,video/*" onchange="uploadImage(this, 'careersPage.intro.slides', ${index}, 'image', 'renderIntroSlides')">
                 <input type="text" value="${slide.image || ''}" placeholder="Image path" readonly style="margin-top:5px; background:rgba(0,0,0,0.1);">
                 <div class="image-preview" style="margin-top:10px;">
                     ${slide.image ? `<img src="${assetUrl(slide.image)}" style="max-width:150px; border-radius:8px; border:1px solid #ddd;">` : ''}
@@ -3726,7 +3789,7 @@ function renderWhyJoinCards() {
                     `}).join('')}
                 </div>
                 
-                <input type="file" id="gallery-upload-${index}" style="display: none;" accept="image/*,.heic,video/mp4,video/webm,video/ogg" onchange="uploadWhyJoinGalleryImage(this, ${index})">
+                <input type="file" id="gallery-upload-${index}" style="display: none;" accept="image/*,video/*" onchange="uploadWhyJoinGalleryImage(this, ${index})">
                 <button onclick="document.getElementById('gallery-upload-${index}').click()" style="background: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.9rem;">+ Add Gallery Media</button>
             </div>
         `;
@@ -3748,6 +3811,11 @@ window.deleteWhyJoinCard = function (index) {
 window.uploadWhyJoinGalleryImage = async function (input, cardIndex) {
     const file = input.files[0];
     if (!file) return;
+    if (!isValidMediaFile(file)) {
+        alert('Only JPEG, PNG, and GIF images, and MP4 videos are accepted. Please convert your file to a supported format before uploading.');
+        input.value = '';
+        return;
+    }
     try {
         const filePath = await processAndUpload(file, 'why-join');
         if (!appData.careersPage.whyJoin.cards[cardIndex].galleryImages) {
@@ -3881,7 +3949,7 @@ function renderOfficeCultureCards() {
                     `}).join('')}
                 </div>
                 
-                <input type="file" id="office-gallery-upload-${index}" style="display: none;" accept="image/*,.heic,video/mp4,video/webm,video/ogg" onchange="uploadOfficeCultureGalleryImage(this, ${index})">
+                <input type="file" id="office-gallery-upload-${index}" style="display: none;" accept="image/*,video/*" onchange="uploadOfficeCultureGalleryImage(this, ${index})">
                 <button onclick="document.getElementById('office-gallery-upload-${index}').click()" style="background: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.9rem;">+ Add Gallery Media</button>
             </div>
         `;
@@ -3903,6 +3971,11 @@ window.deleteOfficeCultureCard = function (index) {
 window.uploadOfficeCultureGalleryImage = async function (input, cardIndex) {
     const file = input.files[0];
     if (!file) return;
+    if (!isValidMediaFile(file)) {
+        alert('Only JPEG, PNG, and GIF images, and MP4 videos are accepted. Please convert your file to a supported format before uploading.');
+        input.value = '';
+        return;
+    }
     try {
         const filePath = await processAndUpload(file, 'office-culture');
         if (!appData.careersPage.officeCulture.cards[cardIndex].galleryImages) {
@@ -4609,7 +4682,7 @@ function renderBlogPostsListInternal(postsWithIndex) {
                 </div>
                 <div class="form-group">
                     <label>Featured Image (Hero)</label>
-                    <input type="file" accept="image/*,.heic" onchange="handleBlogImageUpload(this, ${index})" style="font-size:0.8rem;">
+                    <input type="file" accept="image/*" onchange="handleBlogImageUpload(this, ${index})" style="font-size:0.8rem;">
                     <input type="text" value="${post.image || ''}" readonly style="background:#f5f5f5; margin-top:5px; border:1px solid #ccc; padding:0.4rem; color:#666; width:100%;" placeholder="Image Path">
                     ${post.image ? `<img src="${assetUrl(post.image)}" class="preview-img" style="margin-top:10px;">` : ''}
                 </div>
@@ -4706,7 +4779,7 @@ function renderBlogBlocks(postIndex) {
             contentHtml = `
                 <div class="form-group">
                     <label>Upload Images (Multiple)</label>
-                    <input type="file" accept="image/*,.heic" multiple onchange="handleMultipleBlockImageUpload(this, ${postIndex}, ${blockIndex})" style="margin-bottom: 15px;">
+                    <input type="file" accept="image/*" multiple onchange="handleMultipleBlockImageUpload(this, ${postIndex}, ${blockIndex})" style="margin-bottom: 15px;">
                 </div>
                 <div id="gallery-images-${postIndex}-${blockIndex}" class="gallery-images-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
                     ${imagesHtml}
@@ -4733,7 +4806,7 @@ function renderBlogBlocks(postIndex) {
                          <input type="text" value="${videoUrl}" onchange="updateBlockData(${postIndex}, ${blockIndex}, 'url', this.value); renderBlogBlocks(${postIndex})" placeholder="https://www.youtube.com/watch?v=..." style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
                          <label class="btn-upload" style="cursor: pointer; background: #eee; padding: 8px 12px; border-radius: 4px; border: 1px solid #ddd; font-size: 0.9rem; white-space: nowrap;">
                             Upload Video
-                            <input type="file" accept="video/*,.mp4,.mov,.webm,.ogg" onchange="window.handleBlockVideoUpload(this, ${postIndex}, ${blockIndex})" style="display: none;">
+                            <input type="file" accept="video/*" onchange="window.handleBlockVideoUpload(this, ${postIndex}, ${blockIndex})" style="display: none;">
                         </label>
                     </div>
                 </div>
@@ -4942,6 +5015,13 @@ window.handleBlockImageUpload = async function (input, postIndex, blockIndex) {
 window.handleMultipleBlockImageUpload = async function (input, postIndex, blockIndex) {
     const files = input.files;
     if (!files || files.length === 0) return;
+    for (let i = 0; i < files.length; i++) {
+        if (!isValidImageFile(files[i])) {
+            alert('Only JPEG, PNG, and GIF image files are accepted. Please convert your images before uploading.');
+            input.value = '';
+            return;
+        }
+    }
     let hasError = false;
     for (let i = 0; i < files.length; i++) {
         try {
@@ -5109,6 +5189,11 @@ window.removeBlogPost = function (index) {
 window.handleBlogImageUpload = async function (input, index) {
     const file = input.files[0];
     if (!file) return;
+    if (!isValidImageFile(file)) {
+        alert('Only JPEG, PNG, and GIF image files are accepted. Please convert your image before uploading.');
+        input.value = '';
+        return;
+    }
     try {
         const filePath = await processAndUpload(file, 'blog');
         appData.blogPage.posts[index].image = filePath;
@@ -5620,8 +5705,9 @@ function getEmbedUrl(url) {
 window.handleBlockVideoUpload = async function (input, postIndex, blockIndex) {
     const file = input.files[0];
     if (!file) return;
-    if (!file.type.startsWith('video/') && !file.name.match(/\.(mp4|mov|webm|ogg|mkv)$/i)) {
-        alert('Please select a valid video file.');
+    if (file.type !== 'video/mp4') {
+        alert('Only MP4 video files are supported. Please convert your video to MP4 format before uploading.');
+        input.value = '';
         return;
     }
     const label = input.closest('label');
@@ -5897,7 +5983,7 @@ function renderFooterBrand() {
             </div>
             <div class="form-group">
                 <label>Brand Logo</label>
-                <input type="file" id="footer-brand-logo" accept="image/*,.heic" 
+                <input type="file" id="footer-brand-logo" accept="image/*" 
                        onchange="handleFooterBrandLogoUpload(this)">
                 <div class="image-preview" style="margin-top: 10px;">
                     ${brand.logoUrl ? `<img src="${assetUrl(brand.logoUrl)}" alt="Brand Logo" style="max-width: 200px; max-height: 100px; border: 1px solid #ddd; border-radius: 4px;">` : '<p>No logo uploaded</p>'}
@@ -5922,6 +6008,11 @@ function updateFooterBrand(field, value) {
 
 async function handleFooterBrandLogoUpload(input) {
     if (!input.files[0]) return;
+    if (!isValidImageFile(input.files[0])) {
+        alert('Only JPEG, PNG, and GIF image files are accepted. Please convert your image before uploading.');
+        input.value = '';
+        return;
+    }
     try {
         const filePath = await processAndUpload(input.files[0], 'footer');
         appData.footer.brand.logoUrl = filePath;
@@ -5993,7 +6084,7 @@ function renderFooterNPCSeal() {
             </div>
             <div class="form-group">
                 <label>Upload Image</label>
-                <input type="file" id="footer-npc-image" accept=".png, .jpg, .jpeg, image/png, image/jpeg" 
+                <input type="file" id="footer-npc-image" accept="image/*" 
                        onchange="handleFooterNPCImageUpload(this)">
                 <div class="image-preview" style="margin-top: 15px; text-align: center;">
                     ${npc.imageUrl ? `<img src="${assetUrl(npc.imageUrl)}" alt="NPC Seal" style="max-width: 100%; max-height: 250px; border: 1px solid #eee; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">` : '<p style="color: #999; font-style: italic;">No image uploaded yet</p>'}
@@ -6016,8 +6107,8 @@ async function handleFooterNPCImageUpload(input) {
 
     let file = input.files[0];
 
-    if (file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/jpg') {
-        alert('Please use PNG and JPG images instead. HEIC is not supported.');
+    if (!isValidImageFile(file)) {
+        alert('Only JPEG, PNG, and GIF image files are accepted. Please convert your image before uploading.');
         input.value = '';
         return;
     }
