@@ -1,3 +1,14 @@
+// ===== HTML ESCAPE UTILITY =====
+function escHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 // ===== BROWSER DETECTION (mirrors page-transition.js) =====
 (function () {
     const ua = navigator.userAgent;
@@ -450,8 +461,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Toggle subsection function for collapsible sidebar
-    window.toggleSubsection = function (listId) {
-        const header = event.currentTarget;
+    window.toggleSubsection = function (listId, e) {
+        const header = (e || window.event).currentTarget;
         const list = document.getElementById('contact-departments-sidebar-list');
 
         header.classList.toggle('open');
@@ -688,11 +699,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Add password strength indicator to new password field only
 setTimeout(() => {
-    console.log('Setting up password toggles...');
-
     // Add strength indicator to new password field (in settings)
     const newPasswordField = document.getElementById('new-password');
-    console.log('New password field found:', !!newPasswordField);
 
     if (newPasswordField) {
         // Create a container for new password field and its toggle button
@@ -716,7 +724,6 @@ setTimeout(() => {
                 </svg>
             `;
         newPasswordContainer.appendChild(toggleButton);
-        console.log('New password toggle button added');
 
         // Create password strength indicator
         const strengthIndicator = document.createElement('div');
@@ -744,13 +751,11 @@ setTimeout(() => {
 
         // Add password toggle functionality
         const eyeIcon = document.getElementById('new-password-eye');
-        console.log('New password eye icon found:', !!eyeIcon);
 
         if (toggleButton && eyeIcon) {
             toggleButton.addEventListener('click', () => {
                 const type = newPasswordField.type === 'password' ? 'text' : 'password';
                 newPasswordField.type = type;
-                console.log('Toggle clicked, new type:', type);
 
                 if (type === 'text') {
                     // Show eye icon (password visible)
@@ -769,13 +774,11 @@ setTimeout(() => {
                     toggleButton.title = 'Show Password';
                 }
             });
-            console.log('New password toggle event listener added');
         }
     }
 
     // Also add toggle to confirm password field for consistency
     const confirmPasswordField = document.getElementById('confirm-password');
-    console.log('Confirm password field found:', !!confirmPasswordField);
 
     if (confirmPasswordField) {
         // Create a container for confirm password field and its toggle button
@@ -799,17 +802,14 @@ setTimeout(() => {
                 </svg>
             `;
         confirmContainer.appendChild(confirmToggleButton);
-        console.log('Confirm password toggle button added');
 
         // Add toggle functionality for confirm password
         const confirmEyeIcon = document.getElementById('confirm-password-eye');
-        console.log('Confirm password eye icon found:', !!confirmEyeIcon);
 
         if (confirmToggleButton && confirmEyeIcon) {
             confirmToggleButton.addEventListener('click', () => {
                 const type = confirmPasswordField.type === 'password' ? 'text' : 'password';
                 confirmPasswordField.type = type;
-                console.log('Confirm toggle clicked, new type:', type);
 
                 if (type === 'text') {
                     // Show eye icon (password visible) - shows open eye
@@ -828,7 +828,6 @@ setTimeout(() => {
                     confirmToggleButton.title = 'Show Confirm Password';
                 }
             });
-            console.log('Confirm password toggle event listener added');
         }
     }
 }, 500); // Increased timeout to ensure DOM is ready
@@ -917,7 +916,6 @@ async function initDashboard() {
         // Use default data instead of showing error
         appData = getDefaultAppData();
         renderForms();
-        console.log("Using default data - admin panel will work without server connection");
     }
 }
 // Add default data function
@@ -1708,10 +1706,17 @@ function renderTopPages(pageViews) {
     pages.forEach(page => {
         const tr = document.createElement('tr');
         tr.style.borderBottom = '1px solid #eee';
-        tr.innerHTML = `
-            <td style="padding: 12px; color: black;">${page.path === '/' ? 'Home /' : page.path}</td>
-            <td style="padding: 12px; color: black; font-weight: bold;">${page.views}</td>
-        `;
+
+        const pathCell = document.createElement('td');
+        pathCell.style.cssText = 'padding: 12px; color: black;';
+        pathCell.textContent = page.path === '/' ? 'Home /' : page.path;
+
+        const viewsCell = document.createElement('td');
+        viewsCell.style.cssText = 'padding: 12px; color: black; font-weight: bold;';
+        viewsCell.textContent = page.views;
+
+        tr.appendChild(pathCell);
+        tr.appendChild(viewsCell);
         tbody.appendChild(tr);
     });
 }
@@ -1752,7 +1757,13 @@ function renderProductSidebar() {
             section.products.forEach((prod, pIndex) => {
                 const pLi = document.createElement('li');
                 pLi.className = 'product-item-sidebar';
-                pLi.innerHTML = `${prod.hidden ? '<span style="color:#e67e22; font-size:0.8rem;">(Hidden)</span> ' : ''}${prod.title || `Product #${pIndex + 1}`}`;
+                if (prod.hidden) {
+                    const badge = document.createElement('span');
+                    badge.style.cssText = 'color:#e67e22; font-size:0.8rem;';
+                    badge.textContent = '(Hidden) ';
+                    pLi.appendChild(badge);
+                }
+                pLi.appendChild(document.createTextNode(prod.title || `Product #${pIndex + 1}`));
                 pLi.onclick = (e) => {
                     e.stopPropagation();
                     scrollToProduct(index, pIndex);
@@ -2585,7 +2596,7 @@ function renderList(containerId, dataArray, arrayName, fields, templateObj) {
                     <div class="form-group">
                         <label>${capitalizedLabel}</label>
                         <input type="file" onchange="uploadImage(this, '${arrayName}', ${index}, '${field}')">
-                        <input type="text" value="${val}" readonly style="background:#f5f5f5; margin-top:5px; border:1px solid #ccc; padding:0.5rem; color:#333;" placeholder="Image Path">
+                        <input type="text" value="${escHtml(val)}" readonly style="background:#f5f5f5; margin-top:5px; border:1px solid #ccc; padding:0.5rem; color:#333;" placeholder="Image Path">
                         ${val ? `<img src="${assetUrl(val)}" class="preview-img">` : ''}
                     </div>
                 `;
@@ -2593,14 +2604,14 @@ function renderList(containerId, dataArray, arrayName, fields, templateObj) {
                 itemHtml += `
                     <div class="form-group">
                         <label>${capitalizedLabel}</label>
-                        <textarea onchange="updateArrayField('${arrayName}', ${index}, '${field}', this.value)">${val}</textarea>
+                        <textarea onchange="updateArrayField('${arrayName}', ${index}, '${field}', this.value)">${escHtml(val)}</textarea>
                     </div>
                 `;
             } else {
                 itemHtml += `
                     <div class="form-group">
                         <label>${capitalizedLabel}</label>
-                        <input type="text" value="${val}" onchange="updateArrayField('${arrayName}', ${index}, '${field}', this.value)">
+                        <input type="text" value="${escHtml(val)}" onchange="updateArrayField('${arrayName}', ${index}, '${field}', this.value)">
                     </div>
                 `;
             }
@@ -2919,7 +2930,7 @@ function loadTimelineItems() {
                 return;
             }
         } catch (error) {
-            console.log('Invalid timeline data in localStorage, using defaults');
+            // Invalid data in localStorage, fall through to defaults
         }
     }
 
@@ -3032,7 +3043,6 @@ function updateTimelineItem(index, field, value) {
     if (!appData.timeline || !appData.timeline[index]) return;
 
     appData.timeline[index][field] = value;
-    console.log(`Timeline item ${index} ${field} updated to:`, value);
 
     // Save to localStorage for immediate frontend updates
     localStorage.setItem('escience_timeline', JSON.stringify(appData.timeline));
@@ -3074,7 +3084,7 @@ function renderWhoWeAreSection(container) {
         try {
             appData.whoWeAre = JSON.parse(savedWhoWeAre);
         } catch (error) {
-            console.log('Invalid Who We Are data in localStorage');
+            // Invalid data in localStorage, ignore and use defaults
         }
     }
 
@@ -3115,7 +3125,6 @@ function updateWhoWeAreData(field, value) {
 
     // Auto-save to localStorage for immediate frontend updates
     localStorage.setItem('escience_whoWeAre', JSON.stringify(appData.whoWeAre));
-    console.log(`Who We Are ${field} updated and saved:`, value);
 }
 
 
@@ -3166,7 +3175,6 @@ function updateFamilyCultureData(field, value) {
     if (!appData.familyCulture) appData.familyCulture = {};
     appData.familyCulture[field] = value;
     localStorage.setItem('escience_familyCulture', JSON.stringify(appData.familyCulture));
-    console.log(`Family Culture ${field} updated and saved:`, value);
 }
 
 window.handleFamilyCultureImageUpload = async function (input) {
@@ -3234,7 +3242,6 @@ function updateVisionData(field, value) {
     if (!appData.vision) appData.vision = {};
     appData.vision[field] = value;
     localStorage.setItem('escience_vision', JSON.stringify(appData.vision));
-    console.log(`Vision ${field} updated and saved:`, value);
 }
 
 window.handleVisionImageUpload = async function (input) {
@@ -3303,7 +3310,6 @@ function updateMissionData(field, value) {
     if (!appData.mission) appData.mission = {};
     appData.mission[field] = value;
     localStorage.setItem('escience_mission', JSON.stringify(appData.mission));
-    console.log(`Mission ${field} updated and saved:`, value);
 }
 
 window.handleMissionImageUpload = async function (input) {
@@ -4026,7 +4032,13 @@ window.renderCareersJobsSidebar = function () {
         // Header
         const header = document.createElement('div');
         header.className = 'section-header-row';
-        header.innerHTML = `<span>${title}</span><span class="dropdown-arrow">▶</span>`;
+        const titleSpan = document.createElement('span');
+        titleSpan.textContent = title;
+        const arrowSpan = document.createElement('span');
+        arrowSpan.className = 'dropdown-arrow';
+        arrowSpan.textContent = '▶';
+        header.appendChild(titleSpan);
+        header.appendChild(arrowSpan);
         header.onclick = () => {
             if (type === 'jobs') window.isJobsSectionOpen = !window.isJobsSectionOpen;
             else window.isInternshipsSectionOpen = !window.isInternshipsSectionOpen;
@@ -4433,7 +4445,7 @@ window.removeBlogCategory = function (index) {
 
 // Render blog sidebar with categories
 function renderBlogSidebar(posts) {
-    console.log('renderBlogSidebar called with', posts.length, 'posts');
+
     const sidebarList = document.getElementById('blog-sidebar-list');
     if (!sidebarList) {
         console.error('blog-sidebar-list element not found!');
