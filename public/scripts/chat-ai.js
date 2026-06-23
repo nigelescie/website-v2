@@ -1,4 +1,9 @@
 // ===== CHAT AI FUNCTIONALITY =====
+// Production logging guard (SEC-012)
+if (typeof window !== 'undefined' && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
+    console.log = () => {};
+    console.error = () => {};
+}
 document.addEventListener('DOMContentLoaded', () => {
     const chatInput = document.getElementById('chatInput');
     const chatSend = document.getElementById('chatSend');

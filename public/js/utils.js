@@ -1,3 +1,10 @@
+// Production logging guard (SEC-012): suppress console output when not in dev mode
+if (typeof window !== 'undefined' && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
+    window._devConsole = { log: console.log.bind(console), error: console.error.bind(console) };
+    console.log = () => {};
+    console.error = () => {};
+}
+
 // public/js/utils.js
 
 const API_CONTENT_URL = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE) ? CONFIG.API_BASE + '/content' : '/api/content';
@@ -143,10 +150,23 @@ function updateDOM(data) {
                 const card = document.createElement('div');
                 const delayClass = index > 0 && index <= 3 ? ` delay-${index}` : '';
                 card.className = `solution-card fade-up${delayClass} visible`;
-                card.innerHTML = `
-                    <div class="solution-banner"><img src="${resolveUrl(item.image, '')}" alt="${item.title || ''}" class="solution-image" /></div>
-                    <div class="solution-content"><h3>${item.title || ''}</h3><p>${item.description || ''}</p></div>
-                `;
+                const whyBanner = document.createElement('div');
+                whyBanner.className = 'solution-banner';
+                const whyImg = document.createElement('img');
+                whyImg.src = resolveUrl(item.image, '');
+                whyImg.alt = item.title || '';
+                whyImg.className = 'solution-image';
+                whyBanner.appendChild(whyImg);
+                const whyContent = document.createElement('div');
+                whyContent.className = 'solution-content';
+                const whyH3 = document.createElement('h3');
+                whyH3.textContent = item.title || '';
+                const whyP = document.createElement('p');
+                whyP.textContent = item.description || '';
+                whyContent.appendChild(whyH3);
+                whyContent.appendChild(whyP);
+                card.appendChild(whyBanner);
+                card.appendChild(whyContent);
                 whyUsGrid.appendChild(card);
             });
         }
@@ -163,17 +183,38 @@ function updateDOM(data) {
             data.testimonials.filter(item => !item.hidden).forEach((item) => {
                 const slide = document.createElement('div');
                 slide.className = 'testimonial-slide';
-                slide.innerHTML = `
-                    <div class="testimonial-header">
-                        <div class="client-logo-container"><img src="${resolveUrl(item.logo, '')}" alt="Client Logo" class="client-logo" /></div>
-                        <div class="company-name">${item.company || ''}</div>
-                    </div>
-                    <div class="testimonial-content"><p>"${item.quote || ''}"</p></div>
-                    <div class="testimonial-author">
-                        <div class="author-name">${item.name || ''}</div>
-                        <div class="author-title">${item.title || ''}</div>
-                    </div>
-                `;
+                const tHeader = document.createElement('div');
+                tHeader.className = 'testimonial-header';
+                const tLogoContainer = document.createElement('div');
+                tLogoContainer.className = 'client-logo-container';
+                const tLogoImg = document.createElement('img');
+                tLogoImg.src = resolveUrl(item.logo, '');
+                tLogoImg.alt = 'Client Logo';
+                tLogoImg.className = 'client-logo';
+                tLogoContainer.appendChild(tLogoImg);
+                const tCompany = document.createElement('div');
+                tCompany.className = 'company-name';
+                tCompany.textContent = item.company || '';
+                tHeader.appendChild(tLogoContainer);
+                tHeader.appendChild(tCompany);
+                const tContent = document.createElement('div');
+                tContent.className = 'testimonial-content';
+                const tQuote = document.createElement('p');
+                tQuote.textContent = `"${item.quote || ''}"`;
+                tContent.appendChild(tQuote);
+                const tAuthor = document.createElement('div');
+                tAuthor.className = 'testimonial-author';
+                const tName = document.createElement('div');
+                tName.className = 'author-name';
+                tName.textContent = item.name || '';
+                const tTitle = document.createElement('div');
+                tTitle.className = 'author-title';
+                tTitle.textContent = item.title || '';
+                tAuthor.appendChild(tName);
+                tAuthor.appendChild(tTitle);
+                slide.appendChild(tHeader);
+                slide.appendChild(tContent);
+                slide.appendChild(tAuthor);
                 container.appendChild(slide);
             });
             if (window.initTestimonialsSlider) window.initTestimonialsSlider();
@@ -237,10 +278,12 @@ function updateDOM(data) {
         if (fbLink && data.footer.connect.facebook && data.footer.connect.facebook.url) {
             fbLink.href = data.footer.connect.facebook.url;
             fbLink.target = '_blank';
+            fbLink.rel = 'noopener noreferrer';
         }
         if (liLink && data.footer.connect.linkedin && data.footer.connect.linkedin.url) {
             liLink.href = data.footer.connect.linkedin.url;
             liLink.target = '_blank';
+            liLink.rel = 'noopener noreferrer';
         }
     }
 
@@ -264,9 +307,15 @@ function updateDOM(data) {
                 pageData.sections.forEach(section => {
                     const div = document.createElement('div');
                     div.className = 'terms-section fade-up';
-                    if (section.title) div.innerHTML += `<h2>${section.title}</h2>`;
+                    if (section.title) {
+                        const h2 = document.createElement('h2');
+                        h2.textContent = section.title;
+                        div.appendChild(h2);
+                    }
                     if (section.content) {
-                        div.innerHTML += section.content;
+                        const contentDiv = document.createElement('div');
+                        contentDiv.innerHTML = DOMPurify.sanitize(section.content);
+                        div.appendChild(contentDiv);
                     }
                     target.appendChild(div);
                 });
@@ -523,7 +572,6 @@ function renderCustomSections(sections) {
         }
 
         sectionEl.appendChild(outerContainer);
-        console.log('Rendered custom section:', section.title);
     });
 
     // Remove the old container if it exists and is empty
@@ -532,20 +580,36 @@ function renderCustomSections(sections) {
 }
 
 /** Build the HTML for a single block */
+function safeUrl(url) {
+    if (!url) return '#';
+    try {
+        const parsed = new URL(url, window.location.origin);
+        return ['http:', 'https:'].includes(parsed.protocol) ? url : '#';
+    } catch {
+        return url.startsWith('/') ? url : '#';
+    }
+}
+
 function buildBlockHtml(block, pathPrefix, section) {
     if (block.type === 'text') {
-        return `<div class="section-text" style="color: inherit !important;">${block.content}</div>`;
+        const textDiv = document.createElement('div');
+        textDiv.className = 'section-text';
+        textDiv.style.cssText = 'color: inherit !important;';
+        textDiv.innerHTML = DOMPurify.sanitize(block.content || '');
+        return textDiv.outerHTML;
     } else if (block.type === 'image') {
         // Skip image-as-bg for centered-hero (already used as background)
         if (section.template === 'centered-hero') return '';
         const url = resolveUrl(block.imageUrl || 'assets/placeholder.png', pathPrefix);
-        if (url.includes('via.placeholder.com')) url = url.replace('via.placeholder.com', 'placehold.co');
         return `<div class="visual-card"><div class="visual-content"><img src="${url}" class="visual-image" style="width:100%; height:auto; display:block;" /></div></div>`;
     } else if (block.type === 'button') {
         const align = block.buttonAlign || 'left';
         const bgColor = block.buttonBgColor ? `background-color: ${block.buttonBgColor}; border-color: ${block.buttonBgColor};` : '';
         const textColor = block.buttonTextColor ? `color: ${block.buttonTextColor} !important;` : '';
-        return `<div style="margin-top: 2rem; text-align: ${align};"><a href="${block.buttonLink || '#'}" class="btn-primary-large" style="${bgColor} ${textColor}">${block.buttonText || 'Learn More'}</a></div>`;
+        const href = safeUrl(block.buttonLink);
+        const btnText = document.createElement('span');
+        btnText.textContent = block.buttonText || 'Learn More';
+        return `<div style="margin-top: 2rem; text-align: ${align};"><a href="${href}" class="btn-primary-large" style="${bgColor} ${textColor}">${btnText.textContent}</a></div>`;
     } else if (block.type === 'stats') {
         return `<div id="blocks-stats-container-${block.id}" class="stats-grid"></div>`;
     }
@@ -578,7 +642,10 @@ function renderOurClients(clientsData) {
         logoWrapper.classList.add(`delay-${index % 5}`);
         
         const url = resolveUrl(client.logo || 'assets/placeholder.png', pathPrefix);
-        logoWrapper.innerHTML = `<img src="${url}" alt="${client.name || 'Client Logo'}" />`;
+        const clientImg = document.createElement('img');
+        clientImg.src = url;
+        clientImg.alt = client.name || 'Client Logo';
+        logoWrapper.appendChild(clientImg);
         clientsGrid.appendChild(logoWrapper);
     });
 }
@@ -592,11 +659,19 @@ function renderStats(statsData, containerSelector = '.stats-grid') {
         const div = document.createElement('div');
         div.className = 'stat-card card fade-up visible';
         const uniqueId = `stat-icon-${index}-${Math.random().toString(36).substr(2, 5)}`;
-        div.innerHTML = `
-            <div class="stat-icon" id="${uniqueId}"></div>
-            <div class="stat-number" data-target="${stat.number}">${stat.number}</div>
-            <div class="stat-label">${stat.label}</div>
-        `;
+        const statIconEl = document.createElement('div');
+        statIconEl.className = 'stat-icon';
+        statIconEl.id = uniqueId;
+        const statNumEl = document.createElement('div');
+        statNumEl.className = 'stat-number';
+        statNumEl.dataset.target = stat.number;
+        statNumEl.textContent = stat.number;
+        const statLabelEl = document.createElement('div');
+        statLabelEl.className = 'stat-label';
+        statLabelEl.textContent = stat.label;
+        div.appendChild(statIconEl);
+        div.appendChild(statNumEl);
+        div.appendChild(statLabelEl);
         statsGrid.appendChild(div);
         const iconContainer = div.querySelector('.stat-icon');
         const iconPath = stat.icon || 'assets/icon-placeholder.svg';
@@ -646,10 +721,23 @@ function renderSolutions(solutionsData, containerSelector = '.solutions-grid:not
             card.dataset.href = `nav-pages/solutions.html#${slug}`;
             card.style.cursor = 'pointer';
         }
-        card.innerHTML = `
-            <div class="solution-banner"><img src="${resolveUrl(item.image, '')}" alt="${item.title || ''}" class="solution-image" /></div>
-            <div class="solution-content"><h3>${item.title || ''}</h3><p>${item.description || ''}</p></div>
-        `;
+        const solBanner = document.createElement('div');
+        solBanner.className = 'solution-banner';
+        const solImg = document.createElement('img');
+        solImg.src = resolveUrl(item.image, '');
+        solImg.alt = item.title || '';
+        solImg.className = 'solution-image';
+        solBanner.appendChild(solImg);
+        const solContent = document.createElement('div');
+        solContent.className = 'solution-content';
+        const solH3 = document.createElement('h3');
+        solH3.textContent = item.title || '';
+        const solP = document.createElement('p');
+        solP.textContent = item.description || '';
+        solContent.appendChild(solH3);
+        solContent.appendChild(solP);
+        card.appendChild(solBanner);
+        card.appendChild(solContent);
         solutionsGrid.appendChild(card);
     });
     if (window.initSolutionCardsNavigation) window.initSolutionCardsNavigation();

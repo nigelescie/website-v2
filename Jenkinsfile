@@ -43,13 +43,13 @@ region = ap-southeast-1
 
 [profile escwebsite-dev]
 source_profile = default
-role_arn = arn:aws:iam::346553907973:role/jenkins-pipeline-dev
+role_arn = ${env.DEV_ROLE_ARN}
 region = ap-southeast-1
 output = json
 
 [profile escwebsite-prod]
 source_profile = default
-role_arn = arn:aws:iam::tbd:role/jenkins-pipeline-prod
+role_arn = ${env.PROD_ROLE_ARN}
 region = ap-southeast-1
 output = json" > ~/.aws/config
     '''
@@ -89,14 +89,14 @@ def deploy(String env) {
         dev: [
             bucket   : 'escwebsite-dev-web',
             region   : 'ap-southeast-1',
-            cfDistId : 'E36TVXSCZ97LQM',
-            roleArn  : 'arn:aws:iam::346553907973:role/jenkins-pipeline-dev'
+            cfDistId : env.DEV_CF_DIST_ID,
+            roleArn  : env.DEV_ROLE_ARN
         ],
         prod: [
             bucket   : 'escwebsite-prod-web',   // TODO: replace with prod bucket name
             region   : 'ap-southeast-1',
-            cfDistId : '',                       // TODO: replace with prod CloudFront distribution ID
-            roleArn  : 'arn:aws:iam::tbd:role/jenkins-pipeline-prod'  // TODO: replace tbd with prod AWS account ID
+            cfDistId : env.PROD_CF_DIST_ID,
+            roleArn  : env.PROD_ROLE_ARN
         ]
     ]
 
@@ -112,6 +112,23 @@ def deploy(String env) {
     def profile = cfg.roleArn ? '--profile deploy' : '--profile default'
 
     // Sync public/ folder to S3
+    // Generate environment.js from template using Jenkins-stored credentials
+    withCredentials([
+        string(credentialsId: "${env}-api-base",             variable: 'ENV_API_BASE'),
+        string(credentialsId: "${env}-uploads-base",         variable: 'ENV_UPLOADS_BASE'),
+        string(credentialsId: "${env}-cognito-user-pool-id", variable: 'ENV_COGNITO_POOL_ID'),
+        string(credentialsId: "${env}-cognito-client-id",    variable: 'ENV_COGNITO_CLIENT_ID'),
+    ]) {
+        sh '''#!/bin/bash
+            sed -e "s|__API_BASE__|${ENV_API_BASE}|g" \
+                -e "s|__UPLOADS_BASE__|${ENV_UPLOADS_BASE}|g" \
+                -e "s|__COGNITO_USER_POOL_ID__|${ENV_COGNITO_POOL_ID}|g" \
+                -e "s|__COGNITO_CLIENT_ID__|${ENV_COGNITO_CLIENT_ID}|g" \
+                public/js/environment/environment.template.js \
+                > public/js/environment/environment.js
+        '''
+    }
+
     // --delete removes files in S3 that no longer exist locally
     sh """#!/bin/bash
         aws s3 sync public/ s3://${cfg.bucket}/ \
@@ -120,7 +137,8 @@ def deploy(String env) {
             --delete \
             --cache-control "public, max-age=86400" \
             --exclude "*.DS_Store" \
-            --exclude "Thumbs.db"
+            --exclude "Thumbs.db" \
+            --exclude "js/environment/environment.template.js"
 
         # Override cache-control for HTML files — always revalidate
         aws s3 sync public/ s3://${cfg.bucket}/ \
@@ -185,6 +203,7 @@ pipeline {
                     steps {
                         checkout scm
                         script {
+                            sh 'find public/ -name "debug-*.html" -delete; find public/ -name "test-*.html" -delete'
                             init()
                             deploy('dev')
                         }
@@ -220,6 +239,7 @@ pipeline {
                     steps {
                         checkout scm
                         script {
+                            sh 'find public/ -name "debug-*.html" -delete; find public/ -name "test-*.html" -delete'
                             init()
                             deploy('prod')
                         }

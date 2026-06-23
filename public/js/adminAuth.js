@@ -1,19 +1,32 @@
 // Cognito Auth helpers for admin panel
 // Requires amazon-cognito-identity-js loaded via CDN
 
+// In-memory token storage — keeps JWTs out of localStorage (SEC-011)
+const _sessionStorage = (() => {
+    let store = {};
+    return {
+        setItem(k, v) { store[k] = v; },
+        getItem(k) { return store[k] ?? null; },
+        removeItem(k) { delete store[k]; },
+        clear() { store = {}; },
+    };
+})();
+
 function getCognitoUser(username) {
     const poolData = {
         UserPoolId: CONFIG.COGNITO.UserPoolId,
         ClientId: CONFIG.COGNITO.ClientId,
+        Storage: _sessionStorage,
     };
     const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
-    return new AmazonCognitoIdentity.CognitoUser({ Username: username, Pool: userPool });
+    return new AmazonCognitoIdentity.CognitoUser({ Username: username, Pool: userPool, Storage: _sessionStorage });
 }
 
 function getUserPool() {
     return new AmazonCognitoIdentity.CognitoUserPool({
         UserPoolId: CONFIG.COGNITO.UserPoolId,
         ClientId: CONFIG.COGNITO.ClientId,
+        Storage: _sessionStorage,
     });
 }
 

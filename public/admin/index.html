@@ -10,10 +10,18 @@
     <link rel="stylesheet" href="/admin/admin-style.css">
     <link rel="stylesheet" href="../browser-fixes.css?v=2">
     <!-- Quill Rich Text Editor -->
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet"
+          integrity="sha384-07UbSXbd8HpaOfxZsiO6Y8H1HTX6v0J96b5qP6PKSpYEuSZSYD4GFFHlLRjvjVrL"
+          crossorigin="anonymous">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"
+            integrity="sha384-0zm5QqnR2gL4GY5AwreU3xp5AEGWqkdbamrRLeXwWwepp4JqmPRawLJFD8Cm802W"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"
+            integrity="sha384-NrKB+u6Ts6AtkIhwPixiKTzgSKNblyhlk0Sohlgar9UHUBzai/sgnNNWWd291xqt"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"
+            integrity="sha384-OTofQ0MEeiSgh62havBcemCIK0gqj809wX6UA0uPISNMRnR6NZyCdGzX3SbLrgwL"
+            crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -60,7 +68,7 @@
                     password reset link.</p>
                 <div class="form-group">
                     <label>Email Address</label>
-                    <input class="text-box" type="email" id="forgot-email" required placeholder="admin@escience.net">
+                    <input class="text-box" type="email" id="forgot-email" required placeholder="yourname@domain.com">
                 </div>
                 <button class="login-btn" type="submit">Send Reset Link</button>
                 <div style="text-align: center; margin-top: 15px;">
@@ -737,9 +745,16 @@
     </div>
 
     <!-- Site config (must load before auth & admin scripts) -->
+    <script src="../js/environment/environment.js"></script>
     <script src="../js/config.js"></script>
+    <!-- DOMPurify for XSS sanitization -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"
+            integrity="sha384-+VfUPEb0PdtChMwmBcBmykRMDd+v6D/oFmB3rZM/puCMDYcIvF968OimRh4KQY9a"
+            crossorigin="anonymous"></script>
     <!-- Cognito SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/amazon-cognito-identity-js/dist/amazon-cognito-identity.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/amazon-cognito-identity-js@6.3.12/dist/amazon-cognito-identity.min.js"
+            integrity="sha384-YkDOkBg8dBira7f28t9KbD0tG5OnnuU540fRBz8JgorAXLJOwtakyHNV7m36RDG4"
+            crossorigin="anonymous"></script>
     <script src="../js/adminAuth.js"></script>
     <script src="../js/adminUpload.js"></script>
     <script src="/admin/admin.js"></script>

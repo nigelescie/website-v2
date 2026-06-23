@@ -3,6 +3,10 @@
 .env.local
 .env.production
 
+# Environment-specific JS configs (contain credentials) — template is tracked
+public/js/environment/environment.*.js
+!public/js/environment/environment.template.js
+
 # Dependencies
 node_modules/
 
@@ -13,6 +17,16 @@ npm-debug.log*
 
 # Runtime data
 data/subscribers.json
+data/sessions.json
+data/reset-tokens.json
+data/analytics.json
+data/analytics-archives.json
+data/content.json
+
+# Debug/test artifacts
+public/debug-*.html
+public/test-*.html
+test-cors.html
 
 # OS files
 .DS_Store

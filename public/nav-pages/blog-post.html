@@ -1027,6 +1027,10 @@
 
     <button id="backToTop" class="back-to-top" aria-label="Back to Top">↑</button>
 
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"
+            integrity="sha384-+VfUPEb0PdtChMwmBcBmykRMDd+v6D/oFmB3rZM/puCMDYcIvF968OimRh4KQY9a"
+            crossorigin="anonymous"></script>
+    <script src="../js/environment/environment.js"></script>
     <script src="../js/config.js"></script>
     <script src="../js/utils.js"></script>
     <script src="../scripts/page-transition.js"></script>
@@ -1144,7 +1148,7 @@
                             let blockHtml = '';
                             switch (block.type) {
                                 case 'text':
-                                    blockHtml = `<div class="blog-block blog-text-block animate-on-scroll">${block.content}</div>`;
+                                    blockHtml = `<div class="blog-block blog-text-block animate-on-scroll">${DOMPurify.sanitize(block.content || '')}</div>`;
                                     break;
                                 case 'image':
                                     // Support both new multi-image format and legacy single image
@@ -1178,7 +1182,7 @@
                                     }
                                     break;
                                 case 'quote':
-                                    blockHtml = `<div class="blog-block blog-quote-block animate-on-scroll"><blockquote>${block.content}</blockquote></div>`;
+                                    blockHtml = `<div class="blog-block blog-quote-block animate-on-scroll"><blockquote>${DOMPurify.sanitize(block.content || '')}</blockquote></div>`;
                                     break;
                                 case 'divider':
                                     blockHtml = `<div class="blog-block blog-divider"></div>`;
@@ -1215,7 +1219,7 @@
                                     }
                                     break;
                                 case 'header':
-                                    blockHtml = `<h2 class="blog-block blog-header-block animate-on-scroll">${block.content}</h2>`;
+                                    blockHtml = `<h2 class="blog-block blog-header-block animate-on-scroll">${DOMPurify.sanitize(block.content || '')}</h2>`;
                                     break;
                             }
                             contentContainer.innerHTML += blockHtml;
@@ -1261,7 +1265,7 @@
 
                     } else {
                         // Fallback for legacy HTML content
-                        contentContainer.innerHTML = post.content || '<p>No content available for this post.</p>';
+                        contentContainer.innerHTML = DOMPurify.sanitize(post.content || '<p>No content available for this post.</p>');
                     }
                 }
 
@@ -1285,21 +1289,32 @@
                         const recommended = otherPosts.slice(0, 3);
 
                         if (recommended.length > 0) {
-                            relatedGrid.innerHTML = recommended.map((rp, index) => {
+                            relatedGrid.innerHTML = '';
+                            recommended.forEach((rp, index) => {
                                 const imgPath = resolveUrl(rp.image || 'assets/hero-bg.jpg', '');
-                                // Added slight delay for each card
-                                return `
-                                    <div class="blog-related-card animate-on-scroll" onclick="navigateToPost(${rp.id})" style="transition-delay: ${index * 100}ms">
-                                        <div style="height: 180px; overflow: hidden;">
-                                            <img src="${imgPath}" class="blog-related-image" alt="${rp.title}">
-                                        </div>
-                                        <div class="blog-related-info">
-                                            <h4>${rp.title}</h4>
-                                            <p>${rp.excerpt || ''}</p>
-                                        </div>
-                                    </div>
-                                `;
-                            }).join('');
+                                const card = document.createElement('div');
+                                card.className = 'blog-related-card animate-on-scroll';
+                                card.style.transitionDelay = `${index * 100}ms`;
+                                card.onclick = () => navigateToPost(rp.id);
+                                const imgWrap = document.createElement('div');
+                                imgWrap.style.cssText = 'height: 180px; overflow: hidden;';
+                                const img = document.createElement('img');
+                                img.src = imgPath;
+                                img.className = 'blog-related-image';
+                                img.alt = rp.title || '';
+                                imgWrap.appendChild(img);
+                                const info = document.createElement('div');
+                                info.className = 'blog-related-info';
+                                const h4 = document.createElement('h4');
+                                h4.textContent = rp.title || '';
+                                const p = document.createElement('p');
+                                p.textContent = rp.excerpt || '';
+                                info.appendChild(h4);
+                                info.appendChild(p);
+                                card.appendChild(imgWrap);
+                                card.appendChild(info);
+                                relatedGrid.appendChild(card);
+                            });
                         }
                     }
                 }

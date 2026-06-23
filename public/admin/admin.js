@@ -1,4 +1,10 @@
 // ===== HTML ESCAPE UTILITY =====
+// Production logging guard (SEC-012): suppress console output when not in dev mode
+if (typeof window !== 'undefined' && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
+    console.log = () => {};
+    console.error = () => {};
+}
+
 function escHtml(str) {
     if (str === null || str === undefined) return '';
     return String(str)
@@ -553,32 +559,36 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
                 }
 
-                previewContainer.innerHTML = `
-                    <div style="width: 100%; height: calc(100vh - 150px); border: 1px solid #ddd; border-radius: 8px; overflow: hidden; position: relative; background: #fff; display: flex; flex-direction: column;">
-                        ${extraContent}
-                        <div style="background: rgba(15, 52, 96, 0.95); color: white; padding: 12px; text-align: center; font-weight: bold; font-size: 0.9rem; flex-shrink: 0; display: flex; flex-direction: column; gap: 4px;">
-                            <span>Live Website Preview</span>
-                            <span style="font-size: 0.75rem; font-weight: normal; opacity: 0.8;">This section's structure is fixed within the page template.</span>
-                        </div>
-                        <iframe src="${pageUrl}#${tabId}" style="width: 100%; flex-grow: 1; border: none; background: #fff;" 
-                            onload="setTimeout(() => { 
-                                try { 
-                                    const win = this.contentWindow;
-                                    const doc = win.document;
-                                    const el = doc.getElementById('${tabId}');
-                                    if(el) {
-                                        const y = el.getBoundingClientRect().top + win.scrollY - 100;
-                                        win.scrollTo({top: y, behavior: 'smooth'});
-                                    } else {
-                                        // Fallback: If element not found by ID, try hash scroll
-                                        win.location.replace('${pageUrl}#${tabId}');
-                                    }
-                                } catch(e) {
-                                    // If CORS prevents access, the browser-native hash scroll plus our CSS fixes will handle it
-                                } 
-                            }, 300)"></iframe>
-                    </div>
-                `;
+                previewContainer.innerHTML = '';
+                const previewWrapper = document.createElement('div');
+                previewWrapper.style.cssText = 'width: 100%; height: calc(100vh - 150px); border: 1px solid #ddd; border-radius: 8px; overflow: hidden; position: relative; background: #fff; display: flex; flex-direction: column;';
+                if (extraContent) {
+                    const extraDiv = document.createElement('div');
+                    extraDiv.innerHTML = extraContent;
+                    previewWrapper.appendChild(extraDiv);
+                }
+                const previewBanner = document.createElement('div');
+                previewBanner.style.cssText = 'background: rgba(15, 52, 96, 0.95); color: white; padding: 12px; text-align: center; font-weight: bold; font-size: 0.9rem; flex-shrink: 0; display: flex; flex-direction: column; gap: 4px;';
+                previewBanner.innerHTML = '<span>Live Website Preview</span><span style="font-size: 0.75rem; font-weight: normal; opacity: 0.8;">This section\'s structure is fixed within the page template.</span>';
+                previewWrapper.appendChild(previewBanner);
+                const previewIframe = document.createElement('iframe');
+                previewIframe.src = `${pageUrl}#${tabId}`;
+                previewIframe.style.cssText = 'width: 100%; flex-grow: 1; border: none; background: #fff;';
+                const safeTabId = String(tabId).replace(/[^a-zA-Z0-9_-]/g, '');
+                previewIframe.addEventListener('load', () => {
+                    setTimeout(() => {
+                        try {
+                            const win = previewIframe.contentWindow;
+                            const el = win.document.getElementById(safeTabId);
+                            if (el) {
+                                const y = el.getBoundingClientRect().top + win.scrollY - 100;
+                                win.scrollTo({ top: y, behavior: 'smooth' });
+                            }
+                        } catch(e) { /* cross-origin */ }
+                    }, 300);
+                });
+                previewWrapper.appendChild(previewIframe);
+                previewContainer.appendChild(previewWrapper);
             }
         } else {
             const targetSection = document.getElementById(tabId);
@@ -1741,10 +1751,19 @@ function renderProductSidebar() {
 
         const headerRow = document.createElement('div');
         headerRow.className = 'section-header-row';
-        headerRow.innerHTML = `
-            <span>${section.hidden ? '<span style="color:#e67e22; font-size:0.8rem;">(Hidden)</span> ' : ''}${section.title || `Section #${index + 1}`}</span>
-            <span class="dropdown-arrow">▶</span>
-        `;
+        const headerSpan = document.createElement('span');
+        if (section.hidden) {
+            const hiddenBadge = document.createElement('span');
+            hiddenBadge.style.cssText = 'color:#e67e22; font-size:0.8rem;';
+            hiddenBadge.textContent = '(Hidden) ';
+            headerSpan.appendChild(hiddenBadge);
+        }
+        headerSpan.appendChild(document.createTextNode(section.title || `Section #${index + 1}`));
+        const arrowSpan = document.createElement('span');
+        arrowSpan.className = 'dropdown-arrow';
+        arrowSpan.textContent = '▶';
+        headerRow.appendChild(headerSpan);
+        headerRow.appendChild(arrowSpan);
         headerRow.onclick = () => selectProductSection(index);
 
         sectionContainer.appendChild(headerRow);
@@ -1861,7 +1880,7 @@ function renderSingleSectionEditor(sIndex) {
 
     // Section Fields
     container.innerHTML = `
-        ${linkedSolution ? '<div style="background:#e8f4fd; padding:10px; border-radius:4px; margin-bottom:15px; font-size:0.9rem; color:#2980b9;">ℹ️ This section is linked to the <b>' + linkedSolution.title + '</b> solution on the Home Page.</div>' : ''}
+        ${linkedSolution ? '<div style="background:#e8f4fd; padding:10px; border-radius:4px; margin-bottom:15px; font-size:0.9rem; color:#2980b9;">ℹ️ This section is linked to the <b>' + escHtml(linkedSolution.title) + '</b> solution on the Home Page.</div>' : ''}
         
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
             <h4 style="margin:0;">Category Visibility</h4>
@@ -1872,12 +1891,12 @@ function renderSingleSectionEditor(sIndex) {
 
         <div class="form-group">
             <label>Section Title</label>
-            <input type="text" value="${section.title || ''}" 
+            <input type="text" value="${escHtml(section.title) || ''}"
                 ${linkedSolution ? 'readonly style="background-color: #f0f0f0; color: #666; cursor: not-allowed;"' : `onchange="updateProductSection(${sIndex}, 'title', this.value)"`}>
         </div>
         <div class="form-group">
             <label>Section Subtitle</label>
-            <textarea ${linkedSolution ? 'readonly style="background-color: #f0f0f0; color: #666; cursor: not-allowed;"' : `onchange="updateProductSection(${sIndex}, 'subtitle', this.value)"`}>${section.subtitle || ''}</textarea>
+            <textarea ${linkedSolution ? 'readonly style="background-color: #f0f0f0; color: #666; cursor: not-allowed;"' : `onchange="updateProductSection(${sIndex}, 'subtitle', this.value)"`}>${escHtml(section.subtitle)}</textarea>
         </div>
         <div class="form-group">
             <label>Section ID (Slug) <small>(Auto-generated)</small></label>
@@ -1904,18 +1923,49 @@ function renderSingleSectionEditor(sIndex) {
         prodDiv.style.transition = 'box-shadow 0.3s';
         if (prod.hidden) prodDiv.style.opacity = '0.6';
 
-        prodDiv.innerHTML = `
-             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; background:#f8f9fa; padding:10px 15px; border-radius:6px; border:1px solid #eee;">
-                <h5 style="margin:0; color:#333;">Product #${pIndex + 1}: ${prod.title || 'New Product'} ${prod.hidden ? '<span style="color:#e67e22; font-size:0.8rem; margin-left:10px;">(Hidden)</span>' : ''}</h5>
-                <div>
-                    <button onclick="toggleHideItem('productsPage.sections[${sIndex}].products', ${pIndex}, 'refreshCurrentProductSection')" style="background:${prod.hidden ? '#27ae60' : '#607d8b'}; color:white; padding:0.4rem 0.8rem; border:none; border-radius:4px; cursor:pointer; font-size:0.85rem; margin-right:5px;">${prod.hidden ? 'Show' : 'Hide'}</button>
-                    <button onclick="deleteProductFromSection(${sIndex}, ${pIndex})" style="background:#e74c3c; color:white; padding:0.4rem 0.8rem; border:none; border-radius:4px; cursor:pointer; font-size:0.85rem;">Delete</button>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label>Product Title</label>
-                <input type="text" value="${prod.title || ''}" onchange="updateSectionProduct(${sIndex}, ${pIndex}, 'title', this.value)" style="font-weight:bold; border-color:#0f3460;">
+        const prodHeaderDiv = document.createElement('div');
+        prodHeaderDiv.style.cssText = 'display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; background:#f8f9fa; padding:10px 15px; border-radius:6px; border:1px solid #eee;';
+        const prodH5 = document.createElement('h5');
+        prodH5.style.cssText = 'margin:0; color:#333;';
+        prodH5.textContent = `Product #${pIndex + 1}: ${prod.title || 'New Product'}`;
+        if (prod.hidden) {
+            const hiddenBadge = document.createElement('span');
+            hiddenBadge.style.cssText = 'color:#e67e22; font-size:0.8rem; margin-left:10px;';
+            hiddenBadge.textContent = '(Hidden)';
+            prodH5.appendChild(hiddenBadge);
+        }
+        prodHeaderDiv.appendChild(prodH5);
+        const prodBtnsDiv = document.createElement('div');
+        const prodHideBtn = document.createElement('button');
+        prodHideBtn.style.cssText = `background:${prod.hidden ? '#27ae60' : '#607d8b'}; color:white; padding:0.4rem 0.8rem; border:none; border-radius:4px; cursor:pointer; font-size:0.85rem; margin-right:5px;`;
+        prodHideBtn.textContent = prod.hidden ? 'Show' : 'Hide';
+        prodHideBtn.onclick = () => toggleHideItem(`productsPage.sections[${sIndex}].products`, pIndex, 'refreshCurrentProductSection');
+        const prodDelBtn = document.createElement('button');
+        prodDelBtn.style.cssText = 'background:#e74c3c; color:white; padding:0.4rem 0.8rem; border:none; border-radius:4px; cursor:pointer; font-size:0.85rem;';
+        prodDelBtn.textContent = 'Delete';
+        prodDelBtn.onclick = () => deleteProductFromSection(sIndex, pIndex);
+        prodBtnsDiv.appendChild(prodHideBtn);
+        prodBtnsDiv.appendChild(prodDelBtn);
+        prodHeaderDiv.appendChild(prodBtnsDiv);
+        prodDiv.appendChild(prodHeaderDiv);
+
+        const prodTitleGroup = document.createElement('div');
+        prodTitleGroup.className = 'form-group';
+        const prodTitleLabel = document.createElement('label');
+        prodTitleLabel.textContent = 'Product Title';
+        const prodTitleInput = document.createElement('input');
+        prodTitleInput.type = 'text';
+        prodTitleInput.value = prod.title || '';
+        prodTitleInput.style.cssText = 'font-weight:bold; border-color:#0f3460;';
+        prodTitleInput.onchange = function() { updateSectionProduct(sIndex, pIndex, 'title', this.value); };
+        prodTitleGroup.appendChild(prodTitleLabel);
+        prodTitleGroup.appendChild(prodTitleInput);
+        prodDiv.appendChild(prodTitleGroup);
+        prodDiv.insertAdjacentHTML('beforeend', `
+            <div class="product-edit-grid">
+                <!-- Column 1: Solutions Grid Settings -->
+                <div style="background:#fff; border:1px solid #f0f0f0; padding:15px; border-radius:8px;">
+                    <h6 style="margin:0 0 15px 0; text-transform:uppercase; font-size:0.75rem; color:#0f3460; letter-spacing:1px; border-bottom:2px solid #0f3460; padding-bottom:5px; display:inline-block;">Solutions Page (Grid View)</h6>
             </div>
 
             <div class="product-edit-grid">
