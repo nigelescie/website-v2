@@ -112,23 +112,6 @@ def deploy(String env) {
     def profile = cfg.roleArn ? '--profile deploy' : '--profile default'
 
     // Sync public/ folder to S3
-    // Generate environment.js from template using Jenkins-stored credentials
-    withCredentials([
-        string(credentialsId: "${env}-api-base",             variable: 'ENV_API_BASE'),
-        string(credentialsId: "${env}-uploads-base",         variable: 'ENV_UPLOADS_BASE'),
-        string(credentialsId: "${env}-cognito-user-pool-id", variable: 'ENV_COGNITO_POOL_ID'),
-        string(credentialsId: "${env}-cognito-client-id",    variable: 'ENV_COGNITO_CLIENT_ID'),
-    ]) {
-        sh '''#!/bin/bash
-            sed -e "s|__API_BASE__|${ENV_API_BASE}|g" \
-                -e "s|__UPLOADS_BASE__|${ENV_UPLOADS_BASE}|g" \
-                -e "s|__COGNITO_USER_POOL_ID__|${ENV_COGNITO_POOL_ID}|g" \
-                -e "s|__COGNITO_CLIENT_ID__|${ENV_COGNITO_CLIENT_ID}|g" \
-                public/js/environment/environment.template.js \
-                > public/js/environment/environment.js
-        '''
-    }
-
     // --delete removes files in S3 that no longer exist locally
     sh """#!/bin/bash
         aws s3 sync public/ s3://${cfg.bucket}/ \
@@ -137,8 +120,7 @@ def deploy(String env) {
             --delete \
             --cache-control "public, max-age=86400" \
             --exclude "*.DS_Store" \
-            --exclude "Thumbs.db" \
-            --exclude "js/environment/environment.template.js"
+            --exclude "Thumbs.db"
 
         # Override cache-control for HTML files — always revalidate
         aws s3 sync public/ s3://${cfg.bucket}/ \
@@ -206,6 +188,14 @@ pipeline {
                             sh 'find public/ -name "debug-*.html" -delete; find public/ -name "test-*.html" -delete'
                             init()
                             deploy('dev')
+                            // Block all crawlers on the dev instance
+                            sh """#!/bin/bash
+                                aws s3 cp robots.dev.txt s3://escwebsite-dev-web/robots.txt \
+                                    --region ap-southeast-1 \
+                                    --profile deploy \
+                                    --cache-control "no-cache, no-store, must-revalidate" \
+                                    --content-type "text/plain"
+                            """
                         }
                     }
                     post {

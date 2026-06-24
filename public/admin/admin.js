@@ -1262,10 +1262,8 @@ window.toggleSectionVisibility = function(sectionKey, renderFuncStr, containerId
     // For array-based sections (like timeline), we must use sectionVisibility
     if (appData[sectionKey] && !Array.isArray(appData[sectionKey]) && typeof appData[sectionKey] === 'object') {
         appData[sectionKey].hidden = !appData[sectionKey].hidden;
-        localStorage.setItem(`escience_${sectionKey}`, JSON.stringify(appData[sectionKey]));
     } else {
         appData.sectionVisibility[`${sectionKey}Hidden`] = !appData.sectionVisibility[`${sectionKey}Hidden`];
-        localStorage.setItem(`escience_sectionVisibility`, JSON.stringify(appData.sectionVisibility));
     }
     
     // Auto-save changes entirely
@@ -2969,21 +2967,6 @@ function loadTimelineItems() {
     const timelineList = document.getElementById('timeline-list');
     if (!timelineList) return;
 
-    // Load from localStorage first (most recent changes)
-    const savedTimeline = localStorage.getItem('escience_timeline');
-    if (savedTimeline) {
-        try {
-            const timelineData = JSON.parse(savedTimeline);
-            if (timelineData && timelineData.length > 0) {
-                appData.timeline = timelineData;
-                renderTimelineItems();
-                return;
-            }
-        } catch (error) {
-            // Invalid data in localStorage, fall through to defaults
-        }
-    }
-
     // Initialize timeline data if not exists
     if (!appData.timeline) {
         appData.timeline = [
@@ -3083,9 +3066,6 @@ function addTimelineItem() {
 
     appData.timeline.push(newItem);
 
-    // Save to localStorage for immediate frontend updates
-    localStorage.setItem('escience_timeline', JSON.stringify(appData.timeline));
-
     renderTimelineItems();
 }
 
@@ -3093,9 +3073,6 @@ function updateTimelineItem(index, field, value) {
     if (!appData.timeline || !appData.timeline[index]) return;
 
     appData.timeline[index][field] = value;
-
-    // Save to localStorage for immediate frontend updates
-    localStorage.setItem('escience_timeline', JSON.stringify(appData.timeline));
 }
 
 function moveTimelineItem(index, direction) {
@@ -3107,9 +3084,6 @@ function moveTimelineItem(index, direction) {
     // Swap items
     [appData.timeline[index], appData.timeline[newIndex]] = [appData.timeline[newIndex], appData.timeline[index]];
 
-    // Save to localStorage for immediate frontend updates
-    localStorage.setItem('escience_timeline', JSON.stringify(appData.timeline));
-
     renderTimelineItems();
 }
 
@@ -3118,25 +3092,12 @@ function deleteTimelineItem(index) {
 
     appData.timeline.splice(index, 1);
 
-    // Save to localStorage for immediate frontend updates
-    localStorage.setItem('escience_timeline', JSON.stringify(appData.timeline));
-
     renderTimelineItems();
 }
 
 // Who We Are Section Management
 function renderWhoWeAreSection(container) {
     if (!container) return;
-
-    // Load from localStorage first
-    const savedWhoWeAre = localStorage.getItem('escience_whoWeAre');
-    if (savedWhoWeAre) {
-        try {
-            appData.whoWeAre = JSON.parse(savedWhoWeAre);
-        } catch (error) {
-            // Invalid data in localStorage, ignore and use defaults
-        }
-    }
 
     // Initialize whoWeAre data if not exists
     if (!appData.whoWeAre) {
@@ -3172,9 +3133,6 @@ function renderWhoWeAreSection(container) {
 function updateWhoWeAreData(field, value) {
     if (!appData.whoWeAre) appData.whoWeAre = {};
     appData.whoWeAre[field] = value;
-
-    // Auto-save to localStorage for immediate frontend updates
-    localStorage.setItem('escience_whoWeAre', JSON.stringify(appData.whoWeAre));
 }
 
 
@@ -3224,7 +3182,6 @@ function renderFamilyCultureSection(container) {
 function updateFamilyCultureData(field, value) {
     if (!appData.familyCulture) appData.familyCulture = {};
     appData.familyCulture[field] = value;
-    localStorage.setItem('escience_familyCulture', JSON.stringify(appData.familyCulture));
 }
 
 window.handleFamilyCultureImageUpload = async function (input) {
@@ -3291,7 +3248,6 @@ function renderVisionSection(container) {
 function updateVisionData(field, value) {
     if (!appData.vision) appData.vision = {};
     appData.vision[field] = value;
-    localStorage.setItem('escience_vision', JSON.stringify(appData.vision));
 }
 
 window.handleVisionImageUpload = async function (input) {
@@ -3359,7 +3315,6 @@ function renderMissionSection(container) {
 function updateMissionData(field, value) {
     if (!appData.mission) appData.mission = {};
     appData.mission[field] = value;
-    localStorage.setItem('escience_mission', JSON.stringify(appData.mission));
 }
 
 window.handleMissionImageUpload = async function (input) {
@@ -6065,7 +6020,6 @@ function updateFooterBrand(field, value) {
     if (!appData.footer) appData.footer = {};
     if (!appData.footer.brand) appData.footer.brand = {};
     appData.footer.brand[field] = value;
-    localStorage.setItem('escience_footer_brand', JSON.stringify(appData.footer.brand));
 }
 
 async function handleFooterBrandLogoUpload(input) {
@@ -6123,7 +6077,6 @@ function updateFooterContact(field, value) {
     if (!appData.footer) appData.footer = {};
     if (!appData.footer.contact) appData.footer.contact = {};
     appData.footer.contact[field] = value;
-    localStorage.setItem('escience_footer_contact', JSON.stringify(appData.footer.contact));
 }
 
 function renderFooterNPCSeal() {
@@ -6161,7 +6114,6 @@ function updateFooterNPCSeal(field, value) {
     if (!appData.footer.legal) appData.footer.legal = {};
     if (!appData.footer.legal.npcSeal) appData.footer.legal.npcSeal = {};
     appData.footer.legal.npcSeal[field] = value;
-    localStorage.setItem('escience_footer_npc', JSON.stringify(appData.footer.legal.npcSeal));
 }
 
 async function handleFooterNPCImageUpload(input) {
@@ -6243,7 +6195,6 @@ window.updateFooterConnect = function (platform, field, value) {
     if (!appData.footer.connect[platform]) appData.footer.connect[platform] = {};
 
     appData.footer.connect[platform][field] = value;
-    localStorage.setItem('escience_footer_connect', JSON.stringify(appData.footer.connect));
 };
 
 
@@ -6662,7 +6613,7 @@ window.renderAllSidebarSections = function(pageKey) {
 (function registerQuillFontSizes() {
     try {
         const SizeStyle = Quill.import('attributors/style/size');
-        SizeStyle.whitelist = ['0.75rem', '1.25rem', '1.5rem', '2rem', '3rem'];
+        SizeStyle.allowedValues = ['0.75rem', '1.25rem', '1.5rem', '2rem', '3rem'];
         Quill.register(SizeStyle, true);
     } catch(e) { /* Quill not loaded yet — ok, will fall back to defaults */ }
 })();

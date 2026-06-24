@@ -3,9 +3,8 @@
 .env.local
 .env.production
 
-# Environment-specific JS configs (contain credentials) — template is tracked
+# Environment-specific JS configs (contain credentials)
 public/js/environment/environment.*.js
-!public/js/environment/environment.template.js
 
 # Dependencies
 node_modules/
