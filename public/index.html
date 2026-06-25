@@ -417,7 +417,7 @@
 
             <div class="solutions-grid">
                 <div class="solution-card fade-up"
-                    onclick="window.location.href='nav-pages/solutions.html#crm-tools-for-salesforce'"
+                    data-href="nav-pages/solutions.html#crm-tools-for-salesforce"
                     style="cursor: pointer;">
                     <div class="solution-banner">
                         <!-- Image banners should be screenshots or atleast showcases of the apps as an example -->
@@ -430,7 +430,7 @@
                     </div>
                 </div>
                 <div class="solution-card fade-up delay-1"
-                    onclick="window.location.href='nav-pages/solutions.html#inventory-management'"
+                    data-href="nav-pages/solutions.html#inventory-management"
                     style="cursor: pointer;">
                     <div class="solution-banner">
                         <img src="" alt="Inventory Management" class="solution-image" />
@@ -443,7 +443,7 @@
                     </div>
                 </div>
                 <div class="solution-card fade-up delay-2"
-                    onclick="window.location.href='nav-pages/solutions.html#paperless-operations'"
+                    data-href="nav-pages/solutions.html#paperless-operations"
                     style="cursor: pointer;">
                     <div class="solution-banner">
                         <img src="" alt="Paperless Operations" class="solution-image" />
@@ -454,7 +454,7 @@
                     </div>
                 </div>
                 <div class="solution-card fade-up delay-3"
-                    onclick="window.location.href='nav-pages/solutions.html#mobile-pos-solutions'"
+                    data-href="nav-pages/solutions.html#mobile-pos-solutions"
                     style="cursor: pointer;">
                     <div class="solution-banner">
                         <img src="" alt="Mobile POS Solutions" class="solution-image" />
@@ -466,7 +466,7 @@
                     </div>
                 </div>
                 <div class="solution-card fade-up delay-4"
-                    onclick="window.location.href='nav-pages/solutions.html#brand-loyalty-systems'"
+                    data-href="nav-pages/solutions.html#brand-loyalty-systems"
                     style="cursor: pointer;">
                     <div class="solution-banner">
                         <img src="" alt="Brand Loyalty Systems" class="solution-image" />
@@ -477,7 +477,7 @@
                     </div>
                 </div>
                 <div class="solution-card fade-up delay-5"
-                    onclick="window.location.href='nav-pages/solutions.html#custom'" style="cursor: pointer;">
+                    data-href="nav-pages/solutions.html#custom" style="cursor: pointer;">
                     <div class="solution-banner">
                         <img src="" alt="Custom Solutions" class="solution-image" />
                     </div>
@@ -667,26 +667,7 @@
                 <h2>Ready to Transform Your Business?</h2>
                 <p>Join 100+ companies worldwide who trust eScience for their mobile solutions</p>
                 <div class="contact-form-container">
-                    <form class="contact-form" onsubmit="
-                        event.preventDefault();
-                        var name    = document.getElementById('name').value.trim();
-                        var email   = document.getElementById('email').value.trim();
-                        var company = document.getElementById('company').value.trim();
-                        var phone   = document.getElementById('phone').value.trim();
-                        var message = document.getElementById('message').value.trim();
-
-                        var subject = encodeURIComponent('Website Inquiry from ' + (name || 'Visitor'));
-
-                        var body = encodeURIComponent(
-                            'Name: '    + name    + '\n' +
-                            'Email: '   + email   + '\n' +
-                            (company ? 'Company: ' + company + '\n' : '') +
-                            (phone   ? 'Phone: '   + phone   + '\n' : '') +
-                            '\nMessage:\n' + message
-                        );
-
-                        window.location.href = 'mailto:sales@electronicscience.net?subject=' + subject + '&body=' + body;
-                    ">
+                    <form class="contact-form" id="contactForm">
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="name">Name</label>
@@ -804,18 +785,7 @@
         </div>
     </div>
 
-    <script>
-        // Ensure page starts from top on refresh
-        window.addEventListener('beforeunload', () => {
-            window.scrollTo(0, 0);
-        });
-
-        // Force scroll to top on page load
-        if (history.scrollRestoration) {
-            history.scrollRestoration = 'manual';
-        }
-        window.scrollTo(0, 0);
-    </script>
+    <script src="scripts/index-page-init.js"></script>
     <script src="js/environment/environment.js"></script>
     <script src="js/config.js"></script>
     <script src="scripts/page-transition.js"></script>

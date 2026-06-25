@@ -2126,7 +2126,7 @@ function renderSingleSectionEditor(sIndex) {
                     <input type="text" value="${prod.link || ''}" readonly style="width:100%; padding:4px 8px; font-family:monospace;">
                 </div>
             </div>
-        `;
+        `);
         productsList.appendChild(prodDiv);
     });
 }
@@ -4474,10 +4474,9 @@ function renderBlogSidebar(posts) {
         grouped[cat].push({ post, index });
     });
 
-    // Build sidebar HTML
-    let html = '<li data-tab="blog-page" onclick="showBlogHeroOnly()" style="font-weight: bold;">Categories</li>';
+    // Build sidebar HTML — no inline event handlers (CSP blocks them)
+    let html = '<li data-tab="blog-page" data-action="showBlogHeroOnly" style="font-weight: bold;">Categories</li>';
 
-    // Iterate through all categories (not just those with posts)
     categories.forEach(category => {
         const catKey = category.id;
         const catLabel = category.label;
@@ -4486,17 +4485,17 @@ function renderBlogSidebar(posts) {
         const isActive = window.currentBlogCategory === catKey;
         html += `
             <div class="section-item ${isActive ? 'active-tab' : ''}" data-category="${catKey}">
-                <div class="section-header-row" onclick="selectBlogCategory('${catKey}')">
+                <div class="section-header-row" data-action="selectBlogCategory" data-cat-key="${catKey}">
                     <span>${catLabel}</span>
                     <span class="dropdown-arrow">▶</span>
                 </div>
                 <ul class="product-list-sidebar" id="blog-cat-${catKey}">
                     ${postsInCategory.map(({ post, index }) => `
-                        <li class="product-item-sidebar" data-blog-post-index="${index}" onclick="scrollToBlogPost(event, ${index})">
+                        <li class="product-item-sidebar" data-action="scrollToBlogPost" data-post-index="${index}">
                             ${post.title || 'Untitled Post'}
                         </li>
                     `).join('')}
-                    <li class="product-item-sidebar" style="color: #27ae60;" onclick="event.stopPropagation(); addBlogPost('${catKey}')">
+                    <li class="product-item-sidebar" style="color: #27ae60;" data-action="addBlogPost" data-cat-key="${catKey}">
                         + Add ${catLabel} Post
                     </li>
                 </ul>
@@ -4505,6 +4504,22 @@ function renderBlogSidebar(posts) {
     });
 
     sidebarList.innerHTML = html;
+
+    // Attach event listeners (avoids inline onclick CSP violation)
+    sidebarList.querySelector('[data-action="showBlogHeroOnly"]')
+        ?.addEventListener('click', () => showBlogHeroOnly());
+
+    sidebarList.querySelectorAll('[data-action="selectBlogCategory"]').forEach(el => {
+        el.addEventListener('click', () => selectBlogCategory(el.dataset.catKey));
+    });
+
+    sidebarList.querySelectorAll('[data-action="scrollToBlogPost"]').forEach(el => {
+        el.addEventListener('click', (e) => scrollToBlogPost(e, parseInt(el.dataset.postIndex)));
+    });
+
+    sidebarList.querySelectorAll('[data-action="addBlogPost"]').forEach(el => {
+        el.addEventListener('click', (e) => { e.stopPropagation(); addBlogPost(el.dataset.catKey); });
+    });
 }
 
 // Track current blog category
@@ -4614,6 +4629,12 @@ window.scrollToBlogPost = function (event, index) {
 
 // Track Quill instances for blocks
 let blockQuillInstances = {};
+
+// Render all posts (no category filter)
+window.renderBlogPostsList = function (posts) {
+    const postsWithIndex = (posts || []).map((post, index) => ({ post, index }));
+    renderBlogPostsListInternal(postsWithIndex);
+};
 
 // Render posts for a specific category
 function renderBlogCategoryPosts(catKey) {
@@ -4835,7 +4856,7 @@ function renderBlogBlocks(postIndex) {
                 </div>` : ''}
                 ${!embedUrl && videoUrl ? `
                 <div class="video-preview" style="margin: 10px 0; border-radius: 8px; overflow: hidden; background: #000;">
-                    <video src="${assetUrl(videoUrl)}" controls preload="auto" onloadeddata="this.currentTime=1" style="width: 100%; max-height: 400px; display: block;"></video>
+                    <video src="${assetUrl(videoUrl)}#t=0.1" controls preload="metadata" style="width: 100%; max-height: 400px; display: block;"></video>
                 </div>
                 ` : ''}
                 <div class="form-group">
