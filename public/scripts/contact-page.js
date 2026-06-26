@@ -519,8 +519,8 @@ window.showDepartment = function (deptId) {
     }
 };
 
-// ── Send us a Message: mailto handler + static fallback item wiring ────────
-document.querySelector('.contact-form form').addEventListener('submit', function (e) {
+// ── Send us a Message: submit directly via the backend (no mailto) ─────────
+document.querySelector('.contact-form form').addEventListener('submit', async function (e) {
     e.preventDefault();
 
     const rawDeptValue = document.getElementById('department').value;
@@ -530,43 +530,39 @@ document.querySelector('.contact-form form').addEventListener('submit', function
     const phone = document.getElementById('phone').value.trim();
     const message = document.getElementById('message').value.trim();
 
-    // Parse "deptId::email" (set by selectFormDepartment) or plain "deptId" (old fallback)
-    let toEmail, deptId;
-    if (rawDeptValue.includes('::')) {
-        const parts = rawDeptValue.split('::');
-        deptId = parts[0];
-        toEmail = parts[1];
-    } else {
-        deptId = rawDeptValue;
-        toEmail = (window.deptEmailMap && window.deptEmailMap[deptId])
-            ? window.deptEmailMap[deptId]
-            : 'sales@electronicscience.net';
-    }
-
     if (!rawDeptValue) {
         alert('Please select a department before sending.');
         return;
     }
 
-    // Build subject from the toggle button display text
-    const deptLabel = document.getElementById('deptToggle')
-        ?.querySelector('span')?.textContent || deptId || 'General';
-    const subject = encodeURIComponent(`Contact Form: ${deptLabel} Inquiry from ${name}`);
+    // Parse "deptId::email" (set by selectFormDepartment) or plain "deptId" (old fallback)
+    const deptId = rawDeptValue.includes('::') ? rawDeptValue.split('::')[0] : rawDeptValue;
 
-    // Build body
-    const bodyLines = [
-        `Name: ${name}`,
-        `Email: ${senderEmail}`,
-        company ? `Company: ${company}` : '',
-        phone ? `Phone: ${phone}` : '',
-        '',
-        'Message:',
-        message
-    ].filter(l => l !== null);
-    const body = encodeURIComponent(bodyLines.join('\n'));
+    const submitBtn = this.querySelector('.submit-btn');
+    const originalBtnText = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
 
-    // Open the user's mail client
-    window.location.href = `mailto:${toEmail}?subject=${subject}&body=${body}`;
+    try {
+        const res = await fetch(CONFIG.API_BASE + '/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ departmentId: deptId, name, email: senderEmail, company, phone, message })
+        });
+        const data = parseApiResponse(await res.json());
+        if (!res.ok || !data.success) {
+            throw new Error(data.message || 'Failed to send message');
+        }
+
+        alert('Your message has been sent successfully!');
+        this.reset();
+    } catch (err) {
+        console.error('Error sending contact form:', err);
+        alert('Sorry, something went wrong while sending your message. Please try again later.');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+    }
 });
 
 // Scroll Animations with Intersection Observer
@@ -722,23 +718,4 @@ function showDepartment(dept) {
 const initialDept = document.getElementById('contact-department').value;
 if (initialDept) {
     showDepartment(initialDept);
-}
-
-// Back to Top functionality
-const backToTopBtn = document.getElementById('backToTop');
-if (backToTopBtn) {
-    window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 300) {
-            backToTopBtn.classList.add('visible');
-        } else {
-            backToTopBtn.classList.remove('visible');
-        }
-    });
-
-    backToTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
 }

@@ -24,6 +24,8 @@ function navigateToPost(postId) {
 }
 
 async function loadBlogPost() {
+    window.scrollTo(0, 0);
+
     // Read id from hash (e.g. blog-post.html#id=123)
     const hash = window.location.hash.substring(1);
     const hashParams = new URLSearchParams(hash);
@@ -417,3 +419,4 @@ async function subscribeToNewsletter() {
 }
 
 document.addEventListener('DOMContentLoaded', loadBlogPost);
+window.addEventListener('hashchange', loadBlogPost);
