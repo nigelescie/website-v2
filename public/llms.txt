@@ -1,0 +1,26 @@
+# eScience Corporation
+
+> eScience Corporation ("Architects of Innovation") is a Philippines-based provider of Mobile CRM, Inventory Management, and Point-of-Sale (POS) solutions, empowering businesses with real-time retail and enterprise technology since 2000.
+
+eScience Corporation builds mobile-first software for field sales, inventory tracking, and point-of-sale operations, primarily serving retail and distribution businesses in the Philippines. The company is headquartered at Madrigal Business Park, Muntinlupa City, Metro Manila.
+
+## Company
+
+- [Homepage](https://electronicscience.com/): Overview of eScience Corporation's mission, products, and value proposition.
+- [About Us](https://electronicscience.com/nav-pages/company.html): Company history, leadership, and culture.
+- [Careers](https://electronicscience.com/nav-pages/careers.html): Open roles and information about working at eScience.
+- [Contact Us](https://electronicscience.com/nav-pages/contact-us.html): How to reach eScience Corporation.
+
+## Products & Solutions
+
+- [Solutions](https://electronicscience.com/nav-pages/solutions.html): Mobile CRM, Inventory Management, and POS solution offerings.
+- [Product Details](https://electronicscience.com/nav-pages/product-detail.html): Individual product/feature deep-dives.
+
+## Resources
+
+- [Blog](https://electronicscience.com/nav-pages/blog.html): News, case studies, and insights on mobile CRM and retail technology.
+
+## Legal
+
+- [Privacy Policy](https://electronicscience.com/nav-pages/privacy.html)
+- [Terms and Conditions](https://electronicscience.com/nav-pages/terms.html)

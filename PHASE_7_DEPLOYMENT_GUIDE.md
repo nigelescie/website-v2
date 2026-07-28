@@ -303,6 +303,123 @@ sam deploy \
     CloudFrontDistributionId=<your-distribution-id>
 ```
 
+### 6f — Create CloudFront Function for Directory Index Rewrite
+
+Because the static bucket is a private origin behind OAC (not an S3 website endpoint), CloudFront's **Default root object** only resolves `index.html` for the literal `/` path — it does **not** resolve subdirectory paths like `/admin` or `/admin/` to `admin/index.html`. Without a rewrite, requesting `/admin` returns a 403 from S3, which then gets caught by the `403 → /index.html` custom error response and silently serves the homepage instead of the admin panel.
+
+Create a CloudFront Function to rewrite the URI before it reaches the origin:
+
+```js
+// admin-index-rewrite.js
+function handler(event) {
+  var request = event.request;
+  var uri = request.uri;
+
+  // Requests ending in "/" get index.html appended
+  if (uri.endsWith('/')) {
+    request.uri += 'index.html';
+  }
+  // Requests with no file extension and no trailing slash get "/index.html" appended
+  else if (!uri.includes('.')) {
+    request.uri += '/index.html';
+  }
+
+  return request;
+}
+```
+
+Create and publish the function:
+
+```bash
+aws cloudfront create-function \
+  --name esc-admin-index-rewrite \
+  --function-config Comment="Rewrite directory paths to index.html",Runtime=cloudfront-js-2.0 \
+  --function-code fileb://admin-index-rewrite.js
+
+# Publish it (required before it can be attached to a distribution)
+aws cloudfront publish-function \
+  --name esc-admin-index-rewrite \
+  --if-match <ETag-from-create-function-output>
+```
+
+Attach it to the distribution's **default cache behavior** as a **viewer request** function (via the AWS Console: Distribution → Behaviors → Default (*) → Edit → Function associations → Viewer request → select `esc-admin-index-rewrite`; or via `update-distribution` with the function ARN added to `FunctionAssociations` under `DefaultCacheBehavior`).
+
+After attaching, invalidate the cache so previously-cached 403/404 fallback responses are cleared:
+
+```bash
+aws cloudfront create-invalidation \
+  --distribution-id <your-distribution-id> \
+  --paths "/admin*" "/*"
+```
+
+Verify the fix by loading `https://electronicscience.com/admin` and `https://electronicscience.com/admin/` — both should serve the admin panel instead of redirecting to the homepage.
+
+### 6g — Create Response Headers Policy with CSP and Attach to Default Behavior
+
+Create a CloudFront Response Headers Policy that sets the Content-Security-Policy (and other security headers) on every response:
+
+```bash
+cat > response-headers-policy.json <<'EOF'
+{
+  "ResponseHeadersPolicyConfig": {
+    "Name": "esc-security-headers",
+    "Comment": "Security headers including CSP for electronicscience.net",
+    "SecurityHeadersConfig": {
+      "ContentSecurityPolicy": {
+        "Override": true,
+        "ContentSecurityPolicy": "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://cdn.quilljs.com https://fonts.googleapis.com; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.quilljs.com https://cdn.jsdelivr.net; img-src 'self' data: https://dr8aoog0i127z.cloudfront.net; media-src 'self' https://dr8aoog0i127z.cloudfront.net; connect-src 'self' https://ici5jo28x8.execute-api.ap-southeast-1.amazonaws.com https://cognito-idp.ap-southeast-1.amazonaws.com https://cdn.quilljs.com https://cdn.jsdelivr.net https://escwebsite-dev-storage.s3.ap-southeast-1.amazonaws.com; worker-src blob:; frame-ancestors 'self'; frame-src 'self' https://www.google.com;"
+      },
+      "StrictTransportSecurity": {
+        "Override": true,
+        "IncludeSubdomains": true,
+        "Preload": true,
+        "AccessControlMaxAgeSec": 31536000
+      },
+      "ContentTypeOptions": {
+        "Override": true
+      },
+      "FrameOptions": {
+        "Override": true,
+        "FrameOption": "DENY"
+      },
+      "ReferrerPolicy": {
+        "Override": true,
+        "ReferrerPolicy": "strict-origin-when-cross-origin"
+      }
+    }
+  }
+}
+EOF
+
+aws cloudfront create-response-headers-policy \
+  --response-headers-policy-config file://response-headers-policy.json \
+  --query 'ResponseHeadersPolicy.Id' --output text
+```
+
+> Note: `FrameOptions: DENY` and the CSP's `frame-ancestors 'self'` are redundant on modern browsers (CSP wins), but `X-Frame-Options` is kept for older browser fallback. Since the CSP above allows `frame-src https://www.google.com` (e.g. for embedded reCAPTCHA/Maps), do not tighten `frame-ancestors` further without checking that dependency.
+
+Attach the policy to the distribution's **default cache behavior** (via the AWS Console: Distribution → Behaviors → Default (*) → Edit → Response headers policy → select `esc-security-headers`; or via `update-distribution` with `ResponseHeadersPolicyId` set on `DefaultCacheBehavior`):
+
+```bash
+aws cloudfront update-distribution \
+  --id <your-distribution-id> \
+  --distribution-config file://updated-distribution-config.json
+```
+
+> `update-distribution` requires the full distribution config (fetch it first with `aws cloudfront get-distribution-config --id <your-distribution-id>`, edit the `DefaultCacheBehavior.ResponseHeadersPolicyId` field, then submit with the `--if-match` ETag from the get call). It's usually faster to do this one field via the Console.
+
+After attaching, invalidate the cache and verify the header is present:
+
+```bash
+aws cloudfront create-invalidation \
+  --distribution-id <your-distribution-id> \
+  --paths "/*"
+
+curl -s -I https://electronicscience.com/ | grep -i content-security-policy
+```
+
+If any page fails to load a script/style/font/image after this change, check the browser console for a CSP violation and add the missing origin to the corresponding `-src` directive above, then update the policy with `aws cloudfront update-response-headers-policy`.
+
 ---
 
 ## Step 7 — Update config.js with Real URLs
@@ -381,6 +498,7 @@ Test each flow against the live CloudFront URL:
 | Test | How to Verify |
 |---|---|
 | Public content load | Visit the site — homepage content renders from DynamoDB |
+| Admin route rewrite | Visit `/admin` (no trailing slash) and `/admin/` — both must serve the admin panel, not redirect to the homepage (confirms the CloudFront Function from Step 6f is attached) |
 | Admin login | Go to `/admin/`, sign in with Cognito credentials |
 | Content save | Edit a section in admin, save, verify it persists on refresh |
 | Image upload | Upload an image in admin, confirm it appears via the CDN URL |
@@ -714,18 +832,24 @@ done
 
 ### CloudFront Security Headers
 
-Create a response headers policy via the AWS Console or CLI:
+The response headers policy (including the production CSP) is created and attached in **Step 6g** during initial distribution setup — see that section for the exact policy JSON and CLI commands.
 
-| Header | Value |
-|---|---|
-| Strict-Transport-Security | `max-age=31536000; includeSubdomains; preload` |
-| X-Content-Type-Options | `nosniff` |
-| X-Frame-Options | `DENY` |
-| X-XSS-Protection | `1; mode=block` |
-| Referrer-Policy | `strict-origin-when-cross-origin` |
-| Content-Security-Policy | `default-src 'self' https:; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https:` |
+If the CSP ever needs updating (e.g. a new third-party script/font/image origin is added to the site), update the existing policy in place rather than creating a new one:
 
-Attach the policy to the CloudFront distribution's default behavior.
+```bash
+# Get the current policy (need its Id and ETag)
+aws cloudfront list-response-headers-policies \
+  --query "ResponseHeadersPolicyList.Items[?ResponseHeadersPolicy.ResponseHeadersPolicyConfig.Name=='esc-security-headers']"
+
+# Edit response-headers-policy.json with the new CSP, then:
+aws cloudfront update-response-headers-policy \
+  --id <policy-id> \
+  --if-match <etag> \
+  --response-headers-policy-config file://response-headers-policy.json
+
+# Invalidate so the new headers take effect immediately
+aws cloudfront create-invalidation --distribution-id <your-distribution-id> --paths "/*"
+```
 
 ### API Gateway Throttling
 

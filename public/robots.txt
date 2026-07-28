@@ -6,27 +6,43 @@ Disallow: /uploads/
 # AI Agent Rules (AIO Readiness)
 User-agent: GPTBot
 Allow: /
+Disallow: /admin/
+Disallow: /uploads/
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /admin/
+Disallow: /uploads/
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /admin/
+Disallow: /uploads/
 
 User-agent: CCBot
 Allow: /
+Disallow: /admin/
+Disallow: /uploads/
 
 User-agent: Google-Extended
 Allow: /
+Disallow: /admin/
+Disallow: /uploads/
 
 User-agent: Claude-Web
 Allow: /
+Disallow: /admin/
+Disallow: /uploads/
 
 User-agent: Anthropic-AI
 Allow: /
+Disallow: /admin/
+Disallow: /uploads/
 
 User-agent: OAI-SearchBot
 Allow: /
+Disallow: /admin/
+Disallow: /uploads/
 
 # Sitemap Location
-Sitemap: https://electronicscience.net/sitemap.xml
+Sitemap: https://electronicscience.com/sitemap.xml
